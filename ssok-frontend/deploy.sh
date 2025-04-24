@@ -1,8 +1,17 @@
 #!/bin/sh
 
+echo
+echo "######################################"
+echo "                                      "
+echo "         SSOK-DEPLOY-FRONTEND         "
+echo "                                      "
+echo "######################################"
+echo 
+
 currentDir=$(pwd -P);
 separationPhrase="=====================================";
 
+PROJECT_KEY="ssok"
 FRONTEND_IMAGE_NAME="ssok-frontend"
 DEPLOY_NAME="ssok-deploy"
 TAG="latest"
@@ -21,7 +30,7 @@ echo
 echo $separationPhrase
 
 #프로젝트 별 설정파일 복사
-cp -r -f ./$DEPLOY_NAME/$FRONTEND_IMAGE_NAME/* $currentDir
+cp -r -f ./$DEPLOY_NAME/$FRONTEND_IMAGE_NAME/* $currentDir/$PROJECT_KEY
 
 echo
 echo "REMOTE SERVER STOP AND CLEAN DOCKER BUILD CACHE...."
@@ -30,6 +39,7 @@ echo $separationPhrase
 
 docker compose down
 docker image rmi $FRONTEND_IMAGE_NAME:$TAG
+docker image prune -f
 
 echo
 docker images -a
@@ -41,10 +51,11 @@ echo
 echo $separationPhrase
 
 #프론트 도커 파일 빌드
-cd $currentDir/$FRONTEND_IMAGE_NAME/$FRONTEND_IMAGE_NAME
+cd $currentDir/$PROJECT_KEY
 docker build --no-cache -t $FRONTEND_IMAGE_NAME:$TAG .
 
 #도커 컴포즈 시작
+cd $currentDir
 docker compose -f docker-compose.yml up -d
 
 echo
