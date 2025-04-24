@@ -1,0 +1,12 @@
+services:
+  ssok-frontend:
+    image: ssok/frontend:1.0
+    ports:
+      - "19000:19000"
+      - "19001:19001"
+      - "19002:19002"
+      - "55026:55026"
+    environment:
+      - REACT_NATIVE_PACKAGER_HOSTNAME=kudong.kr
+    stdin_open: true
+    tty: true
