@@ -55,7 +55,6 @@ cd $currentDir/$PROJECT_KEY
 docker build --no-cache -t $FRONTEND_IMAGE_NAME:$TAG .
 
 #도커 컴포즈 시작
-cd $currentDir
 docker compose -f docker-compose.yml up -d
 
 echo
