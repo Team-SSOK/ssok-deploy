@@ -1,6 +1,6 @@
 services:
   ssok-frontend:
-    image: ssok/frontend:1.0
+    image: ssok-frontend:latest
     ports:
       - "19000:19000"
       - "19001:19001"
