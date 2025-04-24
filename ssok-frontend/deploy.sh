@@ -37,9 +37,13 @@ echo "REMOTE SERVER STOP AND CLEAN DOCKER BUILD CACHE...."
 echo 
 echo $separationPhrase
 
+cd $currentDir/$PROJECT_KEY
 docker compose down
+
+cd $currentDir
 docker image rmi $FRONTEND_IMAGE_NAME:$TAG
 docker image prune -f
+docker builder prune -a -f
 
 echo
 docker images -a
@@ -55,7 +59,7 @@ cd $currentDir/$PROJECT_KEY
 docker build --no-cache -t $FRONTEND_IMAGE_NAME:$TAG .
 
 #도커 컴포즈 시작
-docker compose -f docker-compose.yml up -d
+docker compose up -d
 
 echo
 echo "SSOK FRONTEND Finished!"
