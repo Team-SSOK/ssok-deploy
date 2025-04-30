@@ -2,19 +2,63 @@ spring:
   application:
     name: ssok-openbanking
 
+  kafka:
+    bootstrap-servers: broker:9092
+    request-topic: request-topic
+    reply-topic: reply-topic
+    push-topic: push-topic
+    producer:
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+    consumer:
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      properties:
+        spring.json.trusted.packages: kr.ssok.model
+      auto-offset-reset: earliest
+
+  data:
+    redis:
+      host: ${REDIS_HOST:localhost}
+      port: ${REDIS_PORT:6379}
+
   jpa:
-    properties:
-      hibernate:
-        jdbc:
-          time_zone: Asia/Seoul
-        use_sql_comments: 'true'
-        format_sql: 'true'
-        show_sql: 'true'
+  properties:
     hibernate:
-      ddl-auto: update
+      jdbc:
+        time_zone: Asia/Seoul
+      use_sql_comments: 'true'
+      format_sql: 'true'
+      show_sql: 'true'
+  hibernate:
+    ddl-auto: update
 
   datasource:
     username: ${DB_USERNAME:root}
     password: ${DB_PASSWORD:password}
     url: ${DB_URL:jdbc:mysql://localhost:3306/mydb}
     driver-class-name: org.mariadb.jdbc.Driver
+
+  cloud:
+  openfeign:
+    client:
+      config:
+        default:
+          connectTimeout: 10000
+          readTimeout: 10000
+          loggerLevel: full
+
+logging:
+  level:
+    kr.ssok.ssokopenbanking: DEBUG
+    org.hibernate.SQL: DEBUG
+    org.hibernate.type.descriptor.sql.BasicBinder: TRACE
+    org.springframework.web.client.RestTemplate: DEBUG
+    kr.ssok.ssokopenbanking.transfer.client: DEBUG
+
+bank:
+  api:
+    url: ${BANK_API_URL:http://kudong.kr:55027}
+  global:
+    api:
+      url: https://dev-global-bank-api.example.com

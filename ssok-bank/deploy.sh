@@ -153,6 +153,8 @@ echo "currentDir => $(pwd -P)"
 docker load -i ssok-bank.tar
 
 #도커 컴포즈 시작
+docker compose -f docker-compose-kafka.yml up -d
+sleep 10
 docker compose -f docker-compose-bank.yml up -d
 EOT
 

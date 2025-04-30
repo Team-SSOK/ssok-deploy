@@ -2,6 +2,21 @@ spring:
   application:
     name: ssok-bank
 
+  kafka:
+    bootstrap-servers: broker:9092
+    request-topic: request-topic
+    reply-topic: reply-topic
+    push-topic: push-topic
+    producer:
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+    consumer:
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      properties:
+        spring.json.trusted.packages: kr.ssok.model
+      auto-offset-reset: earliest
+
   sql:
     init:
       mode: always
