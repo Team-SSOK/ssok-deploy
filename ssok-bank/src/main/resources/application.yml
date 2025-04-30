@@ -2,6 +2,11 @@ spring:
   application:
     name: ssok-bank
 
+  sql:
+    init:
+      mode: always
+      data-locations: classpath:db/init.sql
+
   jpa:
     properties:
       hibernate:
@@ -18,3 +23,6 @@ spring:
     password: ${DB_PASSWORD:password}
     url: ${DB_URL:jdbc:mysql://localhost:3306/mydb}
     driver-class-name: org.mariadb.jdbc.Driver
+
+encryption:
+  key: ${ENCRYPTION_KEY:key}
