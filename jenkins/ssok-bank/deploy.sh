@@ -111,7 +111,7 @@ sed -i "s|image: ${DOCKER_NICKNAME}/${BACKEND_IMAGE_NAME}:.*|image: ${DOCKER_NIC
 
 git add ${DEPLOYMENT_FILE}
 git commit -m "fix: ${BACKEND_IMAGE_NAME} image to version ${TAG}"
-git push origin HEAD
+git push https://${GIT_USER}:${GIT_PASS}@github.com/Team-SSOK/ssok-bank.git HEAD
 
 # #마운트 시작
 # echo $separationPhrase
