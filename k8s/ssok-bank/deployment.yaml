@@ -79,6 +79,6 @@ spec:
         - containerPort: 8080
         envFrom:
           - configMapRef:
-              name: ssok-bank-cm      
+              name: ssok-bank-cm
           - secretRef:
-              name: ssok-bank-db-secrets      
+              name: ssok-bank-db-secrets
