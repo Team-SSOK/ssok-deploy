@@ -61,6 +61,8 @@ metadata:
   namespace: default
   labels:
     app: ssok-bank
+  annotations:
+    argocd.argoproj.io/sync-wave: "1"
 spec:
   replicas: 3
   selector:
