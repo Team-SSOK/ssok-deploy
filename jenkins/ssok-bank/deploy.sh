@@ -106,7 +106,7 @@ echo "Update Github K8s Manifest file...."
 echo 
 echo $separationPhrase
 
-DEPLOYMENT_FILE=$currentDir/$DEPLOY_NAME/k8s/deployment.yaml
+DEPLOYMENT_FILE=$currentDir/$DEPLOY_NAME/k8s/$BACKEND_IMAGE_NAME/deployment.yaml
 sed -i "s|image: ${DOCKER_NICKNAME}/${BACKEND_IMAGE_NAME}:.*|image: ${DOCKER_NICKNAME}/${BACKEND_IMAGE_NAME}:${TAG}|g" ${DEPLOYMENT_FILE}
 
 # #마운트 시작
