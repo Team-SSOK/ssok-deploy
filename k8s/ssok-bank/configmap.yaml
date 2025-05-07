@@ -9,3 +9,4 @@ data:
   KAFKA_BOOTSTRAP_SERVERS: "broker:9092"
   KAFKA_TRUSTED_PACKAGES: "kr.ssok.model"
   DB_URL: "jdbc:mariadb://172.21.1.22:3306/moni?useUnicode=true&characterEncoding=utf-8&serverTimeZone=Asia/Seoul"
+  ENCRYPTION_KEY: "ss0k-bank-admin1"
