@@ -11,6 +11,7 @@ DOCKER_NICKNAME="kudong"
 BACKEND_IMAGE_NAME="ssok-bank"
 DEPLOY_NAME="ssok-deploy"
 TAG="latest"
+BUILD="build"
 
 echo $separationPhrase
 echo
@@ -34,7 +35,7 @@ echo $separationPhrase
 mkdir -p $currentDir/images;
 
 #프로젝트 별 설정파일 복사
-cp -r -f ./$DEPLOY_NAME/$BACKEND_IMAGE_NAME/* $currentDir
+cp -r -f ./$DEPLOY_NAME/$BUILD/$BACKEND_IMAGE_NAME/* $currentDir
 
 echo
 echo "REMOTE SERVER STOP AND CLEAN DOCKER BUILD CACHE...."

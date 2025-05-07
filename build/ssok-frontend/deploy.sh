@@ -15,6 +15,7 @@ PROJECT_KEY="ssok"
 FRONTEND_IMAGE_NAME="ssok-frontend"
 DEPLOY_NAME="ssok-deploy"
 TAG="latest"
+BUILD="build"
 
 echo $separationPhrase
 echo
@@ -30,7 +31,7 @@ echo
 echo $separationPhrase
 
 #프로젝트 별 설정파일 복사
-cp -r -f ./$DEPLOY_NAME/$FRONTEND_IMAGE_NAME/* $currentDir/$PROJECT_KEY
+cp -r -f ./$DEPLOY_NAME/$BUILD/$FRONTEND_IMAGE_NAME/* $currentDir/$PROJECT_KEY
 
 echo
 echo "REMOTE SERVER STOP AND CLEAN DOCKER BUILD CACHE...."
