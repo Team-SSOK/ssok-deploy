@@ -73,7 +73,7 @@ spec:
     spec:
       containers:
       - name: ssok-bank
-        image: kudong/ssok-bank:1.42
+        image: kudong/ssok-bank:1.43
         imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 8080
