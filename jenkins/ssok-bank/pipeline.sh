@@ -3,7 +3,7 @@ currentDir=$(pwd -P);
 
 git clone https://${GIT_PASS}@github.com/Team-SSOK/ssok-deploy.git
 
-cp -r -f ./ssok-deploy/build/ssok-openbanking/deploy.sh $currentDir
+cp -r -f ./ssok-deploy/jenkins/ssok-bank/deploy.sh $currentDir
 
 chmod +x ./deploy.sh
 ./deploy.sh

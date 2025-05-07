@@ -11,7 +11,7 @@ DOCKER_NICKNAME="kudong"
 BACKEND_IMAGE_NAME="ssok-bank"
 DEPLOY_NAME="ssok-deploy"
 TAG="latest"
-BUILD="build"
+BUILD="jenkins"
 
 echo $separationPhrase
 echo

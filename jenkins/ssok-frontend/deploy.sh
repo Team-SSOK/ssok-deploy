@@ -15,7 +15,7 @@ PROJECT_KEY="ssok"
 FRONTEND_IMAGE_NAME="ssok-frontend"
 DEPLOY_NAME="ssok-deploy"
 TAG="latest"
-BUILD="build"
+BUILD="jenkins"
 
 echo $separationPhrase
 echo
