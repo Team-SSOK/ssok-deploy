@@ -58,11 +58,9 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: ssok-bank-deployment
-  namespace: default
+  namespace: ssok
   labels:
     app: ssok-bank
-  annotations:
-    argocd.argoproj.io/sync-wave: "1"
 spec:
   replicas: 3
   selector:

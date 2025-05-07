@@ -4,8 +4,6 @@ kind: ConfigMap
 metadata:
   name: ssok-bank-cm
   namespace: ssok
-  annotations:
-    argocd.argoproj.io/sync-wave: "0"
 data:
   SERVER_PORT: "8080"
   KAFKA_BOOTSTRAP_SERVERS: "broker:9092"
