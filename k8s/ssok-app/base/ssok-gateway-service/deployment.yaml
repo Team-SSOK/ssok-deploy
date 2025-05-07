@@ -1,0 +1,47 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ssok-gateway-service
+  namespace: ssok
+  labels:
+    app: ssok-gateway-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ssok-gateway-service
+  template:
+    metadata:
+      labels:
+        app: ssok-gateway-service
+    spec:
+      containers:
+      - name: ssok-gateway-service
+        image: kudong/ssok-gateway-service:latest
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 8080
+        envFrom:
+        - configMapRef:
+            name: ssok-gateway-service-cm
+        resources:
+          requests:
+            memory: "256Mi"
+            cpu: "100m"
+          limits:
+            memory: "512Mi"
+            cpu: "300m"
+        readinessProbe:
+          httpGet:
+            path: /actuator/health
+            port: 8080
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          timeoutSeconds: 5
+        livenessProbe:
+          httpGet:
+            path: /actuator/health
+            port: 8080
+          initialDelaySeconds: 40
+          periodSeconds: 20
+          timeoutSeconds: 5

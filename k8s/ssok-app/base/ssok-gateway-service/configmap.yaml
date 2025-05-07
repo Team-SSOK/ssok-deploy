@@ -1,0 +1,29 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: ssok-gateway-service-cm
+  namespace: ssok
+data:
+  SERVER_PORT: "8080"
+  SPRING_PROFILES_ACTIVE: "default"
+  SPRING_CLOUD_CONFIG_URI: "http://ssok-config-service:8888"
+  SPRING_CLOUD_GATEWAY_ROUTES_0_ID: "user-service"
+  SPRING_CLOUD_GATEWAY_ROUTES_0_URI: "http://ssok-user-service:8080"
+  SPRING_CLOUD_GATEWAY_ROUTES_0_PREDICATES_0: "Path=/api/users/**"
+  SPRING_CLOUD_GATEWAY_ROUTES_0_FILTERS_0: "StripPrefix=1"
+  SPRING_CLOUD_GATEWAY_ROUTES_1_ID: "account-service"
+  SPRING_CLOUD_GATEWAY_ROUTES_1_URI: "http://ssok-account-service:8080"
+  SPRING_CLOUD_GATEWAY_ROUTES_1_PREDICATES_0: "Path=/api/accounts/**"
+  SPRING_CLOUD_GATEWAY_ROUTES_1_FILTERS_0: "StripPrefix=1"
+  SPRING_CLOUD_GATEWAY_ROUTES_2_ID: "transfer-service"
+  SPRING_CLOUD_GATEWAY_ROUTES_2_URI: "http://ssok-transfer-service:8080"
+  SPRING_CLOUD_GATEWAY_ROUTES_2_PREDICATES_0: "Path=/api/transfers/**"
+  SPRING_CLOUD_GATEWAY_ROUTES_2_FILTERS_0: "StripPrefix=1"
+  SPRING_CLOUD_GATEWAY_ROUTES_3_ID: "notification-service"
+  SPRING_CLOUD_GATEWAY_ROUTES_3_URI: "http://ssok-notification-service:8080"
+  SPRING_CLOUD_GATEWAY_ROUTES_3_PREDICATES_0: "Path=/api/notifications/**"
+  SPRING_CLOUD_GATEWAY_ROUTES_3_FILTERS_0: "StripPrefix=1"
+  SPRING_CLOUD_GATEWAY_ROUTES_4_ID: "bluetooth-service"
+  SPRING_CLOUD_GATEWAY_ROUTES_4_URI: "http://ssok-bluetooth-service:8080"
+  SPRING_CLOUD_GATEWAY_ROUTES_4_PREDICATES_0: "Path=/api/bluetooth/**"
+  SPRING_CLOUD_GATEWAY_ROUTES_4_FILTERS_0: "StripPrefix=1"

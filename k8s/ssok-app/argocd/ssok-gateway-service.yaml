@@ -1,14 +1,14 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: ssok-config-service
-  namespace: ssok
+  name: ssok-gateway-service
+  namespace: argocd
 spec:
   project: default
   source:
     repoURL: https://github.com/Team-SSOK/ssok-deploy.git
     targetRevision: main
-    path: k8s/ssok-app/base/ssok-config-service
+    path: k8s/ssok-app/base/ssok-gateway-service
   destination:
     server: https://kubernetes.default.svc
     namespace: ssok
