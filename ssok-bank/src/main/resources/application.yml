@@ -32,6 +32,7 @@ spring:
         show_sql: 'true'
     hibernate:
       ddl-auto: update
+    defer-datasource-initialization: true
 
   datasource:
     username: ${DB_USERNAME:root}
