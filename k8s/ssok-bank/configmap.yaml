@@ -1,0 +1,10 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: ssok-bank-cm
+data:
+  SERVER_PORT: "8080"
+  KAFKA_BOOTSTRAP_SERVERS: "broker:9092"
+  KAFKA_TRUSTED_PACKAGES: "kr.ssok.model"
+  DB_URL: "jdbc:mariadb://kudong.kr:55023/moni?useUnicode=true&characterEncoding=utf-8&serverTimeZone=Asia/Seoul"
