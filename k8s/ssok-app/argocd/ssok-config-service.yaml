@@ -1,14 +1,14 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: ssok-dev
+  name: ssok-config-service
   namespace: argocd
 spec:
   project: default
   source:
     repoURL: https://github.com/Team-SSOK/ssok-deploy.git
-    targetRevision: HEAD
-    path: k8s/ssok-app/overlays/dev
+    targetRevision: main
+    path: k8s/ssok-app/base/ssok-config-service
   destination:
     server: https://kubernetes.default.svc
     namespace: ssok
@@ -17,4 +17,4 @@ spec:
       prune: true
       selfHeal: true
     syncOptions:
-      - CreateNamespace=true
+    - CreateNamespace=true

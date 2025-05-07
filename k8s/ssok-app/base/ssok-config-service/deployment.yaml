@@ -1,0 +1,47 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ssok-config-service
+  namespace: ssok
+  labels:
+    app: ssok-config-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ssok-config-service
+  template:
+    metadata:
+      labels:
+        app: ssok-config-service
+    spec:
+      containers:
+      - name: ssok-config-service
+        image: kudong/ssok-config-service:latest
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 8888
+        envFrom:
+        - configMapRef:
+            name: ssok-config-service-cm
+        resources:
+          requests:
+            memory: "256Mi"
+            cpu: "100m"
+          limits:
+            memory: "512Mi"
+            cpu: "300m"
+        readinessProbe:
+          httpGet:
+            path: /actuator/health
+            port: 8888
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          timeoutSeconds: 5
+        livenessProbe:
+          httpGet:
+            path: /actuator/health
+            port: 8888
+          initialDelaySeconds: 40
+          periodSeconds: 20
+          timeoutSeconds: 5
