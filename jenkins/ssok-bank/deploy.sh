@@ -37,28 +37,6 @@ mkdir -p $currentDir/images;
 #프로젝트 별 설정파일 복사
 cp -r -f ./$DEPLOY_NAME/$BUILD/$BACKEND_IMAGE_NAME/* $currentDir
 
-# echo
-# echo "REMOTE SERVER STOP AND CLEAN DOCKER BUILD CACHE...."
-# echo 
-# echo $separationPhrase
-
-# ssh lgcns@172.21.1.22 /bin/bash <<'EOT'
-# cd /home/lgcns/docker_ssok
-# echo "currentDir => $(pwd -P)"
-
-# #도커 컴포즈 종료
-# docker compose -f docker-compose-bank.yml down
-
-# #도커 이미지 제거
-# docker image rmi ssok-bank:latest
-# docker image prune -f
-# docker builder prune -a -f
-# echo
-# docker images -a
-# EOT
-
-echo
-echo $separationPhrase
 echo
 echo "BACKEND BUILD Start...."
 echo 
@@ -106,71 +84,17 @@ echo "Update Github K8s Manifest file...."
 echo 
 echo $separationPhrase
 
-DEPLOYMENT_FILE=$currentDir/$DEPLOY_NAME/k8s/$BACKEND_IMAGE_NAME/deployment.yaml
-sed -i "s|image: ${DOCKER_NICKNAME}/${BACKEND_IMAGE_NAME}:.*|image: ${DOCKER_NICKNAME}/${BACKEND_IMAGE_NAME}:${TAG}|g" ${DEPLOYMENT_FILE}
+K8S_DIR=$currentDir/$DEPLOY_NAME/k8s/$BACKEND_IMAGE_NAME
 
-git add ${DEPLOYMENT_FILE}
-git commit -m "fix: ${BACKEND_IMAGE_NAME} image to version ${TAG}"
-git push https://${GIT_USER}:${GIT_PASS}@github.com/Team-SSOK/ssok-bank.git HEAD
+DEPLOYMENT_FILE="deployment.yaml"
+sed -i "s|image: ${DOCKER_NICKNAME}/${BACKEND_IMAGE_NAME}:.*|image: ${DOCKER_NICKNAME}/${BACKEND_IMAGE_NAME}:${TAG}|g" ${K8S_DIR}/${DEPLOYMENT_FILE}
 
-# #마운트 시작
-# echo $separationPhrase
-# echo
-# echo "Remote Server Mount...."
-# echo 
-# echo $separationPhrase
-
-# mkdir -p $mountDir;
-
-# sshfs $remoteID@$remoteIP:$remoteBaseDir $mountDir;
-# echo
-# echo "=> Successfully Mounted sshfs $remoteID@$remoteIP:$remoteBaseDir <=> $mountDir";
-# echo
-# echo $separationPhrase
-# echo
-# echo "Copy Docker images to Remote Server...."
-# echo 
-# echo $separationPhrase
-
-# #tar 이미지 파일을 원격 서버로 복사
-# echo
-# cp -r -f $currentDir/images/*.tar $mountDir;
-# echo "=> Successfully copied Docker images to Remote Server"
-# echo
-
-# echo $separationPhrase
-# echo
-# echo "Remote Server UnMount...."
-# echo 
-# echo $separationPhrase
-
-# #언마운트
-# echo
-# umount $mountDir;
-# echo "=> Successfully Unmounted sshfs $remoteID@$remoteIP:$remoteBaseDir <=> $mountDir"
-# echo
-
-# echo $separationPhrase
-# echo
-# echo "Run Docker Container in Remote Server...."
-# echo 
-# echo $separationPhrase
-
-# ssh lgcns@172.21.1.22 /bin/bash <<'EOT'
-# echo
-# echo "Remote Server Environment: $( uname -a )"
-# echo "login user => $( whoami )"
-# cd /home/lgcns/docker_ssok
-# echo "currentDir => $(pwd -P)"
-
-# #도커 이미지 로드
-# docker load -i ssok-bank.tar
-
-# #도커 컴포즈 시작
-# docker compose -f docker-compose-kafka.yml up -d
-# sleep 10
-# docker compose -f docker-compose-bank.yml up -d
-# EOT
+cd $K8S_DIR
+git add .
+git status
+git commit -m "build: ${BACKEND_IMAGE_NAME} 이미지 태그를 ${TAG}로 업데이트"
+echo "build: ${BACKEND_IMAGE_NAME} 이미지 태그를 ${TAG}로 업데이트"
+git push https://${GIT_PASS}@github.com/Team-SSOK/ssok-deploy.git main
 
 echo
 echo "SSOK BANK DEPLOY Finished!"
