@@ -76,6 +76,7 @@ docker push "$DOCKER_NICKNAME/$BACKEND_IMAGE_NAME:$TAG"
 
 #허브 이미지 제거
 docker image rmi $DOCKER_NICKNAME/$BACKEND_IMAGE_NAME:$TAG
+docker image rmi $BACKEND_IMAGE_NAME:$TAG
 docker image prune -f
 
 echo $separationPhrase
@@ -93,7 +94,7 @@ cd $K8S_DIR
 git add .
 git status
 git commit -m "build: ${BACKEND_IMAGE_NAME} 이미지 태그를 ${TAG}로 업데이트"
-echo "build: ${BACKEND_IMAGE_NAME} 이미지 태그를 ${TAG}로 업데이트"
+echo
 git push https://${GIT_PASS}@github.com/Team-SSOK/ssok-deploy.git main
 
 echo
