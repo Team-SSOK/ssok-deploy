@@ -1,20 +1,30 @@
 #!/bin/bash
-currentDir=$(pwd -P);
+currentDir=$(pwd -P)
+separationPhrase="======================================"
 
-# Git 저장소 클론
-git clone https://${GIT_PASS}@github.com/Team-SSOK/ssok-deploy.git
+# 서비스 정보 설정
+SERVICE_NAME="ssok-config-service"  # 각 서비스별로 변경 필요
+DOCKER_USER=${DOCKER_USER}
 
-# 배포 스크립트 복사 및 실행
-cp -r -f ./ssok-deploy/jenkins/ssok-app/ssok-config-service/deploy.sh $currentDir
+echo $separationPhrase
+echo
+echo "$SERVICE_NAME CI/CD Process Start......"
+echo
+echo $separationPhrase
+
+# 기존 deploy.sh 스크립트 실행
+git clone https://${GIT_USER}:${GIT_PASS}@github.com/Team-SSOK/ssok-deploy.git temp-deploy
+cp -r -f ./temp-deploy/jenkins/ssok-app/$SERVICE_NAME/deploy.sh $currentDir
 chmod +x ./deploy.sh
 ./deploy.sh
 
 # Git 커밋 해시 가져오기
 source git_commit.txt
+echo "Git commit: $GIT_COMMIT"
 
 # 배포 매니페스트 업데이트
-cd $currentDir
-git clone https://${GIT_PASS}@github.com/Team-SSOK/ssok-deploy.git deploy-repo
+rm -rf temp-deploy
+git clone https://${GIT_USER}:${GIT_PASS}@github.com/Team-SSOK/ssok-deploy.git deploy-repo
 cd deploy-repo
 
 echo $separationPhrase
@@ -23,29 +33,33 @@ echo "Updating Deployment Manifest......"
 echo
 echo $separationPhrase
 
-# ssok-app/overlays/dev 디렉토리가 없으면 생성
-mkdir -p k8s/ssok-app/overlays/dev/ssok-config-service
+# 배포 매니페스트 업데이트
+DEPLOYMENT_PATH="k8s/ssok-app/base/$SERVICE_NAME/deployment.yaml"
 
-# kustomization.yaml 파일 업데이트
-cat > k8s/ssok-app/overlays/dev/ssok-config-service/kustomization.yaml << EOF
-apiVersion: kustomize.config.k8s.io/v1beta1
-kind: Kustomization
-resources:
-- ../../../base/ssok-config-service
-images:
-- name: ${DOCKER_USER}/ssok-config-service
-  newTag: ${GIT_COMMIT}
-EOF
+# deployment.yaml 파일이 존재하는지 확인
+if [ -f "$DEPLOYMENT_PATH" ]; then
+    # 이미지 태그 업데이트
+    sed -i "s|image: $DOCKER_USER/$SERVICE_NAME:.*|image: $DOCKER_USER/$SERVICE_NAME:$GIT_COMMIT|g" $DEPLOYMENT_PATH
 
-# Git 변경사항 커밋 및 푸시
-git config user.email "jenkins@example.com"
-git config user.name "Jenkins"
-git add .
-git commit -m "Update ssok-config-service image to ${GIT_COMMIT}"
-git push origin main
+    # Git 변경사항 커밋 및 푸시
+    git config user.email "jenkins@ssok.kr"
+    git config user.name "Jenkins"
+    git add .
+    git commit -m "Update $SERVICE_NAME image to $GIT_COMMIT"
+    git push origin main
+
+    echo "Deployment manifest updated successfully!"
+else
+    echo "Error: $DEPLOYMENT_PATH does not exist. Please check the path."
+    exit 1
+fi
 
 echo $separationPhrase
 echo
 echo "Deployment Manifest Updated Successfully!"
 echo
 echo $separationPhrase
+
+# 임시 디렉토리 정리
+cd $currentDir
+rm -rf deploy-repo

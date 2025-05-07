@@ -1,0 +1,33 @@
+pipeline {
+    agent any
+
+    environment {
+        GIT_USER = credentials('GIT_USER')
+        GIT_PASS = credentials('GIT_PASS')
+        DOCKER_USER = credentials('DOCKER_USER')
+        DOCKER_PASS = credentials('DOCKER_PASS')
+    }
+
+    stages {
+        stage('Checkout') {
+            steps {
+                checkout scm
+            }
+        }
+
+        stage('Deploy') {
+            steps {
+                sh '''
+                    chmod +x ./pipeline.sh
+                    ./pipeline.sh
+                '''
+            }
+        }
+    }
+
+    post {
+        always {
+            cleanWs()
+        }
+    }
+}
