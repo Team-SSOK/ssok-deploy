@@ -10,7 +10,7 @@ separationPhrase="=====================================";
 DOCKER_NICKNAME="kudong"
 BACKEND_IMAGE_NAME="ssok-bank"
 DEPLOY_NAME="ssok-deploy"
-TAG="latest"
+TAG="1.$BUILD_NUMBER"
 BUILD="jenkins"
 
 echo $separationPhrase
@@ -99,6 +99,15 @@ docker push "$DOCKER_NICKNAME/$BACKEND_IMAGE_NAME:$TAG"
 #허브 이미지 제거
 docker image rmi $DOCKER_NICKNAME/$BACKEND_IMAGE_NAME:$TAG
 docker image prune -f
+
+echo $separationPhrase
+echo
+echo "Update Github K8s Manifest file...."
+echo 
+echo $separationPhrase
+
+DEPLOYMENT_FILE=$currentDir/$DEPLOY_NAME/k8s/deployment.yaml
+sed -i "s|image: ${DOCKER_NICKNAME}/${BACKEND_IMAGE_NAME}:.*|image: ${DOCKER_NICKNAME}/${BACKEND_IMAGE_NAME}:${TAG}|g" ${DEPLOYMENT_FILE}
 
 # #마운트 시작
 # echo $separationPhrase
