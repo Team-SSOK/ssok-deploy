@@ -3,7 +3,7 @@ spring:
     name: ssok-openbanking
 
   kafka:
-    bootstrap-servers: 172.21.1.22:9092
+    bootstrap-servers: 172.21.1.22:31001
     request-topic: request-topic
     reply-topic: reply-topic
     push-topic: push-topic
