@@ -3,7 +3,7 @@ spring:
     name: ssok-openbanking
 
   kafka:
-    bootstrap-servers: broker:9092
+    bootstrap-servers: 172.21.1.22:9092
     request-topic: request-topic
     reply-topic: reply-topic
     push-topic: push-topic
@@ -19,7 +19,7 @@ spring:
 
   data:
     redis:
-      host: ${REDIS_HOST:localhost}
+      host: ${REDIS_HOST:172.21.1.22}
       port: ${REDIS_PORT:6379}
 
   jpa:
