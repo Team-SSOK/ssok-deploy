@@ -1,23 +1,23 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: ssok-gateway-service
+  name: ssok-user-service
   namespace: ssok
   labels:
-    app: ssok-gateway-service
+    app: ssok-user-service
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: ssok-gateway-service
+      app: ssok-user-service
   template:
     metadata:
       labels:
-        app: ssok-gateway-service
+        app: ssok-user-service
     spec:
       containers:
-      - name: ssok-gateway-service
-        image: kudong/ssok-gateway-service:latest
+      - name: ssok-user-service
+        image: kudong/ssok-user-service:latest
         imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 8080
@@ -51,4 +51,4 @@ spec:
       volumes:
       - name: config-volume
         configMap:
-          name: ssok-gateway-service
+          name: ssok-user-service

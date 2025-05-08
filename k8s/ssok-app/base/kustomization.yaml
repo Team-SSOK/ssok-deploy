@@ -1,0 +1,9 @@
+resources:
+- ssok-account-service
+- ssok-transfer-service
+- ssok-user-service
+- ssok-notification-service
+- ssok-gateway-service
+- ssok-bluetooth-service
+- ingress
+- rbac

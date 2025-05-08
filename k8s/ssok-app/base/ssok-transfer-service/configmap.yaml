@@ -1,0 +1,37 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: ssok-transfer-service
+  namespace: ssok
+data:
+  application.yml: |
+    server:
+      port: 8080
+    spring:
+      application:
+        name: ssok-transfer-service
+      cloud:
+        kubernetes:
+          config:
+            enabled: true
+          secrets:
+            enabled: true
+          reload:
+            enabled: true
+      jpa:
+        hibernate:
+          ddl-auto: update
+        show-sql: true
+    external:
+      openbanking-service:
+        url: http://ssok-openbanking-service
+      account-service:
+        url: http://ssok-account-service
+    management:
+      endpoints:
+        web:
+          exposure:
+            include: "*"
+      endpoint:
+        health:
+          show-details: always

@@ -1,29 +1,58 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: ssok-gateway-service-cm
+  name: ssok-gateway-service
   namespace: ssok
 data:
-  SERVER_PORT: "8080"
-  SPRING_PROFILES_ACTIVE: "default"
-  SPRING_CLOUD_CONFIG_URI: "http://ssok-config-service:8888"
-  SPRING_CLOUD_GATEWAY_ROUTES_0_ID: "user-service"
-  SPRING_CLOUD_GATEWAY_ROUTES_0_URI: "http://ssok-user-service:8080"
-  SPRING_CLOUD_GATEWAY_ROUTES_0_PREDICATES_0: "Path=/api/users/**"
-  SPRING_CLOUD_GATEWAY_ROUTES_0_FILTERS_0: "StripPrefix=1"
-  SPRING_CLOUD_GATEWAY_ROUTES_1_ID: "account-service"
-  SPRING_CLOUD_GATEWAY_ROUTES_1_URI: "http://ssok-account-service:8080"
-  SPRING_CLOUD_GATEWAY_ROUTES_1_PREDICATES_0: "Path=/api/accounts/**"
-  SPRING_CLOUD_GATEWAY_ROUTES_1_FILTERS_0: "StripPrefix=1"
-  SPRING_CLOUD_GATEWAY_ROUTES_2_ID: "transfer-service"
-  SPRING_CLOUD_GATEWAY_ROUTES_2_URI: "http://ssok-transfer-service:8080"
-  SPRING_CLOUD_GATEWAY_ROUTES_2_PREDICATES_0: "Path=/api/transfers/**"
-  SPRING_CLOUD_GATEWAY_ROUTES_2_FILTERS_0: "StripPrefix=1"
-  SPRING_CLOUD_GATEWAY_ROUTES_3_ID: "notification-service"
-  SPRING_CLOUD_GATEWAY_ROUTES_3_URI: "http://ssok-notification-service:8080"
-  SPRING_CLOUD_GATEWAY_ROUTES_3_PREDICATES_0: "Path=/api/notifications/**"
-  SPRING_CLOUD_GATEWAY_ROUTES_3_FILTERS_0: "StripPrefix=1"
-  SPRING_CLOUD_GATEWAY_ROUTES_4_ID: "bluetooth-service"
-  SPRING_CLOUD_GATEWAY_ROUTES_4_URI: "http://ssok-bluetooth-service:8080"
-  SPRING_CLOUD_GATEWAY_ROUTES_4_PREDICATES_0: "Path=/api/bluetooth/**"
-  SPRING_CLOUD_GATEWAY_ROUTES_4_FILTERS_0: "StripPrefix=1"
+  application.yml: |
+    server:
+      port: 8080
+    spring:
+      application:
+        name: ssok-gateway-service
+      cloud:
+        kubernetes:
+          config:
+            enabled: true
+          secrets:
+            enabled: true
+          discovery:
+            all-namespaces: false
+          loadbalancer:
+            mode: service
+          reload:
+            enabled: true
+        gateway:
+          routes:
+            - id: user-service
+              uri: lb://ssok-user-service
+              predicates:
+                - Path=/api/auth/**, /api/users/**
+            - id: account-service
+              uri: lb://ssok-account-service
+              predicates:
+                - Path=/api/accounts/**
+            - id: transfer-service
+              uri: lb://ssok-transfer-service
+              predicates:
+                - Path=/api/transfers/**
+            - id: notification-service
+              uri: lb://ssok-notification-service
+              predicates:
+                - Path=/api/notifications/**
+            - id: bluetooth-service
+              uri: lb://ssok-bluetooth-service
+              predicates:
+                - Path=/api/bluetooth/**
+      data:
+        redis:
+          host: ${SPRING_DATA_REDIS_HOST:redis}
+          port: ${SPRING_DATA_REDIS_PORT:6379}
+    management:
+      endpoints:
+        web:
+          exposure:
+            include: "*"
+      endpoint:
+        health:
+          show-details: always
