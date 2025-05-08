@@ -28,13 +28,13 @@ spec:
         - name: KAFKA_PROCESS_ROLES
           value: "broker,controller"
         - name: KAFKA_LISTENERS
-          value: "PLAINTEXT://0.0.0.0:9092,CONTROLLER://0.0.0.0:9093"
+          value: "PLAINTEXT://0.0.0.0:9092,CONTROLLER://0.0.0.0:9093,EXTERNAL://0.0.0.0:31001"
         - name: KAFKA_ADVERTISED_LISTENERS
-          value: "PLAINTEXT://broker:9092,EXTERNAL://172.21.1.22:31001"
+          value: "PLAINTEXT://broker:9092,EXTERNAL://0.0.0.0:31001"
         - name: KAFKA_CONTROLLER_LISTENER_NAMES
           value: "CONTROLLER"
         - name: KAFKA_LISTENER_SECURITY_PROTOCOL_MAP
-          value: "CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT"
+          value: "CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT,EXTERNAL:PLAINTEXT"
         - name: KAFKA_CONTROLLER_QUORUM_VOTERS
           value: "1@broker:9093"
         - name: KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR
