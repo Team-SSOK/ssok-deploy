@@ -3,7 +3,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: ssok-bank-cm
-  namespace: ssok
+  namespace: bank
 data:
   SERVER_PORT: "8080"
   KAFKA_BOOTSTRAP_SERVERS: "broker:9092"

@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: kafka-deployment
-  namespace: ssok
+  namespace: bank
   labels:
     app: kafka
 spec:
@@ -58,7 +58,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: ssok-bank-deployment
-  namespace: ssok
+  namespace: bank
   labels:
     app: ssok-bank
 spec:
