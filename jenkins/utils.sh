@@ -2,12 +2,19 @@
 
 # 서비스 빌드 및 배포를 위한 공통 유틸리티 함수들
 
+# Docker Hub 사용자 이름 (실제 레포지토리 이름)
+DOCKER_REPO_NAME="kudong"
+
 # JAR 파일을 이용한 도커 이미지 빌드 및 푸시
 function build_docker_from_jar() {
     local SERVICE_NAME=$1
     local DOCKER_USER=$2
     local TAG=${3:-latest}
     local WORKSPACE_DIR=$4
+
+    # Git 커밋 해시 먼저 가져오기
+    local GIT_COMMIT=$(git rev-parse --short HEAD)
+    echo "Git commit hash: $GIT_COMMIT"
 
     echo "Building Docker image for $SERVICE_NAME using pre-built JAR..."
 
@@ -40,11 +47,8 @@ EOF
     docker build -t ${SERVICE_NAME}:${TAG} docker-build/
 
     echo "Tagging Docker image..."
-    DOCKER_REPO_NAME=$(echo "$DOCKER_USER" | sed 's/@.*//g')
+    # 하드코딩된 DOCKER_REPO_NAME 사용
     docker tag "${SERVICE_NAME}:${TAG}" "${DOCKER_REPO_NAME}/${SERVICE_NAME}:${TAG}"
-
-    # 커밋 해시에 대한 태그 생성
-    GIT_COMMIT=$(git rev-parse --short HEAD)
     docker tag "${SERVICE_NAME}:${TAG}" "${DOCKER_REPO_NAME}/${SERVICE_NAME}:${GIT_COMMIT}"
 
     echo "Pushing Docker image..."
@@ -54,8 +58,8 @@ EOF
     # 임시 디렉토리 정리
     rm -rf docker-build
 
-    # 커밋 해시 반환
-    echo $GIT_COMMIT
+    # 순수 커밋 해시만 반환
+    echo "$GIT_COMMIT"
 }
 
 # 도커 이미지 빌드 및 푸시 (기존 함수 유지, 필요시 사용)
@@ -64,25 +68,24 @@ function build_and_push_docker_image() {
     local DOCKER_USER=$2
     local TAG=${3:-latest}
 
+    # Git 커밋 해시 먼저 가져오기
+    local GIT_COMMIT=$(git rev-parse --short HEAD)
+    echo "Git commit hash: $GIT_COMMIT"
+
     echo "Building Docker image for $SERVICE_NAME..."
     docker build -f $SERVICE_NAME/Dockerfile -t $SERVICE_NAME:$TAG .
 
     echo "Tagging Docker image..."
-    # Docker 이미지 이름에 @ 문자가 포함되면 안됨 (이메일 주소 형식 방지)
-    DOCKER_REPO_NAME=$(echo "$DOCKER_USER" | sed 's/@.*//g')
-    docker tag "$SERVICE_NAME:$TAG" "$DOCKER_REPO_NAME/$SERVICE_NAME:$TAG"
-
-    # 커밋 해시에 대한 태그 생성
-    GIT_COMMIT=$(git rev-parse --short HEAD)
-    docker tag "$SERVICE_NAME:$TAG" "$DOCKER_REPO_NAME/$SERVICE_NAME:$GIT_COMMIT"
+    # 하드코딩된 DOCKER_REPO_NAME 사용
+    docker tag "$SERVICE_NAME:$TAG" "${DOCKER_REPO_NAME}/${SERVICE_NAME}:${TAG}"
+    docker tag "$SERVICE_NAME:$TAG" "${DOCKER_REPO_NAME}/${SERVICE_NAME}:${GIT_COMMIT}"
 
     echo "Pushing Docker image..."
-    DOCKER_REPO_NAME=$(echo "$DOCKER_USER" | sed 's/@.*//g')
-    docker push "$DOCKER_REPO_NAME/$SERVICE_NAME:$TAG"
-    docker push "$DOCKER_REPO_NAME/$SERVICE_NAME:$GIT_COMMIT"
+    docker push "${DOCKER_REPO_NAME}/${SERVICE_NAME}:${TAG}"
+    docker push "${DOCKER_REPO_NAME}/${SERVICE_NAME}:${GIT_COMMIT}"
 
-    # 커밋 해시 반환
-    echo $GIT_COMMIT
+    # 순수 커밋 해시만 반환
+    echo "$GIT_COMMIT"
 }
 
 # ArgoCD에서 사용할 kustomization 파일 업데이트
@@ -94,16 +97,13 @@ function update_kustomization_file() {
 
     echo "Updating kustomization file for $SERVICE_NAME..."
 
-    # 서비스 디렉토리 경로
+    # 서비스 디렉토리 경로 (Docker 디렉토리 접두사 제거)
     local SERVICE_DIR="$DEPLOY_REPO_PATH/k8s/ssok-app/overlays/dev/$SERVICE_NAME"
 
     # 디렉토리가 없으면 생성
     mkdir -p "$SERVICE_DIR"
 
-    # Docker 이미지 이름에서 이메일 주소 제거
-    DOCKER_REPO_NAME=$(echo "$DOCKER_USER" | sed 's/@.*//g')
-
-    # kustomization.yaml 파일 업데이트
+    # kustomization.yaml 파일 업데이트 (하드코딩된 DOCKER_REPO_NAME 사용)
     cat > "$SERVICE_DIR/kustomization.yaml" << EOF
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
@@ -112,8 +112,8 @@ resources:
 - ../../../base/$SERVICE_NAME
 
 images:
-- name: $DOCKER_REPO_NAME/$SERVICE_NAME
-  newTag: $GIT_COMMIT
+- name: ${DOCKER_REPO_NAME}/${SERVICE_NAME}
+  newTag: ${GIT_COMMIT}
 EOF
 
     echo "Kustomization file updated successfully."
