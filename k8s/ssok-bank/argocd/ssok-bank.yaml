@@ -2,7 +2,7 @@ apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
   name: ssok-bank
-  namespace: ssok
+  namespace: bank
 spec:
   project: default
   source:
