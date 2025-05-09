@@ -34,8 +34,16 @@ else
     cd ssok-deploy
 fi
 
+# 현재 디렉토리 출력 (디버깅용)
+echo "Current directory before updating kustomization: $(pwd)"
+
 # ssok-deploy 저장소에서 kustomization 파일 업데이트
-update_kustomization_file $SERVICE_NAME $DOCKER_USER $GIT_COMMIT "."
+# DEPLOY_REPO_PATH는 더 이상 사용하지 않으므로 비워둡니다
+update_kustomization_file $SERVICE_NAME $DOCKER_USER $GIT_COMMIT ""
+
+# 업데이트된 파일이 제대로 생성되었는지 확인
+echo "Checking if kustomization file was created:"
+ls -la k8s/ssok-app/overlays/dev/$SERVICE_NAME/
 
 # Git 커밋 및 푸시
 git config user.email "jenkins@example.com"
