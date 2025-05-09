@@ -5,5 +5,5 @@ resources:
 - ../../../base/ssok-account-service
 
 images:
-- name: kudong/ssok-account-service
-  newTag: latest
+- name: dhku10@gmail.com/ssok-account-service
+  newTag: c519e05a5c60c52dd8c933cdbb45111c4cb90f88
