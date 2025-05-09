@@ -6,4 +6,4 @@ resources:
 
 images:
 - name: kudong/ssok-gateway-service
-  newTag: Git
+  newTag: 61fc0d7
