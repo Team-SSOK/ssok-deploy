@@ -6,4 +6,4 @@ resources:
 
 images:
 - name: dhku10/ssok-user-service
-  newTag: 2971912
+  newTag: 29b5b9f
