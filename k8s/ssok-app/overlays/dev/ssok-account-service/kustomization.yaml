@@ -6,4 +6,4 @@ resources:
 
 images:
 - name: dhku10/ssok-account-service
-  newTag: 597ed14
+  newTag: dfac731
