@@ -1,6 +1,8 @@
 spring:
   application:
     name: ssok-openbanking
+  profiles:
+    active: kafka
 
   kafka:
     bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS:172.21.1.22:31001}
@@ -14,7 +16,7 @@ spring:
       value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
       key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
       properties:
-        spring.json.trusted.packages: kr.ssok.model
+        spring.json.trusted.packages: "*"
       auto-offset-reset: earliest
 
   data:
