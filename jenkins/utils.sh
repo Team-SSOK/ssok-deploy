@@ -9,7 +9,7 @@ function build_and_push_docker_image() {
     local TAG=${3:-latest}
     
     echo "Building Docker image for $SERVICE_NAME..."
-    docker build -t $SERVICE_NAME:$TAG .
+    docker build -f $SERVICE_NAME/Dockerfile -t $SERVICE_NAME:$TAG .
     
     echo "Tagging Docker image..."
     docker tag "$SERVICE_NAME:$TAG" "$DOCKER_USER/$SERVICE_NAME:$TAG"
