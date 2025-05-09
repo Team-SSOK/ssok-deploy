@@ -5,5 +5,5 @@ resources:
 - ../../../base/ssok-transfer-service
 
 images:
-- name: dhku10/ssok-transfer-service
-  newTag: dfac731
+- name: kudong/ssok-transfer-service
+  newTag: Git
