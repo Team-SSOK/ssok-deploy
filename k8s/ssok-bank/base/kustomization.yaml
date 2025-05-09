@@ -1,0 +1,6 @@
+resources:
+- configmap.yaml
+- secret.yaml
+- service.yaml
+- deployment.yaml
+
