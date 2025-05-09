@@ -6,4 +6,4 @@ resources:
 
 images:
 - name: dhku10/ssok-bluetooth-service
-  newTag: 29b5b9f
+  newTag: d9c6217
