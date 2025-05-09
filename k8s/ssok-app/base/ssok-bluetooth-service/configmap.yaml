@@ -15,9 +15,13 @@ data:
           config:
             enabled: true
           secrets:
-            enabled: true
+            enabled: false
           reload:
             enabled: true
+      data:
+        redis:
+          host: 172.21.1.22
+          port: 6379
     bluetooth:
       uuid-ttl-seconds: 86400 # 기본값 24시간
     external:

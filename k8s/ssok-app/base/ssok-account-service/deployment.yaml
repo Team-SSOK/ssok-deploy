@@ -27,33 +27,6 @@ spec:
         env:
         - name: SPRING_CONFIG_LOCATION
           value: file:/config/application.yml
-        # 데이터베이스 연결 정보
-        - name: SPRING_DATASOURCE_URL
-          valueFrom:
-            secretKeyRef:
-              name: ssok-account-service-secret
-              key: spring.datasource.url
-        - name: SPRING_DATASOURCE_USERNAME
-          valueFrom:
-            secretKeyRef:
-              name: ssok-account-service-secret
-              key: spring.datasource.username
-        - name: SPRING_DATASOURCE_PASSWORD
-          valueFrom:
-            secretKeyRef:
-              name: ssok-account-service-secret
-              key: spring.datasource.password
-        # Redis 연결 정보
-        - name: SPRING_DATA_REDIS_HOST
-          valueFrom:
-            secretKeyRef:
-              name: ssok-account-service-secret
-              key: spring.data.redis.host
-        - name: SPRING_DATA_REDIS_PORT
-          valueFrom:
-            secretKeyRef:
-              name: ssok-account-service-secret
-              key: spring.data.redis.port
         resources:
           requests:
             memory: "256Mi"

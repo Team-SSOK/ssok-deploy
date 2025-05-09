@@ -7,5 +7,3 @@ resources:
 - ssok-bluetooth-service
 - ingress
 - rbac
-- postgresql
-- redis

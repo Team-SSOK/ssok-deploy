@@ -15,9 +15,18 @@ data:
           config:
             enabled: true
           secrets:
-            enabled: true
+            enabled: false
           reload:
             enabled: true
+      datasource:
+        url: jdbc:postgresql://172.21.1.22:5432/mydb
+        username: mydb
+        password: 1234
+        driver-class-name: org.postgresql.Driver
+      data:
+        redis:
+          host: 172.21.1.22
+          port: 6379
       jpa:
         hibernate:
           ddl-auto: update
@@ -49,3 +58,9 @@ data:
       endpoint:
         health:
           show-details: always
+    jwt:
+      secret: ssokAppFinTechSecretKey1234567890ABCDEFGHIJKLMN
+    aligo:
+      API_KEY: eu0x6jq8ohfldehok2vvbecg0exhnrle
+      USER_ID: kingmandoo95
+      SENDER: 01077948797

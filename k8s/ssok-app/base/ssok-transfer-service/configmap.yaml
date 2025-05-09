@@ -15,9 +15,14 @@ data:
           config:
             enabled: true
           secrets:
-            enabled: true
+            enabled: false
           reload:
             enabled: true
+      datasource:
+        url: jdbc:mysql://172.21.1.22:3306/ssok?characterEncoding=UTF-8&serverTimeZone=Asia/Seoul
+        username: ssok
+        password: 1234
+        driver-class-name: com.mysql.cj.jdbc.Driver
       jpa:
         hibernate:
           ddl-auto: update

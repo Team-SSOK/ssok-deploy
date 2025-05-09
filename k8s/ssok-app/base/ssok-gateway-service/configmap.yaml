@@ -15,7 +15,7 @@ data:
           config:
             enabled: true
           secrets:
-            enabled: true
+            enabled: false
           discovery:
             all-namespaces: false
           loadbalancer:
@@ -46,8 +46,8 @@ data:
                 - Path=/api/bluetooth/**
       data:
         redis:
-          host: ${SPRING_DATA_REDIS_HOST:redis}
-          port: ${SPRING_DATA_REDIS_PORT:6379}
+          host: 172.21.1.22
+          port: 6379
     management:
       endpoints:
         web:
@@ -56,3 +56,5 @@ data:
       endpoint:
         health:
           show-details: always
+    jwt:
+      secret: ssokAppFinTechSecretKey1234567890ABCDEFGHIJKLMN
