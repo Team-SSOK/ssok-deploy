@@ -5,5 +5,5 @@ resources:
 - ../../../base/ssok-bluetooth-service
 
 images:
-- name: dhku10@gmail.com/ssok-bluetooth-service
-  newTag: c519e05a5c60c52dd8c933cdbb45111c4cb90f88
+- name: dhku10/ssok-bluetooth-service
+  newTag: 29b5b9f
