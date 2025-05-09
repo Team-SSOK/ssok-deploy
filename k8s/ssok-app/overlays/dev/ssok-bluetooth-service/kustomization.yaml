@@ -5,5 +5,5 @@ resources:
 - ../../../base/ssok-bluetooth-service
 
 images:
-- name: dhku10/ssok-bluetooth-service
-  newTag: dfac731
+- name: kudong/ssok-bluetooth-service
+  newTag: Git
