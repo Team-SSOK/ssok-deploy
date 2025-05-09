@@ -43,8 +43,7 @@ fi
 
 # gradlew에 실행 권한 부여
 chmod +x gradlew
-./gradlew clean --refresh-dependencies
-./gradlew clean :$SERVICE_NAME:build -x test
+./gradlew :ssok-common:build :$SERVICE_NAME:build --refresh-dependencies -x test
 
 # Docker 이미지 빌드 및 푸시
 GIT_COMMIT=$(build_and_push_docker_image $SERVICE_NAME $DOCKER_NICKNAME $TAG)
