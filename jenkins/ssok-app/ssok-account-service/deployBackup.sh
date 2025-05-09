@@ -27,15 +27,26 @@ echo $separationPhrase
 echo
 echo $separationPhrase
 echo
-echo "DOCKER IMAGE BUILD Start...."
-echo
+echo "BACKEND BUILD Start...."
+echo 
 echo $separationPhrase
 
-# Jenkins 워크스페이스의 루트 디렉토리 (환경변수로 받음)
-JENKINS_WORKSPACE="${WORKSPACE:-${currentDir}/../../..}"
+# 모듈 프로세스 - ssok-backend 저장소에서 실행하도록 수정
+cd ${currentDir}/../../..  # Jenkins 작업공간의 루트 디렉토리로 이동
+if [ -d "ssok-backend" ]; then
+    cd ssok-backend  # 기존에 클론된 저장소가 있으면 사용
+else
+    # ssok-backend 저장소가 없으면 클론
+    git clone https://github.com/Team-SSOK/ssok-backend.git
+    cd ssok-backend
+fi
 
-# Docker 이미지 빌드 및 푸시 (빌드된 JAR 파일 사용)
-GIT_COMMIT=$(build_docker_from_jar $SERVICE_NAME $DOCKER_NICKNAME $TAG $JENKINS_WORKSPACE)
+# gradlew에 실행 권한 부여
+chmod +x gradlew
+./gradlew :ssok-common:build :$SERVICE_NAME:build --refresh-dependencies -x test
+
+# Docker 이미지 빌드 및 푸시
+GIT_COMMIT=$(build_and_push_docker_image $SERVICE_NAME $DOCKER_NICKNAME $TAG)
 
 # 배포에 필요한 Git commit 정보 저장
 echo "GIT_COMMIT=$GIT_COMMIT" > git_commit.txt
