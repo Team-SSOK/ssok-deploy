@@ -3,8 +3,7 @@ kind: Kustomization
 
 resources:
 - ../../../base/ssok-gateway-service
-- ../../../base/rbac
 
 images:
 - name: kudong/ssok-gateway-service
-  newTag: 61fc0d7
+  newTag: 18cae79
