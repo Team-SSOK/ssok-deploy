@@ -12,9 +12,16 @@ source jenkins/utils.sh
 # source git_commit.txt 대신에 변수로 읽어오기
 if [ -f "git_commit.txt" ]; then
     GIT_COMMIT=$(grep "GIT_COMMIT=" git_commit.txt | cut -d'=' -f2)
+    # GIT_COMMIT 변수에 값이 제대로 설정되었는지 확인
+    if [[ -z "$GIT_COMMIT" || "$GIT_COMMIT" == "Git" ]]; then
+        echo "Warning: Invalid GIT_COMMIT value found in git_commit.txt, using HEAD commit"
+        GIT_COMMIT=$(git rev-parse --short HEAD)
+    fi
+    echo "Using GIT_COMMIT: $GIT_COMMIT"
 else
     echo "Warning: git_commit.txt not found, using HEAD commit"
     GIT_COMMIT=$(git rev-parse --short HEAD)
+    echo "Using GIT_COMMIT: $GIT_COMMIT"
 fi
 
 echo $separationPhrase

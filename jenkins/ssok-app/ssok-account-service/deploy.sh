@@ -37,6 +37,14 @@ JENKINS_WORKSPACE="${WORKSPACE:-${currentDir}/../../..}"
 # Docker 이미지 빌드 및 푸시 (빌드된 JAR 파일 사용)
 GIT_COMMIT=$(build_docker_from_jar $SERVICE_NAME $DOCKER_NICKNAME $TAG $JENKINS_WORKSPACE)
 
+# GIT_COMMIT 변수에 값이 제대로 설정되었는지 확인
+if [[ -z "$GIT_COMMIT" || "$GIT_COMMIT" == "Git" ]]; then
+    echo "Warning: Invalid GIT_COMMIT value returned from build_docker_from_jar, using HEAD commit"
+    GIT_COMMIT=$(git rev-parse --short HEAD)
+fi
+
+echo "Final GIT_COMMIT value: $GIT_COMMIT"
+
 # 배포에 필요한 Git commit 정보 저장
 echo "GIT_COMMIT=$GIT_COMMIT" > git_commit.txt
 

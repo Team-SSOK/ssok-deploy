@@ -96,6 +96,14 @@ function update_kustomization_file() {
     local DEPLOY_REPO_PATH=$4
 
     echo "Updating kustomization file for $SERVICE_NAME..."
+    
+    # GIT_COMMIT 값이 유효한지 확인
+    if [[ -z "$GIT_COMMIT" || "$GIT_COMMIT" == "Git" ]]; then
+        echo "Warning: Invalid GIT_COMMIT value: '$GIT_COMMIT', using current HEAD commit"
+        GIT_COMMIT=$(git rev-parse --short HEAD)
+    fi
+    
+    echo "Using GIT_COMMIT: $GIT_COMMIT for kustomization update"
 
     # 서비스 디렉토리 경로 수정 - DEPLOY_REPO_PATH에 따른 경로를 올바르게 구성
     # 현재 디렉토리를 기준으로 상대 경로 사용
@@ -119,5 +127,5 @@ images:
   newTag: ${GIT_COMMIT}
 EOF
 
-    echo "Kustomization file updated successfully."
+    echo "Kustomization file updated successfully with newTag: ${GIT_COMMIT}"
 }
