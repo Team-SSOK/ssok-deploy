@@ -4,7 +4,7 @@ metadata:
   name: ssok-bank
   namespace: ssok
 spec:
-  project: ssok
+  project: default
   source:
     repoURL: https://github.com/Team-SSOK/ssok-deploy.git
     targetRevision: main

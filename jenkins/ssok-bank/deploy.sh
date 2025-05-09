@@ -85,7 +85,7 @@ echo "Update Github K8s Manifest file...."
 echo 
 echo $separationPhrase
 
-K8S_DIR=$currentDir/$DEPLOY_NAME/k8s/$BACKEND_IMAGE_NAME
+K8S_DIR=$currentDir/$DEPLOY_NAME/k8s/$BACKEND_IMAGE_NAME/base
 
 DEPLOYMENT_FILE="deployment.yaml"
 sed -i "s|image: ${DOCKER_NICKNAME}/${BACKEND_IMAGE_NAME}:.*|image: ${DOCKER_NICKNAME}/${BACKEND_IMAGE_NAME}:${TAG}|g" ${K8S_DIR}/${DEPLOYMENT_FILE}
