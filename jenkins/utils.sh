@@ -12,15 +12,18 @@ function build_and_push_docker_image() {
     docker build -f $SERVICE_NAME/Dockerfile -t $SERVICE_NAME:$TAG .
     
     echo "Tagging Docker image..."
-    docker tag "$SERVICE_NAME:$TAG" "$DOCKER_USER/$SERVICE_NAME:$TAG"
+    # Docker 이미지 이름에 @ 문자가 포함되면 안됨 (이메일 주소 형식 방지)
+    DOCKER_REPO_NAME=$(echo "$DOCKER_USER" | sed 's/@.*//g')
+    docker tag "$SERVICE_NAME:$TAG" "$DOCKER_REPO_NAME/$SERVICE_NAME:$TAG"
     
     # 커밋 해시에 대한 태그 생성
     GIT_COMMIT=$(git rev-parse --short HEAD)
-    docker tag "$SERVICE_NAME:$TAG" "$DOCKER_USER/$SERVICE_NAME:$GIT_COMMIT"
+    docker tag "$SERVICE_NAME:$TAG" "$DOCKER_REPO_NAME/$SERVICE_NAME:$GIT_COMMIT"
     
     echo "Pushing Docker image..."
-    docker push "$DOCKER_USER/$SERVICE_NAME:$TAG"
-    docker push "$DOCKER_USER/$SERVICE_NAME:$GIT_COMMIT"
+    DOCKER_REPO_NAME=$(echo "$DOCKER_USER" | sed 's/@.*//g')
+    docker push "$DOCKER_REPO_NAME/$SERVICE_NAME:$TAG"
+    docker push "$DOCKER_REPO_NAME/$SERVICE_NAME:$GIT_COMMIT"
     
     # 커밋 해시 반환
     echo $GIT_COMMIT
@@ -41,6 +44,9 @@ function update_kustomization_file() {
     # 디렉토리가 없으면 생성
     mkdir -p "$SERVICE_DIR"
     
+    # Docker 이미지 이름에서 이메일 주소 제거
+    DOCKER_REPO_NAME=$(echo "$DOCKER_USER" | sed 's/@.*//g')
+    
     # kustomization.yaml 파일 업데이트
     cat > "$SERVICE_DIR/kustomization.yaml" << EOF
 apiVersion: kustomize.config.k8s.io/v1beta1
@@ -50,7 +56,7 @@ resources:
 - ../../../base/$SERVICE_NAME
 
 images:
-- name: $DOCKER_USER/$SERVICE_NAME
+- name: $DOCKER_REPO_NAME/$SERVICE_NAME
   newTag: $GIT_COMMIT
 EOF
 
