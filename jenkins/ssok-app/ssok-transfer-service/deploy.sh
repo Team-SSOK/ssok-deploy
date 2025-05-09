@@ -43,6 +43,7 @@ fi
 
 # gradlew에 실행 권한 부여
 chmod +x gradlew
+./gradlew clean --refresh-dependencies
 ./gradlew clean :$SERVICE_NAME:build -x test
 
 # Docker 이미지 빌드 및 푸시
