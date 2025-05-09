@@ -6,4 +6,4 @@ resources:
 
 images:
 - name: kudong/ssok-user-service
-  newTag: Git
+  newTag: 6dae6b1
