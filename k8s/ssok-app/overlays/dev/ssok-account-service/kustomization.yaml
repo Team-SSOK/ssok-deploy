@@ -6,4 +6,4 @@ resources:
 
 images:
 - name: kudong/ssok-account-service
-  newTag: dfac731
+  newTag: Git
