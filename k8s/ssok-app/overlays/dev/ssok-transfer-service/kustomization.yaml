@@ -3,8 +3,7 @@ kind: Kustomization
 
 resources:
 - ../../../base/ssok-transfer-service
-- ../../../base/rbac
 
 images:
 - name: kudong/ssok-transfer-service
-  newTag: 633f611
+  newTag: 17f84ef
