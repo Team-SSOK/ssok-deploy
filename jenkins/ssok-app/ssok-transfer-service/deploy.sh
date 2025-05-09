@@ -1,10 +1,15 @@
-#!/bin/sh
-currentDir=$(pwd -P);
-separationPhrase="=====================================";
+#!/bin/bash
+# ssok-transfer-service 배포 스크립트
+
+# 현재 디렉토리
+currentDir=$(pwd -P)
 SERVICE_NAME="ssok-transfer-service"
 DOCKER_NICKNAME="${DOCKER_USER}"
 TAG="latest"
-BUILD="jenkins"
+separationPhrase="======================================"
+
+# 공통 유틸리티 함수 로드
+source jenkins/utils.sh
 
 echo $separationPhrase
 echo
@@ -26,40 +31,15 @@ echo "BACKEND BUILD Start...."
 echo 
 echo $separationPhrase
 
-# 백엔드 도커 이미지 빌드
+# 빌드 프로세스
 cd $currentDir
 chmod +x gradlew
-./gradlew clean build -x test
-docker buildx build -t $SERVICE_NAME:$TAG .
+./gradlew clean :$SERVICE_NAME:build -x test
 
-# 도커 허브에 업로드
-echo $separationPhrase
-echo
-echo "Upload Image to DockerHub......"
-echo 
-echo $separationPhrase
+# Docker 이미지 빌드 및 푸시
+GIT_COMMIT=$(build_and_push_docker_image $SERVICE_NAME $DOCKER_NICKNAME $TAG)
 
-# 도커 허브 로그인
-docker images
-echo
-echo "DOCKER_USER = $DOCKER_USER"
-echo "DOCKER_PASS = **********"
-echo
-echo "$DOCKER_PASS" | docker login -u "$DOCKER_USER" --password-stdin
-
-# 도커 허브에 업로드할 이미지 태그 생성
-cd $currentDir
-docker tag "$SERVICE_NAME:$TAG" "$DOCKER_NICKNAME/$SERVICE_NAME:$TAG"
-
-# 커밋 해시를 태그에 추가
-GIT_COMMIT=$(git rev-parse --short HEAD)
-docker tag "$SERVICE_NAME:$TAG" "$DOCKER_NICKNAME/$SERVICE_NAME:$GIT_COMMIT"
-
-# 허브 이미지 푸시
-docker push "$DOCKER_NICKNAME/$SERVICE_NAME:$TAG"
-docker push "$DOCKER_NICKNAME/$SERVICE_NAME:$GIT_COMMIT"
-
-# 파이프라인으로 돌아가기 위해 커밋 해시 반환
+# 배포에 필요한 Git commit 해시 저장
 echo "GIT_COMMIT=$GIT_COMMIT" > git_commit.txt
 
 echo
