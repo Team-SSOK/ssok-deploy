@@ -1,0 +1,20 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: ssok-bluetooth-service
+  namespace: ssok
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/Team-SSOK/ssok-deploy.git
+    targetRevision: main
+    path: k8s/ssok-app/base/ssok-bluetooth-service
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: ssok
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+    - CreateNamespace=true

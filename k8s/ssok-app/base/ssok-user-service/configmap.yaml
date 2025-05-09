@@ -1,0 +1,51 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: ssok-user-service
+  namespace: ssok
+data:
+  application.yml: |
+    server:
+      port: 8080
+    spring:
+      application:
+        name: ssok-user-service
+      cloud:
+        kubernetes:
+          config:
+            enabled: true
+          secrets:
+            enabled: true
+          reload:
+            enabled: true
+      jpa:
+        hibernate:
+          ddl-auto: update
+        properties:
+          hibernate:
+            format_sql: true
+            show_sql: true
+        database-platform: org.hibernate.dialect.PostgreSQLDialect
+    bank:
+      server:
+        url: http://kudong.kr/55027
+    feign:
+      client:
+        config:
+          default:
+            connectTimeout: 5000
+            readTimeout: 5000
+            loggerLevel: full
+      hystrix:
+        enabled: true
+    logging:
+      level:
+        kr.ssok.userservice.client: DEBUG
+    management:
+      endpoints:
+        web:
+          exposure:
+            include: "*"
+      endpoint:
+        health:
+          show-details: always
