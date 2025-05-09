@@ -6,4 +6,4 @@ resources:
 
 images:
 - name: dhku10/ssok-transfer-service
-  newTag: 170fedd
+  newTag: 2971912
