@@ -6,4 +6,4 @@ resources:
 
 images:
 - name: kudong/ssok-notification-service
-  newTag: Git
+  newTag: dc09415
