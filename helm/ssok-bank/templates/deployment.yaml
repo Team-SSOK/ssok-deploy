@@ -57,24 +57,24 @@ spec:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: ssok-bank-deployment
-  namespace: bank
+  name: {{ include "ssok-bank.fullname" . }}
+  namespace: {{ .Release.Namespace }}
   labels:
-    app: ssok-bank
+    {{- include "ssok-bank.labels" . | nindent 4 }}
 spec:
-  replicas: 3
+  replicas: {{ .Values.replicaCount }}
   selector:
     matchLabels:
-      app: ssok-bank
+      {{- include "ssok-bank.selectorLabels" . | nindent 6 }}
   template:
     metadata:
       labels:
-        app: ssok-bank
+        {{- include "ssok-bank.selectorLabels" . | nindent 6 }}
     spec:
       containers:
-      - name: ssok-bank
-        image: kudong/ssok-bank:1.4
-        imagePullPolicy: IfNotPresent
+      - name: {{ .Chart.Name }}
+        image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+        imagePullPolicy: {{ .Values.image.pullPolicy }}
         ports:
         - containerPort: 8080
         envFrom:
