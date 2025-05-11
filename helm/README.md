@@ -26,3 +26,23 @@ helm package {chart 경로}
 ```shell
 helm repo index .
 ```
+
+<br/>
+
+## 로컬에서 SSOK 설치
+
+1. helm 리포지토리 추가
+
+```shell
+helm repo add ssok https://raw.githubusercontent.com/Team-SSOK/ssok-deploy/main/helm
+helm repo update
+```
+
+3. ssok 리포지토리내 helm 차트 목록 확인
+
+```shell
+helm search repo ssok
+```
+
+
+
