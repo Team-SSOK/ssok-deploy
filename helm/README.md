@@ -5,7 +5,7 @@ SSOK-DEPLOY 헬름 차트 레포지토리 입니다.
 <br/>
 
 ## 디렉토리 구조
-- `ssok-bank`: ssok-bank 헬름 차트
+- `ssok-bank/`: ssok-bank 헬름 차트
 - `index.yaml`: 레포지토리에 존재하는 헬름 차트 목록
 - `*.tgz`: 생성된 헬름 차트 패키지
 
@@ -43,6 +43,3 @@ helm repo update
 ```shell
 helm search repo ssok
 ```
-
-
-

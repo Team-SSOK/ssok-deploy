@@ -12,6 +12,11 @@
     - `base/`: 기본 서비스 정의
     - `overlays/`: 환경별 설정 (dev, prod)
     - `argocd/`: ArgoCD 애플리케이션 정의
+- `helm/`: Helm Chart 저장소
+  - `index.yaml`: 저장소내 Helm Chart 패키지 목록
+  - `ssok-bank/`: 은행 서비스 헬름 차트
+    - `templates/`: Kubernetes 매니페스트 파일 정의
+    - `values.yaml`: 헬름 차트에 들어갈 환경변수 정의
 
 ## CI/CD 파이프라인
 
