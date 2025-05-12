@@ -3,8 +3,7 @@ kind: Kustomization
 
 resources:
 - ../../../base/ssok-user-service
-- ../../../base/rbac
 
 images:
 - name: kudong/ssok-user-service
-  newTag: 4c4c4b1
+  newTag: e0f4f48
