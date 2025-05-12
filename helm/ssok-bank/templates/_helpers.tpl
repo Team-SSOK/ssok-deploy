@@ -31,7 +31,7 @@
 {{- end }}
 
 {{/*
-Common labels (공통 레이블)
+SSOK-BANK Common labels (공통 레이블)
 */}}
 {{- define "ssok-bank.labels" -}}
 helm.sh/chart: {{ include "ssok-bank.chart" . }}
@@ -43,7 +43,7 @@ app.kubernetes.io/managed-by: {{ .Release.Service }}
 {{- end }}
 
 {{/*
-Selector labels (셀렉터 레이블)
+SSOK-BANK Selector labels (셀렉터 레이블)
 */}}
 {{- define "ssok-bank.selectorLabels" -}}
 app.kubernetes.io/name: {{ include "ssok-bank.name" . }}
@@ -59,4 +59,24 @@ app.kubernetes.io/instance: {{ .Release.Name }}
 {{- else }}
 {{- default "default" .Values.serviceAccount.name }}
 {{- end }}
+{{- end }}
+
+{{/*
+KAFKA Selector labels (셀렉터 레이블)
+*/}}
+{{- define "kafka.selectorLabels" -}}
+app.kubernetes.io/name: kafka
+app.kubernetes.io/instance: kafka
+{{- end }}
+
+{{/*
+KAFKA Common labels (공통 레이블)
+*/}}
+{{- define "kafka.labels" -}}
+helm.sh/chart: {{ include "ssok-bank.chart" . }}
+{{ include "kafka.selectorLabels" . }}
+{{- if .Chart.AppVersion }}
+app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
+{{- end }}
+app.kubernetes.io/managed-by: {{ .Release.Service }}
 {{- end }}
