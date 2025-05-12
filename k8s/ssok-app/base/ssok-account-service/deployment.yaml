@@ -34,22 +34,23 @@ spec:
           limits:
             memory: "512Mi"
             cpu: "300m"
-        readinessProbe:
-          httpGet:
-            path: /actuator/health
-            port: 8080
-          initialDelaySeconds: 60
-          periodSeconds: 15
-          timeoutSeconds: 10
-          failureThreshold: 6
-        livenessProbe:
-          httpGet:
-            path: /actuator/health
-            port: 8080
-          initialDelaySeconds: 90
-          periodSeconds: 30
-          timeoutSeconds: 10
-          failureThreshold: 3
+# 프로브를 일시적으로 비활성화
+#        readinessProbe:
+#          httpGet:
+#            path: /actuator/health
+#            port: 8080
+#          initialDelaySeconds: 60
+#          periodSeconds: 15
+#          timeoutSeconds: 10
+#          failureThreshold: 6
+#        livenessProbe:
+#          httpGet:
+#            path: /actuator/health
+#            port: 8080
+#          initialDelaySeconds: 90
+#          periodSeconds: 30
+#          timeoutSeconds: 10
+#          failureThreshold: 3
       volumes:
       - name: config-volume
         configMap:

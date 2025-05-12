@@ -34,20 +34,20 @@ spec:
           limits:
             memory: "512Mi"
             cpu: "300m"
-        readinessProbe:
-          httpGet:
-            path: /actuator/health
-            port: 8080
-          initialDelaySeconds: 30
-          periodSeconds: 10
-          timeoutSeconds: 5
-        livenessProbe:
-          httpGet:
-            path: /actuator/health
-            port: 8080
-          initialDelaySeconds: 40
-          periodSeconds: 20
-          timeoutSeconds: 5
+#        readinessProbe:
+#          httpGet:
+#            path: /actuator/health
+#            port: 8080
+#          initialDelaySeconds: 30
+#          periodSeconds: 10
+#          timeoutSeconds: 5
+#        livenessProbe:
+#          httpGet:
+#            path: /actuator/health
+#            port: 8080
+#          initialDelaySeconds: 40
+#          periodSeconds: 20
+#          timeoutSeconds: 5
       volumes:
       - name: config-volume
         configMap:

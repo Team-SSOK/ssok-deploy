@@ -58,6 +58,9 @@ data:
       endpoint:
         health:
           show-details: always
+      health:
+        kubernetes:
+          enabled: false    # Kubernetes 헬스 체크 비활성화
     aligo:
       SMS_API_URL: https://apis.aligo.in/send/
       API_KEY: eu0x6jq8ohfldehok2vvbecg0exhnrle

@@ -18,6 +18,10 @@ data:
             enabled: false
           reload:
             enabled: true
+          client:
+            enabled: false      # Kubernetes Client 비활성화
+          discovery:
+            enabled: false      # Kubernetes Discovery 비활성화
       datasource:
         url: jdbc:postgresql://172.21.1.22:5432/mydb
         username: root
@@ -48,3 +52,6 @@ data:
       endpoint:
         health:
           show-details: always
+      health:
+        kubernetes:
+          enabled: false    # Kubernetes 헬스 체크 비활성화
