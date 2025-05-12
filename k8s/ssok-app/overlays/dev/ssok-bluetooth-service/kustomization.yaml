@@ -3,8 +3,7 @@ kind: Kustomization
 
 resources:
 - ../../../base/ssok-bluetooth-service
-- ../../../base/rbac
 
 images:
 - name: kudong/ssok-bluetooth-service
-  newTag: d6f4ee1
+  newTag: 727567f
