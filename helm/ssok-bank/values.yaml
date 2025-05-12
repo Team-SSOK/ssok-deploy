@@ -3,9 +3,9 @@
 replicaCount: 3
 
 image:
-  repository: nginx
+  repository: kudong/ssok-bank
   pullPolicy: IfNotPresent
-  tag: "" # chart appVersion의 이미지 태그를 덮어쓰기
+  tag: "latest" # chart appVersion의 이미지 태그를 덮어쓰기
 
 nameOverride: ""
 fullnameOverride: ""
