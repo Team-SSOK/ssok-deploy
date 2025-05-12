@@ -7,7 +7,9 @@ helmCharts:
   version: 0.1.0
   releaseName: ssok-bank
   namespace: bank
-  valuesFiles:
-    - ../../base/helm-values/values.yaml # Base Values.yaml
-    - helm-values/values.yaml # Override Values.yaml
+  # Base Values.yaml
+  valuesFile: ../../base/helm-values/values.yaml
+  # Override Values.yaml
+  additionalValuesFiles:
+    - helm-values/values.yaml
 
