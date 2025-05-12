@@ -5,6 +5,5 @@ helmCharts:
   repo: https://raw.githubusercontent.com/Team-SSOK/ssok-deploy/main/helm
   version: 0.1.0
   releaseName: ssok-bank
-  namespace: default
   valuesFile: helm-values/values.yaml
 
