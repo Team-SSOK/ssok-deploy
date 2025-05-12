@@ -1,0 +1,28 @@
+# SSOK-BANK 기본 values 입니다.
+
+replicaCount: 3
+
+image:
+  repository: nginx
+  pullPolicy: IfNotPresent
+  # chart appVersion의 이미지 태그를 덮어쓰기
+  tag: ""
+
+nameOverride: ""
+fullnameOverride: ""
+
+serviceAccount:
+  create: true
+  annotations: {}
+  name: ""
+
+# service:
+#   type: ClusterIP
+#   port: 80
+
+
+
+
+
+
+
