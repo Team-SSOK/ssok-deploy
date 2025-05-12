@@ -3,6 +3,7 @@ kind: Kustomization
 
 resources:
 - ../../../base/ssok-user-service
+- ../../../base/rbac
 
 images:
 - name: kudong/ssok-user-service
