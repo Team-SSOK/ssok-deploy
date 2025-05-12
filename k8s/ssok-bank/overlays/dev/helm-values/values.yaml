@@ -1,2 +1,6 @@
+configs:
+  cm:
+    kustomize.buildOptions: --enable-helm
+    
 image:
   tag: "1.0"
