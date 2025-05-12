@@ -47,7 +47,7 @@ spec:
   template:
     metadata:
       labels:
-        {{- include "ssok-bank.selectorLabels" . | nindent 6 }}
+        {{- include "ssok-bank.selectorLabels" . | nindent 8 }}
     spec:
       containers:
       - name: {{ .Chart.Name }}
