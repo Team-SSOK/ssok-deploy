@@ -3,8 +3,7 @@ kind: Kustomization
 
 resources:
 - ../../../base/ssok-notification-service
-- ../../../base/rbac
 
 images:
 - name: kudong/ssok-notification-service
-  newTag: a1b579e
+  newTag: e1a56b3
