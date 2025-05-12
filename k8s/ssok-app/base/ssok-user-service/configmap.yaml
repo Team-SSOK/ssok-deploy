@@ -58,6 +58,9 @@ data:
       endpoint:
         health:
           show-details: always
+      health:
+        kubernetes:
+          enabled: false    # Kubernetes 헬스 체크 비활성화
     jwt:
       secret: ssokAppFinTechSecretKey1234567890ABCDEFGHIJKLMN
     aligo:

@@ -5,7 +5,7 @@ metadata:
   namespace: ssok
 rules:
 - apiGroups: [""]
-  resources: ["configmaps"]
+  resources: ["configmaps", "pods"]
   verbs: ["get", "watch", "list", "update", "patch"]
 ---
 apiVersion: rbac.authorization.k8s.io/v1

@@ -40,3 +40,6 @@ data:
       endpoint:
         health:
           show-details: always
+    health:
+      kubernetes:
+        enabled: false    # Kubernetes 헬스 체크 비활성화
