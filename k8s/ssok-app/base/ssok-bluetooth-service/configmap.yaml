@@ -16,6 +16,8 @@ data:
             enabled: true
             name: ssok-bluetooth-service
             namespace : ssok
+            sources:
+              - name: ssok-bluetooth-service
           secrets:
             enabled: false
           reload:

@@ -16,6 +16,8 @@ data:
             enabled: true
             name: ssok-notification-service
             namespace : ssok
+            sources:
+              - name: ssok-notification-service
           secrets:
             enabled: false
           reload:

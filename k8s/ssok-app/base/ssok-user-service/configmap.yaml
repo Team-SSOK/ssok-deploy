@@ -16,6 +16,8 @@ data:
             enabled: true
             name: ssok-user-service
             namespace : ssok
+            sources:
+              - name: ssok-user-service
           secrets:
             enabled: false
           reload:
