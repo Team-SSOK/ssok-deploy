@@ -16,6 +16,8 @@ data:
             enabled: true
             name: ssok-gateway-service
             namespace : ssok
+            sources:
+              - name: ssok-gateway-service
           secrets:
             enabled: false
           discovery:

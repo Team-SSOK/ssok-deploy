@@ -16,10 +16,16 @@ data:
             enabled: true
             name: ssok-transfer-service
             namespace : ssok
+            sources:
+              - name: ssok-transfer-service
           secrets:
             enabled: false
           reload:
             enabled: true
+          discovery:
+            all-namespaces: false
+          loadbalancer:
+            mode: service
       datasource:
         url: jdbc:mysql://172.21.1.22:3306/ssok?characterEncoding=UTF-8&serverTimeZone=Asia/Seoul
         username: ssok

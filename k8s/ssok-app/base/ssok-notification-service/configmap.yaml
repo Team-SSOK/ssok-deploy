@@ -16,10 +16,16 @@ data:
             enabled: true
             name: ssok-notification-service
             namespace : ssok
+            sources:
+              - name: ssok-notification-service
           secrets:
             enabled: false
           reload:
             enabled: true
+          discovery:
+            all-namespaces: false
+          loadbalancer:
+            mode: service
       data:
         redis:
           host: 172.21.1.22

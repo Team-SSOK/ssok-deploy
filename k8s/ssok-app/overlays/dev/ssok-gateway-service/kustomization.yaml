@@ -7,4 +7,4 @@ resources:
 
 images:
 - name: kudong/ssok-gateway-service
-  newTag: build-52
+  newTag: build-53
