@@ -7,4 +7,4 @@ resources:
 
 images:
 - name: kudong/ssok-account-service
-  newTag: Using
+  newTag: build-42
