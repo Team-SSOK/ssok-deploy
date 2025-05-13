@@ -69,12 +69,17 @@ echo "$DOCKER_PASS" | docker login -u "$DOCKER_USER" --password-stdin
 #도커 허브에 업로드할 로컬용 이미지 생성
 
 cd $currentDir
+docker tag "$BACKEND_IMAGE_NAME:$TAG" "$DOCKER_NICKNAME/$BACKEND_IMAGE_NAME:latest"
 docker tag "$BACKEND_IMAGE_NAME:$TAG" "$DOCKER_NICKNAME/$BACKEND_IMAGE_NAME:$TAG"
 
+
 #허브 이미지 푸시
+docker push "$DOCKER_NICKNAME/$BACKEND_IMAGE_NAME:latest"
 docker push "$DOCKER_NICKNAME/$BACKEND_IMAGE_NAME:$TAG"
 
+
 #허브 이미지 제거
+docker image rmi $DOCKER_NICKNAME/$BACKEND_IMAGE_NAME:latest
 docker image rmi $DOCKER_NICKNAME/$BACKEND_IMAGE_NAME:$TAG
 docker image rmi $BACKEND_IMAGE_NAME:$TAG
 docker image prune -f
