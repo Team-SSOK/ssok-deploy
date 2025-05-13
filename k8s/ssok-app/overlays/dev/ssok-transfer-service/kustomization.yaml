@@ -7,4 +7,4 @@ resources:
 
 images:
 - name: kudong/ssok-transfer-service
-  newTag: build-49
+  newTag: build-50
