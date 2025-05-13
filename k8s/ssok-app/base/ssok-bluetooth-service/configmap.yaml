@@ -34,9 +34,9 @@ data:
       uuid-ttl-seconds: 86400 # 기본값 24시간
     external:
       account-service:
-        url: http://ssok-account-service
+        url: http://ssok-account-service.ssok.svc.cluster.local
       user-service:
-        url: http://ssok-user-service
+        url: http://ssok-user-service.ssok.svc.cluster.local
     management:
       endpoints:
         web:

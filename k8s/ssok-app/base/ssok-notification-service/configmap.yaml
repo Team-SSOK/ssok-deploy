@@ -32,7 +32,7 @@ data:
           port: 6379
     bank:
       server:
-        url: http://ssok-bank:8080
+        url: http://ssok-bank.bank.svc.cluster.local:8080
     feign:
       client:
         config:
