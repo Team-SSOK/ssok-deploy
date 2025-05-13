@@ -56,3 +56,6 @@ data:
     firebase:
       config-path: ${FIREBASE_CONFIG_PATH:classpath:firebase/firebase-adminsdk.json}
       enabled: true
+    fcm:
+      token-ttl-seconds: 2592000 # 기본값 30일
+      image-url: "https://example.com/images/ssok-logo.png" # 임시 주소 -> 이후에 s3 주소
