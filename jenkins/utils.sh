@@ -58,7 +58,7 @@ EOF
     # 임시 디렉토리 정리
     rm -rf docker-build
 
-    # 빌드 번호 반환
+    # 빌드 번호 반환 (출력으로만 사용, 변수 할당에 사용되지 않도록)
     echo "build-${BUILD_NUMBER}"
 }
 
@@ -84,7 +84,7 @@ function build_and_push_docker_image() {
     docker push "${DOCKER_REPO_NAME}/${SERVICE_NAME}:${TAG}"
     docker push "${DOCKER_REPO_NAME}/${SERVICE_NAME}:build-${BUILD_NUMBER}"
 
-    # 빌드 번호 반환
+    # 빌드 번호 반환 (출력으로만 사용, 변수 할당에 사용되지 않도록)
     echo "build-${BUILD_NUMBER}"
 }
 
@@ -95,15 +95,16 @@ function update_kustomization_file() {
     local BUILD_TAG=$3
     local DEPLOY_REPO_PATH=$4
 
-    echo "Updating kustomization file for $SERVICE_NAME..."
+    # 에코 출력은 변수에 할당되지 않도록 stderr로 리다이렉트
+    >&2 echo "Updating kustomization file for $SERVICE_NAME..."
     
     # BUILD_TAG 값이 유효한지 확인
     if [[ -z "$BUILD_TAG" ]]; then
-        echo "Warning: Invalid BUILD_TAG value: '$BUILD_TAG', using default build-1"
+        >&2 echo "Warning: Invalid BUILD_TAG value: '$BUILD_TAG', using default build-1"
         BUILD_TAG="build-1"
     fi
     
-    echo "Using build tag: $BUILD_TAG for kustomization update"
+    >&2 echo "Using build tag: $BUILD_TAG for kustomization update"
 
     # 서비스 디렉토리 경로 수정 - DEPLOY_REPO_PATH에 따른 경로를 올바르게 구성
     # 현재 디렉토리를 기준으로 상대 경로 사용
@@ -112,7 +113,7 @@ function update_kustomization_file() {
     # 디렉토리가 없으면 생성
     mkdir -p "$SERVICE_DIR"
 
-    echo "Creating kustomization file at $SERVICE_DIR/kustomization.yaml"
+    >&2 echo "Creating kustomization file at $SERVICE_DIR/kustomization.yaml"
 
     # kustomization.yaml 파일 업데이트 (하드코딩된 DOCKER_REPO_NAME 사용)
     cat > "$SERVICE_DIR/kustomization.yaml" << EOF
@@ -128,5 +129,8 @@ images:
   newTag: ${BUILD_TAG}
 EOF
 
-    echo "Kustomization file updated successfully with newTag: ${BUILD_TAG}"
+    >&2 echo "Kustomization file updated successfully with newTag: ${BUILD_TAG}"
+    
+    # 아무런 출력이 없도록 함
+    return 0
 }
