@@ -63,8 +63,8 @@ data:
       secret: ssokAppFinTechSecretKey1234567890ABCDEFGHIJKLMN
     auth:
       whitelist:
-      - /api/auth/login
-      - /api/auth/refresh
-      - /api/users/signup
-      - /api/users/phone
-      - /api/users/phone/verify
+        - /api/auth/login
+        - /api/auth/refresh
+        - /api/users/signup
+        - /api/users/phone
+        - /api/users/phone/verify
