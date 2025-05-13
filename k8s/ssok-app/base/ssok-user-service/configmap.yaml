@@ -62,6 +62,8 @@ data:
         kubernetes:
           enabled: false    # Kubernetes 헬스 체크 비활성화
     jwt:
+      access-token-validity-in-seconds: 900  # 예시 값: 24시간(1일)
+      refresh-token-validity-in-seconds: 2592000
       secret: ssokAppFinTechSecretKey1234567890ABCDEFGHIJKLMN
     aligo:
       API_KEY: eu0x6jq8ohfldehok2vvbecg0exhnrle

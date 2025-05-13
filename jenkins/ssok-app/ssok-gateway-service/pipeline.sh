@@ -2,7 +2,7 @@
 # ssok-gateway 매니페스트 스크립트
 
 currentDir=$(pwd -P)
-SERVICE_NAME="ssok-gateway"
+SERVICE_NAME="ssok-gateway-service"
 separationPhrase="==================================="
 
 # 유틸 스크립트 함수 로드

@@ -3,7 +3,7 @@
 
 # 필수 환경변수
 currentDir=$(pwd -P)
-SERVICE_NAME="ssok-gateway"
+SERVICE_NAME="ssok-gateway-service"
 DOCKER_NICKNAME="${DOCKER_USER}"
 TAG="latest"
 separationPhrase="==================================="
