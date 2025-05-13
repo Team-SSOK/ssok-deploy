@@ -6,16 +6,13 @@ metadata:
   labels:
     {{- include "kafka.labels" . | nindent 4 }}
 spec:
-  type: ClusterIP
+  type: NodePort
   selector:
     {{- include "kafka.selectorLabels" . | nindent 4 }}
   ports:
-    - name: http
-      port: 9092
-      targetPort: 9092
-    - name: https
-      port: 9093
-      targetPort: 9093
+    {{- with .Values.kafka.service.port }}
+    {{- toYaml . | nindent 4 }}
+    {{- end }}
 ---
 apiVersion: v1
 kind: Service

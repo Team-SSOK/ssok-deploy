@@ -18,3 +18,15 @@ kafka:
     KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: "1"
     KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS: "0"
     KAFKA_NUM_PARTITIONS: "3"
+  service:
+    port:
+      - name: internal
+        port: 9092
+        targetPort: 9092
+      - name: external
+        port: 31001
+        targetPort: 31001
+        nodePort: 31001
+      - name: controller
+        port: 9093
+        targetPort: 9093
