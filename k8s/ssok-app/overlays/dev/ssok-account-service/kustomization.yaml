@@ -7,4 +7,4 @@ resources:
 
 images:
 - name: kudong/ssok-account-service
-  newTag: 71a95e4
+  newTag: Using
