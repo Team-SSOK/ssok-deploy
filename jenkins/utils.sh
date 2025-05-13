@@ -14,9 +14,9 @@ function build_docker_from_jar() {
 
     # Jenkins 빌드 번호 사용 (기본값: 1)
     local BUILD_NUMBER=${BUILD_NUMBER:-1}
-    echo "Using Jenkins build number: $BUILD_NUMBER"
+    >&2 echo "Using Jenkins build number: $BUILD_NUMBER"
 
-    echo "Building Docker image for $SERVICE_NAME using pre-built JAR..."
+    >&2 echo "Building Docker image for $SERVICE_NAME using pre-built JAR..."
 
     # 임시 디렉토리 생성
     mkdir -p docker-build
@@ -32,33 +32,33 @@ EOF
 
     # JAR 파일 확인 및 복사
     if [ -f "${WORKSPACE_DIR}/target/${SERVICE_NAME}.jar" ]; then
-        echo "Found JAR file at ${WORKSPACE_DIR}/target/${SERVICE_NAME}.jar"
+        >&2 echo "Found JAR file at ${WORKSPACE_DIR}/target/${SERVICE_NAME}.jar"
         cp ${WORKSPACE_DIR}/target/${SERVICE_NAME}.jar docker-build/
     else
-        echo "ERROR: JAR file not found at ${WORKSPACE_DIR}/target/${SERVICE_NAME}.jar"
+        >&2 echo "ERROR: JAR file not found at ${WORKSPACE_DIR}/target/${SERVICE_NAME}.jar"
         # JAR 파일 검색
-        echo "Available files in target directory:"
-        ls -la ${WORKSPACE_DIR}/target/ || echo "target directory not found"
+        >&2 echo "Available files in target directory:"
+        ls -la ${WORKSPACE_DIR}/target/ 1>&2 || >&2 echo "target directory not found"
         return 1
     fi
 
     # Docker 이미지 빌드
-    echo "Building Docker image..."
+    >&2 echo "Building Docker image..."
     docker build -t ${SERVICE_NAME}:${TAG} docker-build/
 
-    echo "Tagging Docker image..."
+    >&2 echo "Tagging Docker image..."
     # 빌드 번호 기반 태그만 사용
     docker tag "${SERVICE_NAME}:${TAG}" "${DOCKER_REPO_NAME}/${SERVICE_NAME}:${TAG}"
     docker tag "${SERVICE_NAME}:${TAG}" "${DOCKER_REPO_NAME}/${SERVICE_NAME}:build-${BUILD_NUMBER}"
 
-    echo "Pushing Docker image..."
+    >&2 echo "Pushing Docker image..."
     docker push "${DOCKER_REPO_NAME}/${SERVICE_NAME}:${TAG}"
     docker push "${DOCKER_REPO_NAME}/${SERVICE_NAME}:build-${BUILD_NUMBER}"
 
     # 임시 디렉토리 정리
     rm -rf docker-build
 
-    # 빌드 번호 반환 (출력으로만 사용, 변수 할당에 사용되지 않도록)
+    # 빌드 번호만 반환 (디버깅 문구 없이)
     echo "build-${BUILD_NUMBER}"
 }
 
@@ -70,21 +70,21 @@ function build_and_push_docker_image() {
     
     # Jenkins 빌드 번호 사용 (기본값: 1)
     local BUILD_NUMBER=${BUILD_NUMBER:-1}
-    echo "Using Jenkins build number: $BUILD_NUMBER"
+    >&2 echo "Using Jenkins build number: $BUILD_NUMBER"
 
-    echo "Building Docker image for $SERVICE_NAME..."
+    >&2 echo "Building Docker image for $SERVICE_NAME..."
     docker build -f $SERVICE_NAME/Dockerfile -t $SERVICE_NAME:$TAG .
 
-    echo "Tagging Docker image..."
+    >&2 echo "Tagging Docker image..."
     # 빌드 번호 기반 태그만 사용
     docker tag "$SERVICE_NAME:$TAG" "${DOCKER_REPO_NAME}/${SERVICE_NAME}:${TAG}"
     docker tag "$SERVICE_NAME:$TAG" "${DOCKER_REPO_NAME}/${SERVICE_NAME}:build-${BUILD_NUMBER}"
 
-    echo "Pushing Docker image..."
+    >&2 echo "Pushing Docker image..."
     docker push "${DOCKER_REPO_NAME}/${SERVICE_NAME}:${TAG}"
     docker push "${DOCKER_REPO_NAME}/${SERVICE_NAME}:build-${BUILD_NUMBER}"
 
-    # 빌드 번호 반환 (출력으로만 사용, 변수 할당에 사용되지 않도록)
+    # 빌드 번호만 반환 (디버깅 문구 없이)
     echo "build-${BUILD_NUMBER}"
 }
 
@@ -95,8 +95,8 @@ function update_kustomization_file() {
     local BUILD_TAG=$3
     local DEPLOY_REPO_PATH=$4
 
-    # 에코 출력은 변수에 할당되지 않도록 stderr로 리다이렉트
-    >&2 echo "Updating kustomization file for $SERVICE_NAME..."
+    # 디버깅: 받은 BUILD_TAG 값을 기록
+    >&2 echo "DEBUG update_kustomization_file: Received BUILD_TAG=$BUILD_TAG"
     
     # BUILD_TAG 값이 유효한지 확인
     if [[ -z "$BUILD_TAG" ]]; then
@@ -104,6 +104,13 @@ function update_kustomization_file() {
         BUILD_TAG="build-1"
     fi
     
+    # 추가 확인: BUILD_TAG 값에 "Using"이 포함되어 있는지 확인
+    if [[ "$BUILD_TAG" == *"Using"* ]]; then
+        >&2 echo "Warning: BUILD_TAG contains 'Using', which may be an error. Original value: '$BUILD_TAG'"
+        >&2 echo "Falling back to default BUILD_TAG using Jenkins BUILD_NUMBER"
+        BUILD_TAG="build-${BUILD_NUMBER:-1}"
+    fi
+
     >&2 echo "Using build tag: $BUILD_TAG for kustomization update"
 
     # 서비스 디렉토리 경로 수정 - DEPLOY_REPO_PATH에 따른 경로를 올바르게 구성
@@ -129,7 +136,9 @@ images:
   newTag: ${BUILD_TAG}
 EOF
 
-    >&2 echo "Kustomization file updated successfully with newTag: ${BUILD_TAG}"
+    >&2 echo "DEBUG: Created kustomization.yaml with newTag: '${BUILD_TAG}'"
+    >&2 echo "DEBUG: Content of the created file:"
+    >&2 cat "$SERVICE_DIR/kustomization.yaml"
     
     # 아무런 출력이 없도록 함
     return 0
