@@ -29,23 +29,23 @@ data:
         gateway:
           routes:
             - id: user-service
-              uri: lb://ssok-user-service
+              uri: http://ssok-user-service.ssok.svc.cluster.local
               predicates:
                 - Path=/api/auth/**, /api/users/**
             - id: account-service
-              uri: lb://ssok-account-service
+              uri: http://ssok-account-service.ssok.svc.cluster.local
               predicates:
                 - Path=/api/accounts/**
             - id: transfer-service
-              uri: lb://ssok-transfer-service
+              uri: http://ssok-transfer-service.ssok.svc.cluster.local
               predicates:
                 - Path=/api/transfers/**
             - id: notification-service
-              uri: lb://ssok-notification-service
+              uri: http://ssok-notification-service.ssok.svc.cluster.local
               predicates:
                 - Path=/api/notifications/**
             - id: bluetooth-service
-              uri: lb://ssok-bluetooth-service
+              uri: http://ssok-bluetooth-service.ssok.svc.cluster.local
               predicates:
                 - Path=/api/bluetooth/**
       data:
