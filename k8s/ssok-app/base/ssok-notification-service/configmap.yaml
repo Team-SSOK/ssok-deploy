@@ -53,3 +53,6 @@ data:
       API_KEY: eu0x6jq8ohfldehok2vvbecg0exhnrle
       USER_ID: kingmandoo95
       SENDER: 01077948797
+    firebase:
+      config-path: ${FIREBASE_CONFIG_PATH:classpath:firebase/firebase-adminsdk.json}
+      enabled: true
