@@ -29,7 +29,7 @@ data:
         show-sql: true
     external:
       openbanking-service:
-        url: http://ssok-openbanking-service
+        url: http://kudong.kr:55028
       account-service:
         url: http://ssok-account-service
     management:

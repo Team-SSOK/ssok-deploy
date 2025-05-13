@@ -41,7 +41,7 @@ data:
         database-platform: org.hibernate.dialect.PostgreSQLDialect
     external:
       openbanking-service:
-        url: http://ssok-openbanking-service
+        url: http://kudong.kr:55028
       user-service:
         url: http://ssok-user-service
     management:

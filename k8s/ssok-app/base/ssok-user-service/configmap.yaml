@@ -37,7 +37,7 @@ data:
         database-platform: org.hibernate.dialect.PostgreSQLDialect
     bank:
       server:
-        url: http://kudong.kr/55027
+        url: http://ssok-bank:8080
     feign:
       client:
         config:

@@ -18,26 +18,13 @@ data:
             enabled: false
           reload:
             enabled: true
-      datasource:
-        url: jdbc:postgresql://172.21.1.22:5432/mydb
-        username: root
-        password: 1234
-        driver-class-name: org.postgresql.Driver
       data:
         redis:
           host: 172.21.1.22
           port: 6379
-      jpa:
-        hibernate:
-          ddl-auto: update
-        properties:
-          hibernate:
-            format_sql: true
-            show_sql: true
-        database-platform: org.hibernate.dialect.PostgreSQLDialect
     bank:
       server:
-        url: http://ssok-account-service
+        url: http://ssok-bank:8080
     feign:
       client:
         config:
