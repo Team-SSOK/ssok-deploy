@@ -1,7 +1,7 @@
 image:
   repository: kudong/ssok-bank
   pullPolicy: IfNotPresent
-  tag: "1.60"
+  tag: "1.61"
 
 kafka:
   config:
