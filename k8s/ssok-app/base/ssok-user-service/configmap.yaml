@@ -45,7 +45,7 @@ data:
         database-platform: org.hibernate.dialect.PostgreSQLDialect
     bank:
       server:
-        url: http://kudong.kr:55027
+        url: http://ssok-bank.bank.svc.cluster.local:8080
     feign:
       client:
         config:
