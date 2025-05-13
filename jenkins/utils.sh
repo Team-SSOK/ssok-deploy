@@ -12,9 +12,9 @@ function build_docker_from_jar() {
     local TAG=${3:-latest}
     local WORKSPACE_DIR=$4
 
-    # Git 커밋 해시 먼저 가져오기
-    local GIT_COMMIT=$(git rev-parse --short HEAD)
-    echo "Git commit hash: $GIT_COMMIT"
+    # Jenkins 빌드 번호 사용 (기본값: 1)
+    local BUILD_NUMBER=${BUILD_NUMBER:-1}
+    echo "Using Jenkins build number: $BUILD_NUMBER"
 
     echo "Building Docker image for $SERVICE_NAME using pre-built JAR..."
 
@@ -47,19 +47,19 @@ EOF
     docker build -t ${SERVICE_NAME}:${TAG} docker-build/
 
     echo "Tagging Docker image..."
-    # 하드코딩된 DOCKER_REPO_NAME 사용
+    # 빌드 번호 기반 태그만 사용
     docker tag "${SERVICE_NAME}:${TAG}" "${DOCKER_REPO_NAME}/${SERVICE_NAME}:${TAG}"
-    docker tag "${SERVICE_NAME}:${TAG}" "${DOCKER_REPO_NAME}/${SERVICE_NAME}:${GIT_COMMIT}"
+    docker tag "${SERVICE_NAME}:${TAG}" "${DOCKER_REPO_NAME}/${SERVICE_NAME}:build-${BUILD_NUMBER}"
 
     echo "Pushing Docker image..."
     docker push "${DOCKER_REPO_NAME}/${SERVICE_NAME}:${TAG}"
-    docker push "${DOCKER_REPO_NAME}/${SERVICE_NAME}:${GIT_COMMIT}"
+    docker push "${DOCKER_REPO_NAME}/${SERVICE_NAME}:build-${BUILD_NUMBER}"
 
     # 임시 디렉토리 정리
     rm -rf docker-build
 
-    # 순수 커밋 해시만 반환
-    echo "$GIT_COMMIT"
+    # 빌드 번호 반환
+    echo "build-${BUILD_NUMBER}"
 }
 
 # 도커 이미지 빌드 및 푸시 (기존 함수 유지, 필요시 사용)
@@ -67,43 +67,43 @@ function build_and_push_docker_image() {
     local SERVICE_NAME=$1
     local DOCKER_USER=$2
     local TAG=${3:-latest}
-
-    # Git 커밋 해시 먼저 가져오기
-    local GIT_COMMIT=$(git rev-parse --short HEAD)
-    echo "Git commit hash: $GIT_COMMIT"
+    
+    # Jenkins 빌드 번호 사용 (기본값: 1)
+    local BUILD_NUMBER=${BUILD_NUMBER:-1}
+    echo "Using Jenkins build number: $BUILD_NUMBER"
 
     echo "Building Docker image for $SERVICE_NAME..."
     docker build -f $SERVICE_NAME/Dockerfile -t $SERVICE_NAME:$TAG .
 
     echo "Tagging Docker image..."
-    # 하드코딩된 DOCKER_REPO_NAME 사용
+    # 빌드 번호 기반 태그만 사용
     docker tag "$SERVICE_NAME:$TAG" "${DOCKER_REPO_NAME}/${SERVICE_NAME}:${TAG}"
-    docker tag "$SERVICE_NAME:$TAG" "${DOCKER_REPO_NAME}/${SERVICE_NAME}:${GIT_COMMIT}"
+    docker tag "$SERVICE_NAME:$TAG" "${DOCKER_REPO_NAME}/${SERVICE_NAME}:build-${BUILD_NUMBER}"
 
     echo "Pushing Docker image..."
     docker push "${DOCKER_REPO_NAME}/${SERVICE_NAME}:${TAG}"
-    docker push "${DOCKER_REPO_NAME}/${SERVICE_NAME}:${GIT_COMMIT}"
+    docker push "${DOCKER_REPO_NAME}/${SERVICE_NAME}:build-${BUILD_NUMBER}"
 
-    # 순수 커밋 해시만 반환
-    echo "$GIT_COMMIT"
+    # 빌드 번호 반환
+    echo "build-${BUILD_NUMBER}"
 }
 
 # ArgoCD에서 사용할 kustomization 파일 업데이트
 function update_kustomization_file() {
     local SERVICE_NAME=$1
     local DOCKER_USER=$2
-    local GIT_COMMIT=$3
+    local BUILD_TAG=$3
     local DEPLOY_REPO_PATH=$4
 
     echo "Updating kustomization file for $SERVICE_NAME..."
     
-    # GIT_COMMIT 값이 유효한지 확인
-    if [[ -z "$GIT_COMMIT" || "$GIT_COMMIT" == "Git" ]]; then
-        echo "Warning: Invalid GIT_COMMIT value: '$GIT_COMMIT', using current HEAD commit"
-        GIT_COMMIT=$(git rev-parse --short HEAD)
+    # BUILD_TAG 값이 유효한지 확인
+    if [[ -z "$BUILD_TAG" ]]; then
+        echo "Warning: Invalid BUILD_TAG value: '$BUILD_TAG', using default build-1"
+        BUILD_TAG="build-1"
     fi
     
-    echo "Using GIT_COMMIT: $GIT_COMMIT for kustomization update"
+    echo "Using build tag: $BUILD_TAG for kustomization update"
 
     # 서비스 디렉토리 경로 수정 - DEPLOY_REPO_PATH에 따른 경로를 올바르게 구성
     # 현재 디렉토리를 기준으로 상대 경로 사용
@@ -121,11 +121,12 @@ kind: Kustomization
 
 resources:
 - ../../../base/$SERVICE_NAME
+- ../../../base/rbac
 
 images:
 - name: ${DOCKER_REPO_NAME}/${SERVICE_NAME}
-  newTag: ${GIT_COMMIT}
+  newTag: ${BUILD_TAG}
 EOF
 
-    echo "Kustomization file updated successfully with newTag: ${GIT_COMMIT}"
+    echo "Kustomization file updated successfully with newTag: ${BUILD_TAG}"
 }

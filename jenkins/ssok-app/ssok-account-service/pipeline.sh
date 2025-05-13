@@ -8,20 +8,19 @@ separationPhrase="==================================="
 # 유틸 스크립트 함수 로드
 source jenkins/utils.sh
 
-# Git 커밋 정보 가져오기
-# source git_commit.txt 대신에 변수로 읽어오기
-if [ -f "git_commit.txt" ]; then
-    GIT_COMMIT=$(grep "GIT_COMMIT=" git_commit.txt | cut -d'=' -f2)
-    # GIT_COMMIT 변수에 값이 제대로 설정되었는지 확인
-    if [[ -z "$GIT_COMMIT" || "$GIT_COMMIT" == "Git" ]]; then
-        echo "Warning: Invalid GIT_COMMIT value found in git_commit.txt, using HEAD commit"
-        GIT_COMMIT=$(git rev-parse --short HEAD)
+# 빌드 태그 정보 가져오기
+if [ -f "build_tag.txt" ]; then
+    BUILD_TAG=$(grep "BUILD_TAG=" build_tag.txt | cut -d'=' -f2)
+    # BUILD_TAG 변수에 값이 제대로 설정되었는지 확인
+    if [[ -z "$BUILD_TAG" ]]; then
+        echo "Warning: Invalid BUILD_TAG value found in build_tag.txt, using default build tag"
+        BUILD_TAG="build-${BUILD_NUMBER:-1}"
     fi
-    echo "Using GIT_COMMIT: $GIT_COMMIT"
+    echo "Using Build Tag: $BUILD_TAG"
 else
-    echo "Warning: git_commit.txt not found, using HEAD commit"
-    GIT_COMMIT=$(git rev-parse --short HEAD)
-    echo "Using GIT_COMMIT: $GIT_COMMIT"
+    echo "Warning: build_tag.txt not found, using default build tag"
+    BUILD_TAG="build-${BUILD_NUMBER:-1}"
+    echo "Using Default Build Tag: $BUILD_TAG"
 fi
 
 echo $separationPhrase
@@ -46,7 +45,7 @@ echo "Current directory before updating kustomization: $(pwd)"
 
 # ssok-deploy 저장소에서 kustomization 파일 업데이트
 # DEPLOY_REPO_PATH는 더 이상 사용하지 않으므로 비워둡니다
-update_kustomization_file $SERVICE_NAME $DOCKER_USER $GIT_COMMIT ""
+update_kustomization_file $SERVICE_NAME $DOCKER_USER $BUILD_TAG ""
 
 # 업데이트된 파일이 제대로 생성되었는지 확인
 echo "Checking if kustomization file was created:"
@@ -56,7 +55,7 @@ ls -la k8s/ssok-app/overlays/dev/$SERVICE_NAME/
 git config user.email "jenkins@example.com"
 git config user.name "Jenkins"
 git add .
-git commit -m "Update $SERVICE_NAME image to ${GIT_COMMIT}"
+git commit -m "Update $SERVICE_NAME image to ${BUILD_TAG}"
 git push origin main
 
 echo $separationPhrase
