@@ -14,6 +14,8 @@ data:
         kubernetes:
           config:
             enabled: true
+            name: ssok-account-service
+            namespace : ssok
           secrets:
             enabled: false
           reload:
