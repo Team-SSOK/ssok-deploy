@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: ssok-user-service
+  name: ssok-user-service-kubernetes
   namespace: ssok
 data:
   application.yml: |
