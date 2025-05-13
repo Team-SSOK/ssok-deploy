@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: ssok-bluetooth-service-kubernetes
+  name: ssok-bluetooth-service
   namespace: ssok
 data:
   application.yml: |
