@@ -61,3 +61,10 @@ data:
           enabled: false    # Kubernetes 헬스 체크 비활성화
     jwt:
       secret: ssokAppFinTechSecretKey1234567890ABCDEFGHIJKLMN
+    auth:
+      whitelist:
+      - /api/auth/login
+      - /api/auth/refresh
+      - /api/users/signup
+      - /api/users/phone
+      - /api/users/phone/verify
