@@ -55,6 +55,10 @@ EOF
     docker push "${DOCKER_REPO_NAME}/${SERVICE_NAME}:${TAG}"
     docker push "${DOCKER_REPO_NAME}/${SERVICE_NAME}:build-${BUILD_NUMBER}"
 
+    docker image rmi "${DOCKER_REPO_NAME}/${SERVICE_NAME}:${TAG}"
+    docker image rmi "${DOCKER_REPO_NAME}/${SERVICE_NAME}:build-${BUILD_NUMBER}"
+    docker image prune -f
+
     # 임시 디렉토리 정리
     rm -rf docker-build
 
