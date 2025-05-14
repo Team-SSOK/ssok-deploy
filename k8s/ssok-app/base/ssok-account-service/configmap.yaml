@@ -47,7 +47,7 @@ data:
       openbanking-service:
         url: http://kudong.kr:55028
       user-service:
-        url: http://ssok-user-service.ssok.svc.cluster.local:8080
+        url: http://ssok-user-service.ssok.svc.cluster.local
     management:
       endpoints:
         web:
