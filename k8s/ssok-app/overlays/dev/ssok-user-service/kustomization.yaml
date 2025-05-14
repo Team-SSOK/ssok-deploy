@@ -7,4 +7,4 @@ resources:
 
 images:
 - name: kudong/ssok-user-service
-  newTag: build-74
+  newTag: build-76
