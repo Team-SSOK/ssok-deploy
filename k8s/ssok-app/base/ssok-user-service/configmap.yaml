@@ -79,4 +79,4 @@ data:
       SENDER: 01077948797
     notification:
       server:
-        url: http://ssok-notification-service.ssok.svc.cluster.local
+        url: http://ssok-notification-service.ssok.svc.cluster.local:8080
