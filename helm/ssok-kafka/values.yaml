@@ -3,7 +3,7 @@
 replicaCount: 1
 
 image:
-  repository: apache/kafka:latest
+  repository: apache/kafka
   pullPolicy: IfNotPresent
   tag: "latest" # chart appVersion의 이미지 태그를 덮어쓰기
 
