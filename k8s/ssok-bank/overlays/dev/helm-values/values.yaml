@@ -2,31 +2,3 @@ image:
   repository: kudong/ssok-bank
   pullPolicy: IfNotPresent
   tag: "1.62"
-
-kafka:
-  config:
-    KAFKA_NODE_ID: "1"
-    KAFKA_PROCESS_ROLES: "broker,controller"
-    KAFKA_LISTENERS: "INTERNAL://0.0.0.0:9092,CONTROLLER://0.0.0.0:9093,EXTERNAL://0.0.0.0:31001"
-    KAFKA_ADVERTISED_LISTENERS: "INTERNAL://broker.bank.svc.cluster.local:9092,EXTERNAL://172.21.1.22:31001"
-    KAFKA_CONTROLLER_LISTENER_NAMES: "CONTROLLER"
-    KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: "CONTROLLER:PLAINTEXT,INTERNAL:PLAINTEXT,EXTERNAL:PLAINTEXT"
-    KAFKA_INTER_BROKER_LISTENER_NAME: "INTERNAL"
-    KAFKA_CONTROLLER_QUORUM_VOTERS: "1@broker:9093"
-    KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: "1"
-    KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: "1"
-    KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: "1"
-    KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS: "0"
-    KAFKA_NUM_PARTITIONS: "3"
-  service:
-    port:
-      - name: internal
-        port: 9092
-        targetPort: 9092
-      - name: external
-        port: 31001
-        targetPort: 31001
-        nodePort: 31001
-      - name: controller
-        port: 9093
-        targetPort: 9093
