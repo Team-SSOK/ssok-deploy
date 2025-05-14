@@ -9,8 +9,8 @@
 KAFKA Selector labels (셀렉터 레이블)
 */}}
 {{- define "kafka.selectorLabels" -}}
-app.kubernetes.io/name: kafka
-app.kubernetes.io/instance: kafka
+app.kubernetes.io/name: ssok-kafka
+app.kubernetes.io/instance: ssok-kafka
 {{- end }}
 
 {{/*
