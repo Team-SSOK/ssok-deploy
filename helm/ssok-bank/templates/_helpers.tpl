@@ -60,23 +60,3 @@ app.kubernetes.io/instance: {{ .Release.Name }}
 {{- default "default" .Values.serviceAccount.name }}
 {{- end }}
 {{- end }}
-
-{{/*
-KAFKA Selector labels (셀렉터 레이블)
-*/}}
-{{- define "kafka.selectorLabels" -}}
-app.kubernetes.io/name: kafka
-app.kubernetes.io/instance: kafka
-{{- end }}
-
-{{/*
-KAFKA Common labels (공통 레이블)
-*/}}
-{{- define "kafka.labels" -}}
-helm.sh/chart: {{ include "ssok-bank.chart" . }}
-{{ include "kafka.selectorLabels" . }}
-{{- if .Chart.AppVersion }}
-app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
-{{- end }}
-app.kubernetes.io/managed-by: {{ .Release.Service }}
-{{- end }}
