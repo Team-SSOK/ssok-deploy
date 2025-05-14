@@ -77,3 +77,6 @@ data:
       API_KEY: eu0x6jq8ohfldehok2vvbecg0exhnrle
       USER_ID: kingmandoo95
       SENDER: 01077948797
+    notification:
+      server:
+        url: http://ssok-notification-service.ssok.svc.cluster.local
