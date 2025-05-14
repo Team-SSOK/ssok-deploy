@@ -3,12 +3,23 @@ entries:
   ssok-bank:
   - apiVersion: v2
     appVersion: 0.1.0
-    created: "2025-05-13T10:19:18.6970507+09:00"
+    created: "2025-05-14T09:22:51.2067473+09:00"
     description: A SSOK-BANK Helm chart for Kubernetes
-    digest: 40d90c04f7222a9c8f0b358dc69b09e279473fb345c4ab1ed73be9857de22bce
+    digest: 11be976703e603e9cfce816d63a94608220d5895e97b6ac1c8fc3823bf82faf5
     name: ssok-bank
     type: application
     urls:
     - ssok-bank-0.1.0.tgz
     version: 0.1.0
-generated: "2025-05-13T10:19:18.695948+09:00"
+  ssok-openbanking:
+  - apiVersion: v2
+    appVersion: 0.1.0
+    created: "2025-05-14T09:22:51.2078723+09:00"
+    description: A SSOK-OPENBANKING Helm chart for Kubernetes
+    digest: 7cbd4d6af98ccad66377c0d77d8f317d13ff4a1722416f9f064d037dece9dd72
+    name: ssok-openbanking
+    type: application
+    urls:
+    - ssok-openbanking-0.1.0.tgz
+    version: 0.1.0
+generated: "2025-05-14T09:22:51.2057618+09:00"
