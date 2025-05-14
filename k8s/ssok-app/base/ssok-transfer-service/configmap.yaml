@@ -38,6 +38,7 @@ data:
     external:
       openbanking-service:
         url: http://kudong.kr:55028
+        api-key: 123456789abcdefghijk
       account-service:
         url: http://ssok-account-service.ssok.svc.cluster.local
     management:
