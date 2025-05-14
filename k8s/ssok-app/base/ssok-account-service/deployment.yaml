@@ -28,13 +28,13 @@ spec:
         env:
         - name: SPRING_CONFIG_LOCATION
           value: file:/config/application.yml
-        resources:
-          requests:
-            memory: "256Mi"
-            cpu: "100m"
-          limits:
-            memory: "512Mi"
-            cpu: "500m"
+#        resources:
+#          requests:
+#            memory: "256Mi"
+#            cpu: "100m"
+#          limits:
+#            memory: "512Mi"
+#            cpu: "500m"
 # 프로브를 일시적으로 비활성화
 #        readinessProbe:
 #          httpGet:

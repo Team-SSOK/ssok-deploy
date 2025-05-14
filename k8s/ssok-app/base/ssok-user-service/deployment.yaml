@@ -28,13 +28,13 @@ spec:
         env:
         - name: SPRING_CONFIG_LOCATION
           value: file:/config/application.yml
-        resources:
-          requests:
-            memory: "256Mi"
-            cpu: "100m"
-          limits:
-            memory: "512Mi"
-            cpu: "300m"
+#        resources:
+#          requests:
+#            memory: "256Mi"
+#            cpu: "100m"
+#          limits:
+#            memory: "512Mi"
+#            cpu: "1000m"
 #        readinessProbe:
 #          httpGet:
 #            path: /actuator/health
