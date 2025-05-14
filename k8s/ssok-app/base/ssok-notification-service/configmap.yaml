@@ -72,3 +72,7 @@ data:
     fcm:
       token-ttl-seconds: 2592000 # 기본값 30일
       image-url: "https://example.com/images/ssok-logo.png" # 임시 주소 -> 이후에 s3 주소
+    kafka:
+      bootstrap-servers: broker.bank.svc.cluster.local:9092
+      notification-topic: ssok.notification.topic
+      group-id: notification-group

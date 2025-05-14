@@ -41,6 +41,8 @@ data:
         api-key: 4a87c69e-2787-4ae7-8f41-dbb0068a44d9
       account-service:
         url: http://ssok-account-service.ssok.svc.cluster.local
+      notification-service:
+        url: http://ssok-notification-service.ssok.svc.cluster.local
     management:
       endpoints:
         web:
@@ -66,3 +68,6 @@ data:
               isolation:
                 thread:
                   timeoutInMilliseconds: 30000
+      kafka:
+        bootstrap-servers: broker.bank.svc.cluster.local:9092
+        notification-topic: ssok.notification.topic
