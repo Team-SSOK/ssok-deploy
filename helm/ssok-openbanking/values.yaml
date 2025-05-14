@@ -1,0 +1,40 @@
+# SSOK-OPENBANKING 기본 values 입니다.
+
+replicaCount: 3
+
+image:
+  repository: kudong/ssok-openbanking
+  pullPolicy: IfNotPresent
+  tag: "latest" # chart appVersion의 이미지 태그를 덮어쓰기
+
+nameOverride: ""
+fullnameOverride: ""
+
+serviceAccount:
+  create: true
+  annotations: {}
+  name: ""
+
+openbanking:
+  config:
+    SERVER_PORT: "8080"
+    KAFKA_BOOTSTRAP_SERVERS: "broker.bank.svc.cluster.local:9092"
+    KAFKA_TRUSTED_PACKAGES: "kr.ssok.model"
+    DB_URL: "jdbc:mariadb://172.21.1.22:3306/moni?useUnicode=true&characterEncoding=utf-8&serverTimeZone=Asia/Seoul"
+    REDIS_HOST: "172.21.1.22"
+    REDIS_PORT: "6379"
+    BANK_API_URL: "http://ssok-bank.bank.svc.cluster.local:8080"
+  db:
+    DB_USERNAME: bGdjbnM=
+    DB_PASSWORD: dGxkcHNkcHRt
+
+# service:
+#   type: ClusterIP
+#   port: 80
+
+
+
+
+
+
+

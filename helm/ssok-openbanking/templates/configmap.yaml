@@ -1,0 +1,12 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: ssok-openbanking-cm
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "ssok-openbanking.labels" . | nindent 4 }}
+data:
+  {{- with .Values.openbanking.config }}
+  {{- toYaml . | nindent 2 }}
+  {{- end }}

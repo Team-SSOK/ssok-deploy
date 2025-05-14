@@ -6,6 +6,7 @@ metadata:
   labels:
     {{- include "kafka.labels" . | nindent 4 }}
 spec:
+  revisionHistoryLimit: 1
   replicas: 1
   selector:
     matchLabels:
@@ -40,6 +41,7 @@ metadata:
   labels:
     {{- include "ssok-bank.labels" . | nindent 4 }}
 spec:
+  revisionHistoryLimit: 1
   replicas: {{ .Values.replicaCount }}
   selector:
     matchLabels:

@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "ssok-openbanking.fullname" . }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "ssok-openbanking.labels" . | nindent 4 }}
+spec:
+  type: NodePort
+  selector:
+    {{- include "ssok-openbanking.selectorLabels" . | nindent 4 }}
+  sessionAffinity: None
+  ports:
+    - port: 8080 # 다른 pod exec 접속후 curl http://ssok-openbanking-service:8080 로 접근
+      targetPort: 8080 # openbanking의 타겟 포트
+      nodePort: 31002  # 외부에서 http://kudong.kr:55028
