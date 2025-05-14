@@ -69,5 +69,5 @@ data:
                 thread:
                   timeoutInMilliseconds: 30000
     kafka:
-      bootstrap-servers: broker.bank.svc.cluster.local:9092
+      bootstrap-servers: broker.kafka.svc.cluster.local:9092
       notification-topic: ssok.notification.topic

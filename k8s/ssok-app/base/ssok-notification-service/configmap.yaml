@@ -31,7 +31,7 @@ data:
           host: 172.21.1.22
           port: 6379
     kafka:
-      bootstrap-servers: broker.bank.svc.cluster.local:9092
+      bootstrap-servers: broker.kafka.svc.cluster.local:9092
       notification-topic: ssok.notification.topic
       group-id: notification-group
     bank:
