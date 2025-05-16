@@ -7,4 +7,4 @@ resources:
 
 images:
 - name: kudong/ssok-bluetooth-service
-  newTag: build-80
+  newTag: build-82
