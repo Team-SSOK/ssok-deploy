@@ -1,7 +1,7 @@
 image:
   repository: kudong/ssok-bank
   pullPolicy: IfNotPresent
-  tag: "1.68"
+  tag: "1.69"
 
 bank:
   config:
