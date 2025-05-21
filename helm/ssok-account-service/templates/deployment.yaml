@@ -1,10 +1,9 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: ssok-account-service
-  namespace: ssok
+  name: {{ include "ssok-account-service.fullname" . }}
   labels:
-    app: ssok-account-service
+    {{- include "ssok-account-service.labels" . | nindent 4 }}
 spec:
   replicas: {{ .Values.replicaCount }}
   selector:
@@ -19,7 +18,7 @@ spec:
     spec:
       containers:
         - name: {{ .Chart.Name }}
-          image: kudong/ssok-account-service:latest
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:
             - containerPort: {{ .Values.service.targetPort }}
