@@ -17,7 +17,7 @@ service:
 transfer:
   config:
     SERVER_PORT: "8080"
-    DB_URL: "jdbc:mysql://localhost:3306/ssok?characterEncoding=UTF-8&serverTimeZone=Asia/Seoul"
+    DB_URL: "jdbc:mysql://172.21.1.22:5432/ssok?characterEncoding=UTF-8&serverTimeZone=Asia/Seoul"
     DB_USERNAME: "ssok"
     DB_PASSWORD: "1234"
     KAFKA_NOTIFICATION_TOPIC: "ssok.notification.topic"
