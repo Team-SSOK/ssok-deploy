@@ -1,0 +1,47 @@
+replicaCount: 2
+
+image:
+  repository: kudong/ssok-gateway-service
+  tag: release-1.0.0
+  pullPolicy: IfNotPresent
+
+serviceAccount:
+  create: true
+  name: ""
+
+service:
+  type: NodePort
+  port: 8080
+  targetPort: 8080
+  nodePort: 31080
+
+gateway:
+  config:
+    SERVER_PORT: "8080"
+    DB_URL: "jdbc:postgresql://172.21.1.22:5432/mydb"
+    REDIS_HOST: "172.21.1.22"
+    REDIS_PORT: "6379"
+    JWT_SECRET: "ssokAppFinTechSecretKey1234567890ABCDEFGHIJKLMN"
+    WHITELIST: "/api/auth/login,/api/auth/refresh,/api/users/signup,/api/users/phone,/api/users/phone/verify"
+    NOTIFICATION_URL: "http://ssok-notification-service.ssok.svc.cluster.local"
+    ROUTES: |
+      - id: user-service
+        uri: http://ssok-user-service.ssok.svc.cluster.local
+        predicates:
+          - Path=/api/auth/**, /api/users/**
+      - id: account-service
+        uri: http://ssok-account-service.ssok.svc.cluster.local
+        predicates:
+          - Path=/api/accounts/**
+      - id: transfer-service
+        uri: http://ssok-transfer-service.ssok.svc.cluster.local
+        predicates:
+          - Path=/api/transfers/**
+      - id: notification-service
+        uri: http://ssok-notification-service.ssok.svc.cluster.local
+        predicates:
+          - Path=/api/notifications/**
+      - id: bluetooth-service
+        uri: http://ssok-bluetooth-service.ssok.svc.cluster.local
+        predicates:
+          - Path=/api/bluetooth/**

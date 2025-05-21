@@ -1,0 +1,13 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+helmCharts:
+  - name: ssok-gateway-service
+    repo: https://raw.githubusercontent.com/Team-SSOK/ssok-deploy/main/helm/
+    version: 0.1.0
+    releaseName: ssok-gateway-service
+    namespace: ssok
+    valuesFile: helm-values/values.yaml
+
+resources:
+  - ../../../base/rbac/rbac.yaml

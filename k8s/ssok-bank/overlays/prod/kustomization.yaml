@@ -1,0 +1,11 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+helmCharts:
+- name: ssok-bank
+  repo: https://raw.githubusercontent.com/Team-SSOK/ssok-deploy/main/helm
+  version: 0.1.0
+  releaseName: ssok-bank
+  namespace: bank
+  valuesFile: helm-values/values.yaml
+
