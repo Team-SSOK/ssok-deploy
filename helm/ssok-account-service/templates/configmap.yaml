@@ -21,6 +21,7 @@ data:
             useNameAsPrefix: false
             sources:
               - name: ssok-account-service
+                explicitPrefix: false
           secrets:
             enabled: false
           reload:

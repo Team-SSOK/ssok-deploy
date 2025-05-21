@@ -21,6 +21,7 @@ data:
             useNameAsPrefix: false
             sources:
               - name: ssok-bluetooth-service
+                explicitPrefix: false
           secrets:
             enabled: false
           reload:
