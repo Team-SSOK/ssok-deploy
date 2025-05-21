@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: ssok-account-service
-  amespace: ssok
+  namespace: ssok
   labels:
     {{- include "ssok-account-service.labels" . | nindent 4 }}
 spec:

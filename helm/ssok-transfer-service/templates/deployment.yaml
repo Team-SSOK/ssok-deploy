@@ -1,7 +1,8 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "ssok-transfer-service.fullname" . }}
+  name: ssok-transfer-service
+  namespace: ssok
   labels:
     {{- include "ssok-transfer-service.labels" . | nindent 4 }}
 spec:
@@ -22,6 +23,13 @@ spec:
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:
             - containerPort: {{ .Values.service.targetPort }}
-          envFrom:
-            - configMapRef:
-                name: {{ include "ssok-transfer-service.fullname" . }}-cm
+          volumeMounts:
+            - name: config-volume
+              mountPath: /config
+          env:
+            - name: SPRING_CONFIG_LOCATION
+              value: file:/config/application.yml
+      volumes:
+        - name: config-volume
+          configMap:
+            name: ssok-transfer-service
