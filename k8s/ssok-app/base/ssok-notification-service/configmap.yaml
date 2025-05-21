@@ -26,12 +26,7 @@ data:
             all-namespaces: false
           loadbalancer:
             mode: service
-      data:
-        redis:
-          host: 172.21.1.22
-          port: 6379
     kafka:
-      bootstrap-servers: broker.kafka.svc.cluster.local:9092
       notification-topic: ssok.notification.topic
       group-id: notification-group
     bank:
@@ -65,11 +60,6 @@ data:
       health:
         kubernetes:
           enabled: false    # Kubernetes 헬스 체크 비활성화
-    aligo:
-      SMS_API_URL: https://apis.aligo.in/send/
-      API_KEY: eu0x6jq8ohfldehok2vvbecg0exhnrle
-      USER_ID: kingmandoo95
-      SENDER: 01077948797
     firebase:
       config-path: ${FIREBASE_CONFIG_PATH:classpath:firebase/firebase-adminsdk.json}
       enabled: true

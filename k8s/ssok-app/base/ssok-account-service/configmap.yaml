@@ -27,14 +27,7 @@ data:
           loadbalancer:
             mode: service
       datasource:
-        url: jdbc:postgresql://172.21.1.22:5432/mydb
-        username: root
-        password: 1234
         driver-class-name: org.postgresql.Driver
-      data:
-        redis:
-          host: 172.21.1.22
-          port: 6379
       jpa:
         hibernate:
           ddl-auto: update
@@ -44,9 +37,6 @@ data:
             format_sql: true
         database-platform: org.hibernate.dialect.PostgreSQLDialect
     external:
-      openbanking-service:
-        url: http://172.21.1.22:8081
-        api-key: 4a87c69e-2787-4ae7-8f41-dbb0068a44d9
       user-service:
         url: http://ssok-user-service.ssok.svc.cluster.local
     management:

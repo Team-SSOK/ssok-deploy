@@ -28,6 +28,9 @@ spec:
         env:
         - name: SPRING_CONFIG_LOCATION
           value: file:/config/application.yml
+        envFrom:
+        - secretRef:
+          name: ssok-notification-service
 #        resources:
 #          requests:
 #            memory: "256Mi"

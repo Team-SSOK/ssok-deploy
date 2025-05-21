@@ -27,18 +27,12 @@ data:
           loadbalancer:
             mode: service
       datasource:
-        url: jdbc:mysql://172.21.1.22:3306/ssok?characterEncoding=UTF-8&serverTimeZone=Asia/Seoul
-        username: ssok
-        password: 1234
         driver-class-name: com.mysql.cj.jdbc.Driver
       jpa:
         hibernate:
           ddl-auto: update
         show-sql: true
     external:
-      openbanking-service:
-        url: http://172.21.1.22:8081
-        api-key: 4a87c69e-2787-4ae7-8f41-dbb0068a44d9
       account-service:
         url: http://ssok-account-service.ssok.svc.cluster.local
       notification-service:
@@ -69,5 +63,4 @@ data:
                 thread:
                   timeoutInMilliseconds: 30000
     kafka:
-      bootstrap-servers: broker.kafka.svc.cluster.local:9092
       notification-topic: ssok.notification.topic
