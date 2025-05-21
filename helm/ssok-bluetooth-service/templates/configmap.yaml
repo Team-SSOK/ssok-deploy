@@ -1,0 +1,65 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: ssok-bluetooth-service
+  namespace: ssok
+  labels:
+    {{- include "ssok-bluetooth-service.labels" . | nindent 4 }}
+data:
+  application.yml: |
+    server:
+      port: {{ .Values.bluetooth.config.SERVER_PORT }}
+    spring:
+      application:
+        name: ssok-bluetooth-service
+      cloud:
+        kubernetes:
+          config:
+            enabled: true
+            namespace: ssok
+            sources:
+              - name: ssok-bluetooth-service
+          secrets:
+            enabled: false
+          reload:
+            enabled: true
+          discovery:
+            all-namespaces: false
+          loadbalancer:
+            mode: service
+      data:
+        redis:
+          host: {{ .Values.bluetooth.config.REDIS_HOST }}
+          port: {{ .Values.bluetooth.config.REDIS_PORT }}
+    bluetooth:
+      uuid-ttl-seconds: {{ .Values.bluetooth.config.UUID_TTL_SECONDS }}
+    external:
+      account-service:
+        url: {{ .Values.bluetooth.config.ACCOUNT_SERVICE_URL }}
+      user-service:
+        url: {{ .Values.bluetooth.config.USER_SERVICE_URL }}
+    feign:
+      client:
+        config:
+          default:
+            connectTimeout: 20000
+            readTimeout: 20000
+            loggerLevel: full
+      hystrix:
+        command:
+          default:
+            execution:
+              isolation:
+                thread:
+                  timeoutInMilliseconds: 30000
+    management:
+      endpoints:
+        web:
+          exposure:
+            include: "*"
+      endpoint:
+        health:
+          show-details: always
+      health:
+        kubernetes:
+          enabled: false

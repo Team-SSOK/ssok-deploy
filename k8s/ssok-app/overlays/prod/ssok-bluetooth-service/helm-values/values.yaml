@@ -1,0 +1,24 @@
+replicaCount: 2
+
+image:
+  repository: kudong/ssok-bluetooth-service
+  tag: latest
+  pullPolicy: IfNotPresent
+
+serviceAccount:
+  create: true
+  name: ""
+
+service:
+  type: ClusterIP
+  port: 80
+  targetPort: 8080
+
+bluetooth:
+  config:
+    SERVER_PORT: "8080"
+    REDIS_HOST: "172.21.1.22"
+    REDIS_PORT: "6379"
+    UUID_TTL_SECONDS: "86400"
+    ACCOUNT_SERVICE_URL: "http://ssok-account-service.ssok.svc.cluster.local"
+    USER_SERVICE_URL: "http://ssok-user-service.ssok.svc.cluster.local"
