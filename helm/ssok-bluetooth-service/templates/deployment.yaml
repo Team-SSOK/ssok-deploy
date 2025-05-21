@@ -32,4 +32,4 @@ spec:
       volumes:
         - name: config-volume
           configMap:
-            name: {{ include "ssok-bluetooth-service.fullname" . }}-cm
+            name: ssok-bluetooth-service
