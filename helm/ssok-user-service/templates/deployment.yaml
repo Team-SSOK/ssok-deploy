@@ -25,5 +25,3 @@ spec:
           envFrom:
             - configMapRef:
                 name: {{ include "ssok-user-service.fullname" . }}-cm
-            - secretRef:
-                name: {{ include "ssok-user-service.fullname" . }}-secret
