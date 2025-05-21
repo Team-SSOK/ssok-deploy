@@ -3,8 +3,6 @@ kind: ConfigMap
 metadata:
   name: ssok-gateway-service
   namespace: ssok
-  # labels:
-  #   {{- include "ssok-gateway-service.labels" . | nindent 4 }}
 data:
   application.yml: |
     server:

@@ -3,13 +3,9 @@ kind: Service
 metadata:
   name: ssok-gateway-service
   namespace: ssok
-  # labels:
-  #   {{- include "ssok-gateway-service.labels" . | nindent 4 }}
 spec:
   selector:
     app: ssok-gateway-service
-    # app.kubernetes.io/name: {{ include "ssok-gateway-service.name" . }}
-    # app.kubernetes.io/instance: {{ .Release.Name }}
   ports:
     - port: {{ .Values.service.port }}
       targetPort: {{ .Values.service.targetPort }}

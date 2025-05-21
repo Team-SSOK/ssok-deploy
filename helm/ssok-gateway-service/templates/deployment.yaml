@@ -5,23 +5,18 @@ metadata:
   namespace: ssok
   labels:
     app: ssok-gateway-service
-    # {{- include "ssok-gateway-service.labels" . | nindent 4 }}
 spec:
   replicas: {{ .Values.replicaCount }}
   selector:
     matchLabels:
       app: ssok-gateway-service
-      # app.kubernetes.io/name: {{ include "ssok-gateway-service.name" . }}
-      # app.kubernetes.io/instance: {{ .Release.Name }}
   template:
     metadata:
       labels:
         app: ssok-gateway-service
-        # app.kubernetes.io/name: {{ include "ssok-gateway-service.name" . }}
-        # app.kubernetes.io/instance: {{ .Release.Name }}
     spec:
       containers:
-        - name: ssok-gateway-service # {{ .Chart.Name }}
+        - name: ssok-gateway-service
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:
