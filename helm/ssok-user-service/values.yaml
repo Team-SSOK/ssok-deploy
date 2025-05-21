@@ -1,0 +1,30 @@
+replicaCount: 1
+
+image:
+  repository: kudong/ssok-user-service
+  tag: latest
+  pullPolicy: IfNotPresent
+
+serviceAccount:
+  create: true
+  name: ""
+
+service:
+  type: ClusterIP
+  port: 80
+  targetPort: 8080
+
+user:
+  config:
+    SERVER_PORT: "8080"
+    DB_URL: "jdbc:postgresql://localhost:5432/mydb"
+    REDIS_HOST: "localhost"
+    REDIS_PORT: "6379"
+    JWT_SECRET: "defaultSecret"
+    ALIGO_API_KEY: ""
+    ALIGO_USER_ID: ""
+    ALIGO_SENDER: ""
+    NOTIFICATION_URL: ""
+  db:
+    DB_USERNAME: cm9vdA==
+    DB_PASSWORD: MTIzNA==
