@@ -1,0 +1,29 @@
+replicaCount: 1
+
+image:
+  repository: kudong/ssok-transfer-service
+  tag: latest
+  pullPolicy: IfNotPresent
+
+serviceAccount:
+  create: true
+  name: ""
+
+service:
+  type: ClusterIP
+  port: 80
+  targetPort: 8080
+
+transfer:
+  config:
+    SERVER_PORT: "8080"
+    KAFKA_NOTIFICATION_TOPIC: "ssok.notification.topic"
+    ACCOUNT_SERVICE_URL: "http://localhost"
+    NOTIFICATION_SERVICE_URL: "http://localhost"
+  db:
+    spring.datasource.url: amRiYzpteXNxbDovL2xvY2FsaG9zdDozMzA2L3Nzb2tkYj9jaGFyYWN0ZXJFbmNvZGluZz1VVEYtOCZzZXJ2ZXJUaW1lWm9uZT1Bc2lhL1Nlb3Vs
+    spring.datasource.username: c3Nva3VzZXI=
+    spring.datasource.password: c3Nva3B3
+    kafka.bootstrap-servers: YnJva2VyLmxvY2FsaG9zdDo5MDky
+    external.openbanking-service.url: http://localhost:8081
+    external.openbanking-service.api-key: NGE4N2M2OWUtMjc4Ny00YWU3LThmNDEtZGJiMDA2OGE0NGQ5

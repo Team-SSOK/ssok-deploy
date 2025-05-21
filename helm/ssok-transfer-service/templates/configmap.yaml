@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "ssok-transfer-service.fullname" . }}-cm
+  labels:
+    {{- include "ssok-transfer-service.labels" . | nindent 4 }}
+data:
+  {{- with .Values.transfer.config }}
+  {{- toYaml . | nindent 2 }}
+  {{- end }}
