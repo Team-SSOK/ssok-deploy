@@ -30,7 +30,7 @@ spec:
           value: file:/config/application.yml
         envFrom:
         - secretRef:
-          name: ssok-user-service
+            name: ssok-user-service
 #        resources:
 #          requests:
 #            memory: "256Mi"
