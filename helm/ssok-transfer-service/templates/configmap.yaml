@@ -18,10 +18,8 @@ data:
             enabled: true
             name: ssok-transfer-service
             namespace: ssok
-            useNameAsPrefix: false
             sources:
               - name: ssok-transfer-service
-                explicitPrefix: false
           secrets:
             enabled: false
           reload:

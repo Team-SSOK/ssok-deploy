@@ -18,10 +18,8 @@ data:
             enabled: true
             name: ssok-notification-service
             namespace: ssok
-            useNameAsPrefix: false
             sources:
               - name: ssok-notification-service
-                explicitPrefix: false
           secrets:
             enabled: false
           reload:

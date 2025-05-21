@@ -16,10 +16,8 @@ data:
             enabled: true
             name: ssok-user-service
             namespace: ssok
-            useNameAsPrefix: false
             sources:
               - name: ssok-user-service
-                explicitPrefix: false
           secrets:
             enabled: false
           reload:
