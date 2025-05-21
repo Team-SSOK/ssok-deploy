@@ -1,0 +1,28 @@
+replicaCount: 2
+
+image:
+  repository: kudong/ssok-account-service
+  tag: release-1.0.0
+  pullPolicy: IfNotPresent
+
+serviceAccount:
+  create: true
+  name: ""
+
+service:
+  type: ClusterIP
+  port: 80
+  targetPort: 8080
+
+account:
+  config:
+    SERVER_PORT: "8080"
+    DB_URL: "jdbc:postgresql://172.21.1.22:5432/mydb"
+    REDIS_HOST: "172.21.1.22"
+    REDIS_PORT: "6379"
+    OPENBANKING_URL: "http://172.21.1.22:8081"
+    OPENBANKING_API_KEY: "4a87c69e-2787-4ae7-8f41-dbb0068a44d9"
+    USER_SERVICE_URL: "http://ssok-user-service.ssok.svc.cluster.local"
+  db:
+    DB_USERNAME: cm9vdA==
+    DB_PASSWORD: MTIzNA==
