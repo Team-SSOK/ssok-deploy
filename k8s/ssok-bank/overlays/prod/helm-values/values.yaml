@@ -8,7 +8,7 @@ replicaCount: 1
 bank:
   config:
     SERVER_PORT: "8080"
-    KAFKA_BOOTSTRAP_SERVERS: "broker:9092"
+    KAFKA_BOOTSTRAP_SERVERS: "broker.kafka.svc.cluster.local:9092"
     KAFKA_TRUSTED_PACKAGES: "kr.ssok.model"
     DB_URL: "jdbc:mariadb://172.16.1.10:3308/moni?useUnicode=true&characterEncoding=utf-8&serverTimeZone=Asia/Seoul"
     ENCRYPTION_KEY: "ss0k-bank-admin1"
