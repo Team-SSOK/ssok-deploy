@@ -16,7 +16,9 @@ data:
         kubernetes:
           config:
             enabled: true
+            name: ssok-transfer-service
             namespace: ssok
+            useNameAsPrefix: false
             sources:
               - name: ssok-transfer-service
           secrets:

@@ -16,7 +16,9 @@ data:
         kubernetes:
           config:
             enabled: true
+            name: ssok-notification-service
             namespace: ssok
+            useNameAsPrefix: false
             sources:
               - name: ssok-notification-service
           secrets:

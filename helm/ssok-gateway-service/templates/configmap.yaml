@@ -16,7 +16,9 @@ data:
         kubernetes:
           config:
             enabled: true
+            name: ssok-gateway-service
             namespace: ssok
+            useNameAsPrefix: false
             sources:
               - name: ssok-gateway-service
           secrets:
