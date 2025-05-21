@@ -1,10 +1,51 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: {{ include "ssok-gateway-service.fullname" . }}-cm
+  name: ssok-gateway-service
+  namespace: ssok
   labels:
     {{- include "ssok-gateway-service.labels" . | nindent 4 }}
 data:
-  {{- with .Values.gateway.config }}
-  {{- toYaml . | nindent 2 }}
-  {{- end }}
+  application.yml: |
+    server:
+      port: {{ .Values.gateway.config.SERVER_PORT | quote }}
+    spring:
+      application:
+        name: ssok-gateway-service
+      cloud:
+        kubernetes:
+          config:
+            enabled: true
+            name: ssok-gateway-service
+            namespace: ssok
+            sources:
+              - name: ssok-gateway-service
+          secrets:
+            enabled: false
+          reload:
+            enabled: true
+          discovery:
+            all-namespaces: false
+          loadbalancer:
+            mode: service
+        gateway:
+          routes: {{ .Values.gateway.config.ROUTES | nindent 12 }}
+      data:
+        redis:
+          host: {{ .Values.gateway.config.REDIS_HOST | quote }}
+          port: {{ .Values.gateway.config.REDIS_PORT | quote }}
+    jwt:
+      secret: {{ .Values.gateway.config.JWT_SECRET | quote }}
+    auth:
+      whitelist: [{{ .Values.gateway.config.WHITELIST | quote }}]
+    management:
+      endpoints:
+        web:
+          exposure:
+            include: "*"
+      endpoint:
+        health:
+          show-details: always
+      health:
+        kubernetes:
+          enabled: false
