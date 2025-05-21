@@ -36,6 +36,8 @@ data:
           host: {{ .Values.user.config.REDIS_HOST | quote }}
           port: {{ .Values.user.config.REDIS_PORT | quote }}
     jwt:
+      access-token-validity-in-seconds: {{ .Values.user.config.JWT_ACCESS_VALID | quote }}
+      refresh-token-validity-in-seconds: {{ .Values.user.config.JWT_REFRESH_VALID | quote }}
       secret: {{ .Values.user.config.JWT_SECRET | quote }}
     auth:
       whitelist:

@@ -22,6 +22,8 @@ user:
     DB_PASSWORD: "1234"
     REDIS_HOST: "172.21.1.22"
     REDIS_PORT: "6379"
+    JWT_ACCESS_VALID: "900"
+    JWT_REFRESH_VALID: "2592000"
     JWT_SECRET: "ssokAppFinTechSecretKey1234567890ABCDEFGHIJKLMN"
     ALIGO_API_KEY: "eu0x6jq8ohfldehok2vvbecg0exhnrle"
     ALIGO_USER_ID: "kingmandoo95"

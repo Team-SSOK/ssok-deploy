@@ -22,6 +22,8 @@ user:
     DB_PASSWORD: "1234"
     REDIS_HOST: "localhost"
     REDIS_PORT: "6379"
+    JWT_ACCESS_VALID: "900"
+    JWT_REFRESH_VALID: "2592000"
     JWT_SECRET: "defaultSecret"
     ALIGO_API_KEY: ""
     ALIGO_USER_ID: ""
