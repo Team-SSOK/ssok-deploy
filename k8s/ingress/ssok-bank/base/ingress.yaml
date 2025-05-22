@@ -1,0 +1,35 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: ssok-bank-ingress
+  namespace: bank
+  annotations:
+    kubernetes.io/ingress.class: alb
+    alb.ingress.kubernetes.io/scheme: internet-facing
+    alb.ingress.kubernetes.io/target-type: ip
+    alb.ingress.kubernetes.io/listen-ports: '[{"HTTP":80}]'
+    alb.ingress.kubernetes.io/group.name: ssok-group
+    alb.ingress.kubernetes.io/subnets: subnet-0477299d6297b7a52,subnet-05bce5c34c2186ef4
+    # HTTPS 설정 시, 아래 참고
+    # alb.ingress.kubernetes.io/listen-ports: '[{"HTTP":80,"HTTPS":443}]'
+    # alb.ingress.kubernetes.io/certificate-arn: arn:aws:acm:ap-northeast-2:123456789012:certificate/abcde...
+
+spec:
+  rules:
+    - host: bank.ssok.kr
+      http:
+        paths:
+          - path: /api/bank/transfer
+            pathType: Prefix
+            backend:
+              service:
+                name: ssok-bank-proxy
+                port:
+                  number: 8080
+          - path: /api/bank
+            pathType: Prefix
+            backend:
+              service:
+                name: ssok-bank
+                port:
+                  number: 8080
