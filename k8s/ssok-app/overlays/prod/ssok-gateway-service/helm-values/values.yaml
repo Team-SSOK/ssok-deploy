@@ -40,7 +40,7 @@ gateway:
       - id: notification-service
         uri: http://ssok-notification-service.ssok.svc.cluster.local
         predicates:
-          - Path=/api/notifications/**
+          - Path=/api/notification/**
       - id: bluetooth-service
         uri: http://ssok-bluetooth-service.ssok.svc.cluster.local
         predicates:
