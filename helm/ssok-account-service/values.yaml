@@ -18,11 +18,10 @@ account:
   config:
     SERVER_PORT: "8080"
     DB_URL: "jdbc:postgresql://localhost:5432/mydb"
+    DB_USERNAME: "root"
+    DB_PASSWORD: "1234"
     REDIS_HOST: "localhost"
     REDIS_PORT: "6379"
     OPENBANKING_URL: "http://localhost:8081"
     OPENBANKING_API_KEY: ""
     USER_SERVICE_URL: "http://localhost"
-  db:
-    DB_USERNAME: cm9vdA==
-    DB_PASSWORD: MTIzNA==

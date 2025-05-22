@@ -1,0 +1,28 @@
+replicaCount: 2
+
+image:
+  repository: kudong/ssok-notification-service
+  tag: latest
+  pullPolicy: IfNotPresent
+
+serviceAccount:
+  create: true
+  name: ""
+
+service:
+  type: ClusterIP
+  port: 80
+  targetPort: 8080
+
+notification:
+  config:
+    SERVER_PORT: "8080"
+    REDIS_HOST: "172.21.1.22"
+    REDIS_PORT: "6379"
+    KAFKA_BOOTSTRAP_SERVERS: "broker.kafka.svc.cluster.local:9092"
+    ALIGO_SMS_API_URL: "https://apis.aligo.in/send/"
+    ALIGO_API_KEY: "eu0x6jq8ohfldehok2vvbecg0exhnrle"
+    ALIGO_USER_ID: "kingmandoo95"
+    ALIGO_SENDER: "01077948797"
+    FCM_IMAGE_URL: "https://example.com/images/ssok-logo.png"
+    FIREBASE_CONFIG_PATH: "classpath:firebase/firebase-adminsdk.json"

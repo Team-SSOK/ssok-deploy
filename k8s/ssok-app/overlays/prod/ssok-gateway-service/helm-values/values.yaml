@@ -2,7 +2,7 @@ replicaCount: 2
 
 image:
   repository: kudong/ssok-gateway-service
-  tag: release-1.0.0
+  tag: latest
   pullPolicy: IfNotPresent
 
 serviceAccount:
@@ -40,7 +40,7 @@ gateway:
       - id: notification-service
         uri: http://ssok-notification-service.ssok.svc.cluster.local
         predicates:
-          - Path=/api/notifications/**
+          - Path=/api/notification/**
       - id: bluetooth-service
         uri: http://ssok-bluetooth-service.ssok.svc.cluster.local
         predicates:

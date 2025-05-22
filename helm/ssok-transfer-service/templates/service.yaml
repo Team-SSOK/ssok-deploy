@@ -1,7 +1,8 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ include "ssok-transfer-service.fullname" . }}
+  name: ssok-transfer-service
+  namespace: ssok
   labels:
     {{- include "ssok-transfer-service.labels" . | nindent 4 }}
 spec:

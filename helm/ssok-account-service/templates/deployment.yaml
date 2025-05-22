@@ -1,7 +1,8 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "ssok-account-service.fullname" . }}
+  name: ssok-account-service
+  namespace: ssok
   labels:
     {{- include "ssok-account-service.labels" . | nindent 4 }}
 spec:
@@ -22,6 +23,13 @@ spec:
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:
             - containerPort: {{ .Values.service.targetPort }}
-          envFrom:
-            - configMapRef:
-                name: {{ include "ssok-account-service.fullname" . }}-cm
+          env:
+            - name: SPRING_CONFIG_LOCATION
+              value: file:/config/application.yml
+          volumeMounts:
+            - name: config-volume
+              mountPath: /config
+      volumes:
+        - name: config-volume
+          configMap:
+            name: ssok-account-service

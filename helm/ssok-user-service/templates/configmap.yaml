@@ -1,10 +1,69 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: {{ include "ssok-user-service.fullname" . }}-cm
-  labels:
-    {{- include "ssok-user-service.labels" . | nindent 4 }}
+  name: ssok-user-service
+  namespace: ssok
 data:
-  {{- with .Values.user.config }}
-  {{- toYaml . | nindent 2 }}
-  {{- end }}
+  application.yml: |
+    server:
+      port: {{ .Values.user.config.SERVER_PORT | quote }}
+    spring:
+      application:
+        name: ssok-user-service
+      cloud:
+        kubernetes:
+          config:
+            enabled: true
+            name: ssok-user-service
+            namespace: ssok
+            sources:
+              - name: ssok-user-service
+          secrets:
+            enabled: false
+          reload:
+            enabled: true
+          discovery:
+            all-namespaces: false
+          loadbalancer:
+            mode: service
+      datasource:
+        url: {{ .Values.user.config.DB_URL | quote }}
+        username: {{ .Values.user.config.DB_USERNAME | quote }}
+        password: {{ .Values.user.config.DB_PASSWORD | quote }}
+        driver-class-name: org.postgresql.Driver
+      data:
+        redis:
+          host: {{ .Values.user.config.REDIS_HOST | quote }}
+          port: {{ .Values.user.config.REDIS_PORT | quote }}
+    jwt:
+      access-token-validity-in-seconds: {{ .Values.user.config.JWT_ACCESS_VALID | quote }}
+      refresh-token-validity-in-seconds: {{ .Values.user.config.JWT_REFRESH_VALID | quote }}
+      secret: {{ .Values.user.config.JWT_SECRET | quote }}
+    auth:
+      whitelist:
+        - /api/auth/login
+        - /api/auth/refresh
+        - /api/users/signup
+        - /api/users/phone
+        - /api/users/phone/verify
+    bank:
+      server:
+        url: {{ .Values.user.config.BANK_SERVICE_URL | quote }}
+    notification:
+      server:
+        url: {{ .Values.user.config.NOTIFICATION_URL | quote }}
+    aligo:
+      api-key: {{ .Values.user.config.ALIGO_API_KEY | quote }}
+      user-id: {{ .Values.user.config.ALIGO_USER_ID | quote }}
+      sender: {{ .Values.user.config.ALIGO_SENDER | quote }}
+    management:
+      endpoints:
+        web:
+          exposure:
+            include: "*"
+      endpoint:
+        health:
+          show-details: always
+      health:
+        kubernetes:
+          enabled: false

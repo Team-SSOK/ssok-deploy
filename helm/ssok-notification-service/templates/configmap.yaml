@@ -1,0 +1,77 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: ssok-notification-service
+  namespace: ssok
+  labels:
+    {{- include "ssok-notification-service.labels" . | nindent 4 }}
+data:
+  application.yml: |
+    server:
+      port: {{ .Values.notification.config.SERVER_PORT | quote }}
+    spring:
+      application:
+        name: ssok-notification-service
+      cloud:
+        kubernetes:
+          config:
+            enabled: true
+            name: ssok-notification-service
+            namespace: ssok
+            sources:
+              - name: ssok-notification-service
+          secrets:
+            enabled: false
+          reload:
+            enabled: true
+          discovery:
+            all-namespaces: false
+          loadbalancer:
+            mode: service
+      data:
+        redis:
+          host: {{ .Values.notification.config.REDIS_HOST | quote }}
+          port: {{ .Values.notification.config.REDIS_PORT | quote }}
+    kafka:
+      bootstrap-servers: {{ .Values.notification.config.KAFKA_BOOTSTRAP_SERVERS | quote }}
+      notification-topic: ssok.notification.topic
+      group-id: notification-group
+    feign:
+      client:
+        config:
+          default:
+            connectTimeout: 20000
+            readTimeout: 20000
+            loggerLevel: full
+      hystrix:
+        command:
+          default:
+            execution:
+              isolation:
+                thread:
+                  timeoutInMilliseconds: 30000
+    firebase:
+      config-path: {{ .Values.notification.config.FIREBASE_CONFIG_PATH | quote }}
+      enabled: true
+    fcm:
+      token-ttl-seconds: 2592000
+      image-url: {{ .Values.notification.config.FCM_IMAGE_URL | quote }}
+    aligo:
+      SMS_API_URL: {{ .Values.notification.config.ALIGO_SMS_API_URL | quote }}
+      API_KEY: {{ .Values.notification.config.ALIGO_API_KEY | quote }}
+      USER_ID: {{ .Values.notification.config.ALIGO_USER_ID | quote }}
+      SENDER: {{ .Values.notification.config.ALIGO_SENDER | quote }}
+    management:
+      endpoints:
+        web:
+          exposure:
+            include: "*"
+      endpoint:
+        health:
+          show-details: always
+    logging:
+      level:
+        kr.ssok.userservice.client: DEBUG
+    health:
+      kubernetes:
+        enabled: false

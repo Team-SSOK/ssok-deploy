@@ -10,4 +10,4 @@ helmCharts:
     valuesFile: helm-values/values.yaml
 
 resources:
-  - ../../../base/rbac/rbac.yaml
+  - rbac.yaml
