@@ -1,0 +1,33 @@
+# SSOK-BANK-PROXY values 입니다.
+
+replicaCount: 1
+
+image:
+  repository: kudong/ssok-openbanking
+  pullPolicy: IfNotPresent
+  tag: "latest" # chart appVersion의 이미지 태그를 덮어쓰기
+
+nameOverride: ""
+fullnameOverride: ""
+
+serviceAccount:
+  create: true
+  annotations: {}
+  name: ""
+
+proxy:
+  config:
+    SERVER_PORT: "8080"
+    KAFKA_BOOTSTRAP_SERVERS: "broker.kafka.svc.cluster.local:9092"
+    KAFKA_TRUSTED_PACKAGES: "kr.ssok.model"
+
+# service:
+#   type: ClusterIP
+#   port: 80
+
+
+
+
+
+
+
