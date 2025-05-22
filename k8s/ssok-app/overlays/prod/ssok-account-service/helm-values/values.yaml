@@ -20,7 +20,7 @@ account:
     DB_URL: "jdbc:postgresql://172.16.0.86:5432/ssokdb"
     DB_USERNAME: "ssokuser"
     DB_PASSWORD: "ssokpw"
-    REDIS_HOST: "172.21.1.22"
+    REDIS_HOST: "172.16.0.86"
     REDIS_PORT: "6379"
     OPENBANKING_URL: "http://172.16.1.194:8080"
     OPENBANKING_API_KEY: "6ee92f1d-e70e-470b-9f13-1b0822374728"
