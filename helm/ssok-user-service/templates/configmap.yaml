@@ -48,7 +48,7 @@ data:
         - /api/users/phone/verify
     bank:
       server:
-        url: {{ .Values.notification.config.BANK_SERVICE_URL }}
+        url: {{ .Values.user.config.BANK_SERVICE_URL | quote }}
     notification:
       server:
         url: {{ .Values.user.config.NOTIFICATION_URL | quote }}
