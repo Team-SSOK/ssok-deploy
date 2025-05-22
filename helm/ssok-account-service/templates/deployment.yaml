@@ -17,6 +17,7 @@ spec:
         app.kubernetes.io/name: {{ include "ssok-account-service.name" . }}
         app.kubernetes.io/instance: {{ .Release.Name }}
     spec:
+      serviceAccount: ssok-account-service-sa
       containers:
         - name: {{ .Chart.Name }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"

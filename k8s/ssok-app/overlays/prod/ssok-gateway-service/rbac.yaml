@@ -7,7 +7,7 @@ metadata:
 apiVersion: rbac.authorization.k8s.io/v1
 kind: Role
 metadata:
-  name: ssok-usgatewayer-service-role
+  name: ssok-gateway-service-role
   namespace: ssok
 rules:
 - apiGroups: [""]
