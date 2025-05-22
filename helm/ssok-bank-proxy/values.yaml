@@ -3,7 +3,7 @@
 replicaCount: 1
 
 image:
-  repository: kudong/ssok-openbanking
+  repository: kudong/ssok-bank-proxy
   pullPolicy: IfNotPresent
   tag: "latest" # chart appVersion의 이미지 태그를 덮어쓰기
 
