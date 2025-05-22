@@ -19,14 +19,14 @@ spec:
     - host: ssok.kr
       http:
         paths:
-          - path: /api/bank/transfer(/|$)(.*)
+          - path: /api/bank/transfer
             pathType: Prefix
             backend:
               service:
                 name: ssok-bank-proxy
                 port:
                   number: 8080
-          - path: /api/bank(/|$)(.*)
+          - path: /api/bank
             pathType: Prefix
             backend:
               service:
