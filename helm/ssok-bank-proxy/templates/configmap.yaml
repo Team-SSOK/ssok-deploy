@@ -1,0 +1,12 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: ssok-bank-proxy-cm
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "ssok-bank-proxy.labels" . | nindent 4 }}
+data:
+  {{- with .Values.proxy.config }}
+  {{- toYaml . | nindent 2 }}
+  {{- end }}
