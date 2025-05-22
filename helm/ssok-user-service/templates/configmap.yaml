@@ -46,6 +46,9 @@ data:
         - /api/users/signup
         - /api/users/phone
         - /api/users/phone/verify
+    bank:
+      server:
+        url: {{ .Values.notification.config.BANK_SERVICE_URL }}
     notification:
       server:
         url: {{ .Values.user.config.NOTIFICATION_URL | quote }}

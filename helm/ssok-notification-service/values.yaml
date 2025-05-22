@@ -20,7 +20,6 @@ notification:
     REDIS_HOST: "localhost"
     REDIS_PORT: "6379"
     KAFKA_BOOTSTRAP_SERVERS: "broker.localhost:9092"
-    BANK_SERVICE_URL: "http://localhost"
     ALIGO_API_KEY: ""
     ALIGO_USER_ID: ""
     ALIGO_SENDER: ""

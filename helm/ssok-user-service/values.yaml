@@ -29,3 +29,4 @@ user:
     ALIGO_USER_ID: ""
     ALIGO_SENDER: ""
     NOTIFICATION_URL: ""
+    BANK_SERVICE_URL: ""

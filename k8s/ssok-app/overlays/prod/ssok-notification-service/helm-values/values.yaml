@@ -20,7 +20,6 @@ notification:
     REDIS_HOST: "172.21.1.22"
     REDIS_PORT: "6379"
     KAFKA_BOOTSTRAP_SERVERS: "broker.kafka.svc.cluster.local:9092"
-    BANK_SERVICE_URL: "http://ssok-bank.bank.svc.cluster.local:8080"
     ALIGO_SMS_API_URL: "https://apis.aligo.in/send/"
     ALIGO_API_KEY: "eu0x6jq8ohfldehok2vvbecg0exhnrle"
     ALIGO_USER_ID: "kingmandoo95"

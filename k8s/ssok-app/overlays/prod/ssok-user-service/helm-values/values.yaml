@@ -29,3 +29,4 @@ user:
     ALIGO_USER_ID: "kingmandoo95"
     ALIGO_SENDER: "01077948797"
     NOTIFICATION_URL: "http://ssok-notification-service.ssok.svc.cluster.local"
+    BANK_SERVICE_URL: "http://ssok-bank.bank.svc.cluster.local:8080"

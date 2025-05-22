@@ -36,9 +36,6 @@ data:
       bootstrap-servers: {{ .Values.notification.config.KAFKA_BOOTSTRAP_SERVERS }}
       notification-topic: ssok.notification.topic
       group-id: notification-group
-    bank:
-      server:
-        url: {{ .Values.notification.config.BANK_SERVICE_URL }}
     feign:
       client:
         config:
