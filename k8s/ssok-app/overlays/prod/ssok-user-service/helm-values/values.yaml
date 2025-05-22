@@ -17,10 +17,10 @@ service:
 user:
   config:
     SERVER_PORT: "8080"
-    DB_URL: "jdbc:postgresql://172.21.1.22:5432/mydb"
-    DB_USERNAME: "root"
-    DB_PASSWORD: "1234"
-    REDIS_HOST: "172.21.1.22"
+    DB_URL: "jdbc:postgresql://172.16.0.86:5433/ssokdb"
+    DB_USERNAME: "ssokuser"
+    DB_PASSWORD: "ssokpw"
+    REDIS_HOST: "172.16.0.86"
     REDIS_PORT: "6379"
     JWT_ACCESS_VALID: "900"
     JWT_REFRESH_VALID: "2592000"

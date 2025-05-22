@@ -17,11 +17,11 @@ service:
 account:
   config:
     SERVER_PORT: "8080"
-    DB_URL: "jdbc:postgresql://172.21.1.22:5432/mydb"
-    DB_USERNAME: "root"               # ← 이쪽으로 이동
-    DB_PASSWORD: "1234"               # ← 이쪽으로 이동
+    DB_URL: "jdbc:postgresql://172.16.0.86:5432/ssokdb"
+    DB_USERNAME: "ssokuser"
+    DB_PASSWORD: "ssokpw"
     REDIS_HOST: "172.21.1.22"
     REDIS_PORT: "6379"
-    OPENBANKING_URL: "http://172.21.1.22:8081"
+    OPENBANKING_URL: "http://172.16.1.194:8080"
     OPENBANKING_API_KEY: "4a87c69e-2787-4ae7-8f41-dbb0068a44d9"
     USER_SERVICE_URL: "http://ssok-user-service.ssok.svc.cluster.local"
