@@ -10,10 +10,9 @@ serviceAccount:
   name: ""
 
 service:
-  type: NodePort
-  port: 8080
+  type: ClusterIP
+  port: 80
   targetPort: 8080
-  nodePort: 31080
 
 gateway:
   config:
