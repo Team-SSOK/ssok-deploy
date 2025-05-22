@@ -23,5 +23,5 @@ account:
     REDIS_HOST: "172.21.1.22"
     REDIS_PORT: "6379"
     OPENBANKING_URL: "http://172.16.1.194:8080"
-    OPENBANKING_API_KEY: "4a87c69e-2787-4ae7-8f41-dbb0068a44d9"
+    OPENBANKING_API_KEY: "6ee92f1d-e70e-470b-9f13-1b0822374728"
     USER_SERVICE_URL: "http://ssok-user-service.ssok.svc.cluster.local"
