@@ -47,7 +47,8 @@ data:
         - /api/users/phone
         - /api/users/phone/verify
     notification:
-      url: {{ .Values.user.config.NOTIFICATION_URL | quote }}
+      server:
+        url: {{ .Values.user.config.NOTIFICATION_URL | quote }}
     aligo:
       api-key: {{ .Values.user.config.ALIGO_API_KEY | quote }}
       user-id: {{ .Values.user.config.ALIGO_USER_ID | quote }}
