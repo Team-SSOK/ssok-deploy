@@ -31,6 +31,13 @@ data:
         username: {{ .Values.user.config.DB_USERNAME | quote }}
         password: {{ .Values.user.config.DB_PASSWORD | quote }}
         driver-class-name: org.postgresql.Driver
+      jpa:
+        hibernate:
+          ddl-auto: update
+        properties:
+          hibernate:
+            format_sql: true
+            show_sql: true
       data:
         redis:
           host: {{ .Values.user.config.REDIS_HOST | quote }}
