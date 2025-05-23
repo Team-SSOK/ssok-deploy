@@ -88,6 +88,12 @@ function build_and_push_docker_image() {
     docker push "${DOCKER_REPO_NAME}/${SERVICE_NAME}:${TAG}"
     docker push "${DOCKER_REPO_NAME}/${SERVICE_NAME}:build-${BUILD_NUMBER}"
 
+    # 도커이미지 삭제
+    docker image rmi "${DOCKER_REPO_NAME}/${SERVICE_NAME}:latest"
+    docker image rmi "${DOCKER_REPO_NAME}/${SERVICE_NAME}:${TAG}"
+    docker image rmi "${SERVICE_NAME}:${TAG}"
+    docker image prune -f
+
     # 빌드 번호만 반환 (디버깅 문구 없이)
     echo "build-${BUILD_NUMBER}"
 }
