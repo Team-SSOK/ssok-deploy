@@ -1,7 +1,7 @@
 image:
   repository: kudong/ssok-bank
   pullPolicy: IfNotPresent
-  tag: "1.73"
+  tag: "1.74"
 
 replicaCount: 1
 
