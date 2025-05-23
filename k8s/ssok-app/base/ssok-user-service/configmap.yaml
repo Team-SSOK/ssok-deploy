@@ -72,6 +72,10 @@ data:
       server:
         url: http://ssok-notification-service.ssok.svc.cluster.local
     aws:
-      region: ${AWS_S3_REGION:ap-northeast-2}
-      bucket: ${AWS_S3_BUCKET:ssok-project-bucket}
-      profile-image-path: ${AWS_S3_PROFILE_IMAGE_PATH:profile-images}
+      s3:
+        credentials:
+          access-key: ${AWS_S3_ACCESS_KEY:abcdefg12345}
+          secret-key: ${AWS_S3_SECRET_KEY:abcdefg12345/MBhG+8}
+        region: ${AWS_S3_REGION:ap-northeast-2}
+        bucket: ${AWS_S3_BUCKET:ssok-project-bucket}
+        profile-image-path: ${AWS_S3_PROFILE_IMAGE_PATH:profile-images}
