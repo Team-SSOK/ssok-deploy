@@ -2,7 +2,7 @@ replicaCount: 1
 
 image:
   repository: kudong/ssok-bluetooth-service
-  tag: latest
+  tag: ""
   pullPolicy: IfNotPresent
 
 serviceAccount:
