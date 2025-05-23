@@ -7,4 +7,4 @@ resources:
 
 images:
 - name: kudong/ssok-notification-service
-  newTag: build-86
+  newTag: build-87
