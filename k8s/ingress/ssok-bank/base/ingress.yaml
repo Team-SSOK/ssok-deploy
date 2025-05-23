@@ -33,3 +33,10 @@ spec:
                 name: ssok-bank
                 port:
                   number: 8080
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: ssok-bank
+                port:
+                  number: 8080

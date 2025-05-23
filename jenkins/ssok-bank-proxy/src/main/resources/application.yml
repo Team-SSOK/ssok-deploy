@@ -19,3 +19,13 @@ spring:
       properties:
         spring.json.trusted.packages: ${KAFKA_TRUSTED_PACKAGES:kr.ssok.model}
       auto-offset-reset: earliest
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,prometheus
+  prometheus:
+    metrics:
+      export:
+        enabled: true
