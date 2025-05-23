@@ -12,6 +12,10 @@ spec:
     {{- include "ssok-bank.selectorLabels" . | nindent 4 }}
   sessionAffinity: None
   ports:
-    - port: 8080 # 다른 pod exec 접속후 curl http://ssok-bank-service:8080 로 접근
+    - name: web       # ← 반드시 포트 이름 지정
+      port: 80
+      targetPort: 8080
+    - name: api
+      port: 8080 # 다른 pod exec 접속후 curl http://ssok-bank-service:8080 로 접근
       targetPort: 8080 # nginx의 타겟 포트
       nodePort: 31000  # 외부에서 http://kudong.kr:55027
