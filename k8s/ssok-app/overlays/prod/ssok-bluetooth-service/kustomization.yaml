@@ -1,10 +1,13 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 
-resources:
-- ../../../base/ssok-bluetooth-service
-- ../../../base/rbac
+helmCharts:
+  - name: ssok-bluetooth-service
+    repo: https://raw.githubusercontent.com/Team-SSOK/ssok-deploy/main/helm/
+    version: 0.1.0
+    releaseName: ssok-bluetooth-service
+    namespace: ssok
+    valuesFile: helm-values/values.yaml
 
-images:
-- name: kudong/ssok-bluetooth-service
-  newTag: build-88
+resources:
+  - rbac.yaml

@@ -9,7 +9,7 @@ spec:
     repoURL: https://github.com/Team-SSOK/ssok-deploy.git
     targetRevision: main
     # path: k8s/ssok-app/overlays/dev/ssok-account-service
-    path: k8s/ssok-app/overlays/prod/ssok-account-service/helm-values
+    path: k8s/ssok-app/overlays/prod/ssok-account-service
   destination:
     server: https://kubernetes.default.svc
     namespace: ssok
