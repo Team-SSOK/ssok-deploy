@@ -6,6 +6,7 @@ metadata:
   labels:
     {{- include "ssok-gateway-service.labels" . | nindent 4 }}
 spec:
+  revisionHistoryLimit: 1
   replicas: {{ .Values.replicaCount }}
   selector:
     matchLabels:
