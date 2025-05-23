@@ -36,7 +36,7 @@ data:
       jpa:
         hibernate:
           ddl-auto: update
-        show-sql: true
+        show-sql: false
     external:
       account-service:
         url: {{ .Values.transfer.config.ACCOUNT_SERVICE_URL | quote }}

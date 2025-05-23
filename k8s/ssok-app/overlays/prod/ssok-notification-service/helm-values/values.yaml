@@ -1,4 +1,4 @@
-replicaCount: 2
+replicaCount: 1
 
 image:
   repository: kudong/ssok-notification-service
@@ -17,7 +17,7 @@ service:
 notification:
   config:
     SERVER_PORT: "8080"
-    REDIS_HOST: "172.21.1.22"
+    REDIS_HOST: "172.16.0.86"
     REDIS_PORT: "6379"
     KAFKA_BOOTSTRAP_SERVERS: "broker.kafka.svc.cluster.local:9092"
     ALIGO_SMS_API_URL: "https://apis.aligo.in/send/"

@@ -1,4 +1,4 @@
-replicaCount: 2
+replicaCount: 1
 
 image:
   repository: kudong/ssok-transfer-service
@@ -17,12 +17,12 @@ service:
 transfer:
   config:
     SERVER_PORT: "8080"
-    DB_URL: "jdbc:mysql://172.21.1.22:3306/ssok?characterEncoding=UTF-8&serverTimeZone=Asia/Seoul"
-    DB_USERNAME: "ssok"
-    DB_PASSWORD: "1234"
+    DB_URL: "jdbc:mysql://172.16.0.86:3306/ssokdb?characterEncoding=UTF-8&serverTimeZone=Asia/Seoul"
+    DB_USERNAME: "ssokuser"
+    DB_PASSWORD: "ssokpw"
     KAFKA_NOTIFICATION_TOPIC: "ssok.notification.topic"
     KAFKA_BOOTSTRAP_SERVERS: "broker.kafka.svc.cluster.local:9092"
     ACCOUNT_SERVICE_URL: "http://ssok-account-service.ssok.svc.cluster.local"
     NOTIFICATION_SERVICE_URL: "http://ssok-notification-service.ssok.svc.cluster.local"
-    OPENBANKING_URL: "http://172.21.1.22:8081"
-    OPENBANKING_API_KEY: "4a87c69e-2787-4ae7-8f41-dbb0068a44d9"
+    OPENBANKING_URL: "http://172.16.1.194:8080"
+    OPENBANKING_API_KEY: "6ee92f1d-e70e-470b-9f13-1b0822374728"

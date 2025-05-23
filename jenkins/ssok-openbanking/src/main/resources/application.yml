@@ -2,22 +2,7 @@ spring:
   application:
     name: ssok-openbanking
   profiles:
-    active: kafka
-
-  kafka:
-    bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS:172.21.1.22:31001}
-    request-topic: request-topic
-    reply-topic: reply-topic
-    push-topic: push-topic
-    producer:
-      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
-      key-serializer: org.apache.kafka.common.serialization.StringSerializer
-    consumer:
-      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
-      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
-      properties:
-        spring.json.trusted.packages: "*"
-      auto-offset-reset: earliest
+    active: default
 
   data:
     redis:
@@ -32,8 +17,8 @@ spring:
         use_sql_comments: 'true'
         format_sql: 'true'
         show_sql: 'true'
-  hibernate:
-    ddl-auto: update
+    hibernate:
+      ddl-auto: update
 
   datasource:
     username: ${DB_USERNAME:root}

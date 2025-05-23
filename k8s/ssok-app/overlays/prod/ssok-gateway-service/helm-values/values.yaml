@@ -1,4 +1,4 @@
-replicaCount: 2
+replicaCount: 1
 
 image:
   repository: kudong/ssok-gateway-service
@@ -10,16 +10,14 @@ serviceAccount:
   name: ""
 
 service:
-  type: NodePort
-  port: 8080
+  type: ClusterIP
+  port: 80
   targetPort: 8080
-  nodePort: 31080
 
 gateway:
   config:
     SERVER_PORT: "8080"
-    DB_URL: "jdbc:postgresql://172.21.1.22:5432/mydb"
-    REDIS_HOST: "172.21.1.22"
+    REDIS_HOST: "172.16.0.86"
     REDIS_PORT: "6379"
     JWT_SECRET: "ssokAppFinTechSecretKey1234567890ABCDEFGHIJKLMN"
     WHITELIST: "/api/auth/login,/api/auth/refresh,/api/users/signup,/api/users/phone,/api/users/phone/verify"
