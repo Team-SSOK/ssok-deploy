@@ -2,7 +2,7 @@ replicaCount: 1
 
 image:
   repository: kudong/ssok-notification-service
-  tag: "build-91"
+  tag: "build-96"
   pullPolicy: IfNotPresent
 
 serviceAccount:
