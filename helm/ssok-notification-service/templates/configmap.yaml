@@ -69,6 +69,8 @@ data:
       endpoint:
         health:
           show-details: always
+        prometheus:
+          enabled: true
     logging:
       level:
         kr.ssok.userservice.client: DEBUG
