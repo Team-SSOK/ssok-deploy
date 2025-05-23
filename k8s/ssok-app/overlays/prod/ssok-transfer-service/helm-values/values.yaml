@@ -2,7 +2,7 @@ replicaCount: 1
 
 image:
   repository: kudong/ssok-transfer-service
-  tag: latest
+  tag: ""
   pullPolicy: IfNotPresent
 
 serviceAccount:
