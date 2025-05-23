@@ -30,7 +30,26 @@ spec:
           env:
             - name: SPRING_CONFIG_LOCATION
               value: file:/config/application.yml
+
+        - name: fluent-bit
+          image: cr.fluentbit.io/fluent/fluent-bit:4.0.2
+          imagePullPolicy: IfNotPresent
+          volumeMounts:
+            - name: varlog
+              mountPath: /var/log
+            - name: fluent-bit-config
+              mountPath: /fluent-bit/etc
+          resources:
+            limits:
+              memory: 100Mi
+              cpu: 100m
+
       volumes:
         - name: config-volume
           configMap:
             name: ssok-transfer-service
+        - name: varlog
+          emptyDir: {}
+        - name: fluent-bit-config
+          configMap:
+            name: fluent-bit-config-transfer
