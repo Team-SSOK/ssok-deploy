@@ -127,7 +127,7 @@ function update_kustomization_file() {
     >&2 echo "Creating kustomization file at $SERVICE_DIR/values.yaml"
 
     YAML_FILE="values.yaml"
-    sed -i 's/\(  tag: \).*$/\1"'"$TAG"'"/' ${SERVICE_DIR}/${YAML_FILE}
+    sed -i 's/\(  tag: \).*$/\1"'"$BUILD_TAG"'"/' ${SERVICE_DIR}/${YAML_FILE}
 
 #    # kustomization.yaml 파일 업데이트 (하드코딩된 DOCKER_REPO_NAME 사용)
 #    cat > "$SERVICE_DIR/values.yaml" << EOF
