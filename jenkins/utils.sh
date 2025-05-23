@@ -119,7 +119,7 @@ function update_kustomization_file() {
 
     # 서비스 디렉토리 경로 수정 - DEPLOY_REPO_PATH에 따른 경로를 올바르게 구성
     # 현재 디렉토리를 기준으로 상대 경로 사용
-    local SERVICE_DIR="k8s/ssok-app/overlays/dev/$SERVICE_NAME"
+    local SERVICE_DIR="k8s/ssok-app/overlays/prod/$SERVICE_NAME"
 
     # 디렉토리가 없으면 생성
     mkdir -p "$SERVICE_DIR"
