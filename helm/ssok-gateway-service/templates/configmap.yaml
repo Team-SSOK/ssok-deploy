@@ -46,6 +46,8 @@ data:
       endpoint:
         health:
           show-details: always
+        prometheus:
+          enabled: true
       health:
         kubernetes:
           enabled: false

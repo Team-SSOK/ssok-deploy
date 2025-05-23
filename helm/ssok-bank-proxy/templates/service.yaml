@@ -11,6 +11,10 @@ spec:
     {{- include "ssok-bank-proxy.selectorLabels" . | nindent 4 }}
   sessionAffinity: None
   ports:
-    - port: 8080 # 다른 pod exec 접속후 curl http://ssok-bank-proxy:8080 로 접근
+    - name: web
+      port: 80
+      targetPort: 8080
+    - name: api
+      port: 8080 # 다른 pod exec 접속후 curl http://ssok-bank-proxy:8080 로 접근
       targetPort: 8080 # openbanking의 타겟 포트
       nodePort: 31009  # 외부에서 http://kudong.kr:55028
