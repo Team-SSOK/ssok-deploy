@@ -52,4 +52,4 @@ spec:
           emptyDir: {}
         - name: fluent-bit-config
           configMap:
-            name: fluent-bit-config
+            name: fluent-bit-config-user
