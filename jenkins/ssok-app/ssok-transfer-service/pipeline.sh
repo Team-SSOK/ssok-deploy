@@ -36,13 +36,13 @@ echo "Current directory before updating kustomization: $(pwd)"
 # DEPLOY_REPO_PATH는 더 이상 사용하지 않으므로 비워둡니다
 update_kustomization_file $SERVICE_NAME $DOCKER_USER $BUILD_TAG ""
 
-# 업데이트된 파일이 제대로 생성되었는지 확인
-echo "Checking if kustomization file was created:"
-ls -la k8s/ssok-app/overlays/prod/$SERVICE_NAME/
-
-# 생성된 kustomization.yaml 파일 내용 확인 (디버깅용)
-echo "Contents of updated kustomization.yaml file:"
-cat k8s/ssok-app/overlays/prod/$SERVICE_NAME/kustomization.yaml
+## 업데이트된 파일이 제대로 생성되었는지 확인
+#echo "Checking if kustomization file was created:"
+#ls -la k8s/ssok-app/overlays/prod/$SERVICE_NAME/
+#
+## 생성된 kustomization.yaml 파일 내용 확인 (디버깅용)
+#echo "Contents of updated kustomization.yaml file:"
+#cat k8s/ssok-app/overlays/prod/$SERVICE_NAME/kustomization.yaml
 
 # Git 커밋 및 푸시
 git config user.email "jenkins@example.com"
