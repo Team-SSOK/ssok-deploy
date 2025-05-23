@@ -16,7 +16,7 @@ metadata:
 
 spec:
   rules:
-    - host: ssok.kr
+    - host: api.ssok.kr
       http:
         paths:
           - path: /api
