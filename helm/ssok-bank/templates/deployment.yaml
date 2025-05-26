@@ -28,7 +28,10 @@ spec:
               name: ssok-bank-cm
           - secretRef:
               name: ssok-bank-db-secrets
-
+        volumeMounts:
+          - name: varlog
+            mountPath: /var/log
+            
       - name: fluent-bit
         image: cr.fluentbit.io/fluent/fluent-bit:4.0.2
         imagePullPolicy: IfNotPresent
