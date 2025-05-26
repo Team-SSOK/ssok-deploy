@@ -21,6 +21,41 @@ proxy:
     KAFKA_BOOTSTRAP_SERVERS: "broker.kafka.svc.cluster.local:9092"
     KAFKA_TRUSTED_PACKAGES: "kr.ssok.model"
 
+log:
+  fluentbit:
+    conf: |
+      [SERVICE]
+          Flush         1
+          Daemon        Off
+          Log_Level     info
+          Parsers_File  parsers.conf
+
+      [INPUT]
+          Name              tail
+          Path              /var/log/ssok-bank-proxy.log
+          Parser            json
+          Tag               app.log 
+          Refresh_Interval  5
+          Mem_Buf_Limit     10MB
+          Skip_Long_Lines   On
+
+      [OUTPUT]
+          Name              stdout
+          Match             app.*
+
+      [OUTPUT]
+          Name              forward
+          Match             app.*
+          Host              fluentd.logging.svc.cluster.local
+          Port              24224
+  parsers:
+    conf: |
+      [PARSER]
+          Name              json
+          Format            json
+          Time_Key          time
+          Time_Format       %Y-%m-%dT%H:%M:%S.%L
+
 # service:
 #   type: ClusterIP
 #   port: 80

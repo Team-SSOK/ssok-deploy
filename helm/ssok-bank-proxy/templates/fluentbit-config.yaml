@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: ssok-bank-proxy-fluent-bit-config
+  namespace: bank
+data:
+  fluent-bit.conf: |
+    {{- .Values.log.fluentbit.conf | nindent 4 }}
+  parsers.conf: |
+    {{- .Values.log.parsers.conf | nindent 4 }}
