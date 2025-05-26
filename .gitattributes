@@ -1,0 +1,20 @@
+# 기본적으로 모든 텍스트 파일은 LF 사용
+* text=auto eol=lf
+
+# YAML 파일들은 LF 사용
+*.yaml text eol=lf
+*.yml text eol=lf
+
+# Markdown 파일들은 LF 사용
+*.md text eol=lf
+
+# Shell 스크립트는 LF 사용
+*.sh text eol=lf
+
+# 바이너리 파일들은 변경하지 않음
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.ico binary
+*.tgz binary
