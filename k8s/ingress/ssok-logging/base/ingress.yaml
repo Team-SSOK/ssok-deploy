@@ -1,8 +1,8 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: ssok-app-ingress
-  namespace: ssok
+  name: ssok-logging-ingress
+  namespace: logging
   annotations:
     kubernetes.io/ingress.class: alb
     alb.ingress.kubernetes.io/scheme: internet-facing
@@ -16,13 +16,20 @@ metadata:
 
 spec:
   rules:
-    - host: api.ssok.kr
+    - host: log.ssok.kr
       http:
         paths:
-          - path: /api
+          - path: /opensearch
             pathType: Prefix
             backend:
               service:
-                name: ssok-gateway-service
+                name: opensearch-cluster-master
                 port:
-                  number: 80
+                  number: 9200
+          - path: /dashboards
+            pathType: Prefix
+            backend:
+              service:
+                name: opensearch-dashboards
+                port:
+                  number: 5601
