@@ -26,6 +26,8 @@ spec:
           ports:
             - containerPort: {{ .Values.service.targetPort }}
           volumeMounts:
+            - name: varlog
+              mountPath: /var/log
             - name: config-volume
               mountPath: /config
           env:

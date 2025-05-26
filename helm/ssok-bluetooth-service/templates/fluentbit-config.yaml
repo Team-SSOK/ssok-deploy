@@ -18,7 +18,7 @@ data:
         Name              tail
         Path              /var/log/ssok-bluetooth-service.log
         Parser            json
-        Tag               bluetooth.log 
+        Tag               bluetooth.log
         Refresh_Interval  5
         Mem_Buf_Limit     10MB
         Skip_Long_Lines   On
