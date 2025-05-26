@@ -1,0 +1,20 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: ssok-monitoring-ingress
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/Team-SSOK/ssok-deploy.git
+    targetRevision: main
+    path: k8s/ingress/ssok-monitoring/base
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: monitoring
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+    - CreateNamespace=true
