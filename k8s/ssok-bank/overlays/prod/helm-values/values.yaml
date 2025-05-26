@@ -45,5 +45,5 @@ log:
       [PARSER]
           Name              json
           Format            json
-          Time_Key          time
-          Time_Format       %Y-%m-%dT%H:%M:%S.%L
+          Time_Key          @timestamp
+          Time_Format       %Y-%m-%dT%H:%M:%S.%fZ
