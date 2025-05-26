@@ -70,7 +70,7 @@ data:
           secret-key: {{ .Values.user.config.AWS_S3_SECRET_KEY | default "" | quote }}
         region: {{ .Values.user.config.AWS_S3_REGION | default "ap-northeast-2" | quote }}
         bucket: {{ .Values.user.config.AWS_S3_BUCKET | default "ssok-project-bucket" | quote }}
-        profile-image-path: {{ .Values.user.config.AWS_S3_PROFILE_IMAGE_PATH | default "profile-images" | quote }
+        profile-image-path: {{ .Values.user.config.AWS_S3_PROFILE_IMAGE_PATH | default "profile-images" | quote }}
     management:
       endpoints:
         web:
