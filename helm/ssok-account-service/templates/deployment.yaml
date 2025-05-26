@@ -6,6 +6,7 @@ metadata:
   labels:
     {{- include "ssok-account-service.labels" . | nindent 4 }}
 spec:
+  revisionHistoryLimit: 1
   replicas: {{ .Values.replicaCount }}
   selector:
     matchLabels:
@@ -28,6 +29,8 @@ spec:
             - name: SPRING_CONFIG_LOCATION
               value: file:/config/application.yml
           volumeMounts:
+            - name: varlog
+              mountPath: /var/log
             - name: config-volume
               mountPath: /config
 

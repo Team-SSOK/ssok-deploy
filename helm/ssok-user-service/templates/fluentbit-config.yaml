@@ -18,7 +18,7 @@ data:
         Name              tail
         Path              /var/log/ssok-user-service.log
         Parser            json
-        Tag               user.log 
+        Tag               user.log
         Refresh_Interval  5
         Mem_Buf_Limit     10MB
         Skip_Long_Lines   On
@@ -34,4 +34,4 @@ data:
         Name              json
         Format            json
         Time_Key          time
-        Time_Format       %Y-%m-%dT%H:%M:%S.%L
+        Time_Format       %Y-%m-%dT%H:%M:%S.%L%z

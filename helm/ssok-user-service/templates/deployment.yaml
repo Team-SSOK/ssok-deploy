@@ -6,6 +6,7 @@ metadata:
   labels:
     {{- include "ssok-user-service.labels" . | nindent 4 }}
 spec:
+  revisionHistoryLimit: 1
   replicas: {{ .Values.replicaCount }}
   selector:
     matchLabels:
@@ -25,6 +26,8 @@ spec:
           ports:
             - containerPort: {{ .Values.service.targetPort }}
           volumeMounts:
+            - name: varlog
+              mountPath: /var/log
             - name: config-volume
               mountPath: /config
           env:

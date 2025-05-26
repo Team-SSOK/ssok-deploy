@@ -12,3 +12,38 @@ bank:
     KAFKA_TRUSTED_PACKAGES: "kr.ssok.model"
     DB_URL: "jdbc:mariadb://172.16.0.86:3308/moni?useUnicode=true&characterEncoding=utf-8&serverTimeZone=Asia/Seoul"
     ENCRYPTION_KEY: "ss0k-bank-admin1"
+
+log:
+  fluentbit:
+    conf: |
+      [SERVICE]
+          Flush         1
+          Daemon        Off
+          Log_Level     info
+          Parsers_File  parsers.conf
+
+      [INPUT]
+          Name              tail
+          Path              /var/log/ssok-bank.log
+          Parser            json
+          Tag               app.log 
+          Refresh_Interval  5
+          Mem_Buf_Limit     10MB
+          Skip_Long_Lines   On
+
+      [OUTPUT]
+          Name              stdout
+          Match             app.*
+
+      [OUTPUT]
+          Name              forward
+          Match             app.*
+          Host              fluentd.logging.svc.cluster.local
+          Port              24224
+  parsers:
+    conf: |
+      [PARSER]
+          Name              json
+          Format            json
+          Time_Key          @timestamp
+          Time_Format       %Y-%m-%dT%H:%M:%S.%fZ
