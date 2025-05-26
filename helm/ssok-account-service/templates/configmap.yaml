@@ -20,3 +20,5 @@ data:
       openbanking-service:
         url: ${EXTERNAL_OPENBANKING_URL}
         api-key: ${EXTERNAL_OPENBANKING_API_KEY}
+      user-service:
+        url: ${EXTERNAL_USER_SERVICE_URL}

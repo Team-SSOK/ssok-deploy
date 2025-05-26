@@ -106,3 +106,5 @@ secrets:
     openbankingService:
       url: http://172.16.1.194:8080
       apiKey: 6ee92f1d-e70e-470b-9f13-1b0822374728
+    userService:
+      url: http://ssok-user-service.ssok.svc.cluster.local

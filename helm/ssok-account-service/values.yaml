@@ -106,3 +106,5 @@ secrets:
     openbankingService:
       url: http://localhost:8081
       apiKey: ""
+    userService:
+      url: http://localhost
