@@ -35,4 +35,4 @@ user:
     AWS_S3_SECRET_KEY: ""  # IRSA 사용시 빈 값
     AWS_S3_REGION: "ap-northeast-2"
     AWS_S3_BUCKET: "ssok-project-bucket"
-    AWS_S3_PROFILE_IMAGE_PATH: "profile-images"
+    AWS_S3_PROFILE_IMAGE_PATH: "profile-imagess"
