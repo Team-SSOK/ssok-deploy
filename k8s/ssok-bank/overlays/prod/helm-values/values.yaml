@@ -49,4 +49,4 @@ log:
           Name              json
           Format            json
           Time_Key          time
-          Time_Format       %Y-%m-%dT%H:%M:%S.%fZ
+          Time_Format       %Y-%m-%dT%H:%M:%S.%L%z
