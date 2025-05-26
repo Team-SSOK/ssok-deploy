@@ -7,74 +7,17 @@ metadata:
     {{- include "ssok-account-service.labels" . | nindent 4 }}
 data:
   application.yml: |-
-    server:
-      port: {{ .Values.account.config.SERVER_PORT | quote }}
+{{ toYaml .Values.applicationConfig | indent 4 }}
     spring:
-      application:
-        name: ssok-account-service
-      cloud:
-        kubernetes:
-          config:
-            enabled: true
-            name: ssok-account-service
-            namespace: ssok
-            sources:
-              - name: ssok-account-service
-          secrets:
-            enabled: false
-          reload:
-            enabled: true
-          discovery:
-            all-namespaces: false
-          loadbalancer:
-            mode: service
       datasource:
-        url: {{ .Values.account.config.DB_URL | quote }}
-        username: {{ .Values.account.config.DB_USERNAME | quote }}
-        password: {{ .Values.account.config.DB_PASSWORD | quote }}
-        driver-class-name: org.postgresql.Driver
+        url: ${SPRING_DATASOURCE_URL}
+        username: ${SPRING_DATASOURCE_USERNAME}
+        password: ${SPRING_DATASOURCE_PASSWORD}
       data:
         redis:
-          host: {{ .Values.account.config.REDIS_HOST | quote }}
-          port: {{ .Values.account.config.REDIS_PORT | quote }}
-      jpa:
-        hibernate:
-          ddl-auto: update
-        show-sql: false
-        properties:
-          hibernate:
-            format_sql: false
-        database-platform: org.hibernate.dialect.PostgreSQLDialect
+          host: ${SPRING_DATA_REDIS_HOST}
+          port: ${SPRING_DATA_REDIS_PORT}
     external:
       openbanking-service:
-        url: {{ .Values.account.config.OPENBANKING_URL | quote }}
-        api-key: {{ .Values.account.config.OPENBANKING_API_KEY | quote }}
-      user-service:
-        url: {{ .Values.account.config.USER_SERVICE_URL | quote }}
-    management:
-      endpoints:
-        web:
-          exposure:
-            include: "*"
-      endpoint:
-        health:
-          show-details: always
-        prometheus:
-          enabled: true
-    health:
-      kubernetes:
-        enabled: false
-    feign:
-      client:
-        config:
-          default:
-            connectTimeout: 20000
-            readTimeout: 20000
-            loggerLevel: full
-      hystrix:
-        command:
-          default:
-            execution:
-              isolation:
-                thread:
-                  timeoutInMilliseconds: 30000
+        url: ${EXTERNAL_OPENBANKING_URL}
+        api-key: ${EXTERNAL_OPENBANKING_API_KEY}
