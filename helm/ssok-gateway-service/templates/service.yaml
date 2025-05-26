@@ -10,6 +10,7 @@ spec:
     app.kubernetes.io/name: {{ include "ssok-gateway-service.name" . }}
     app.kubernetes.io/instance: {{ .Release.Name }}
   ports:
+    - name: {{ .Values.service.name }}
     - port: {{ .Values.service.port }}
       targetPort: {{ .Values.service.targetPort }}
   type: {{ .Values.service.type }}
