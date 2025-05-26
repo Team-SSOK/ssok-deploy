@@ -5,20 +5,90 @@ image:
   tag: latest
   pullPolicy: IfNotPresent
 
-serviceAccount:
-  create: true
-  name: ""
-
 service:
   type: ClusterIP
   name: web
   port: 80
   targetPort: 8080
 
-gateway:
-  config:
-    SERVER_PORT: "8080"
-    REDIS_HOST: "localhost"
-    REDIS_PORT: "6379"
-    JWT_SECRET: "defaultSecret"
-    ROUTES: ""
+applicationConfig:
+  server:
+    port: 8080
+  spring:
+    application:
+      name: ssok-gateway-service
+    cloud:
+      kubernetes:
+        config:
+          enabled: true
+          name: ssok-gateway-service
+          namespace: ssok
+          sources:
+            - name: ssok-gateway-service
+        secrets:
+          enabled: false
+        reload:
+          enabled: true
+        discovery:
+          all-namespaces: false
+        loadbalancer:
+          mode: service
+    gateway:
+      routes: []
+  management:
+    endpoints:
+      web:
+        exposure:
+          include: "*"
+    endpoint:
+      health:
+        show-details: always
+      prometheus:
+        enabled: true
+  health:
+    kubernetes:
+      enabled: false
+
+fluentbit:
+  fluentBitConf: |-
+    [SERVICE]
+        Flush         1
+        Daemon        Off
+        Log_Level     info
+        Parsers_File  parsers.conf
+        HTTP_Server   On
+        HTTP_Listen   0.0.0.0
+        HTTP_Port     2020
+
+    [INPUT]
+        Name              tail
+        Path              /var/log/ssok-gateway-service.log
+        Parser            json
+        Tag               gateway.log
+        Refresh_Interval  5
+        Mem_Buf_Limit     10MB
+        Skip_Long_Lines   On
+
+    [OUTPUT]
+        Name              forward
+        Match             gateway.*
+        Host              fluentd.logging.svc.cluster.local
+        Port              24224
+  parsersConf: |-
+    [PARSER]
+        Name              json
+        Format            json
+        Time_Key          time
+        Time_Format       %Y-%m-%dT%H:%M:%S.%L%z
+
+secrets:
+  redis:
+    host: localhost
+    port: "6379"
+  jwt:
+    secret: defaultSecret
+  auth:
+    whitelist: "/api/auth/login,/api/auth/refresh,/api/users/signup,/api/users/phone,/api/users/phone/verify"
+  external:
+    notificationService:
+      url: http://localhost

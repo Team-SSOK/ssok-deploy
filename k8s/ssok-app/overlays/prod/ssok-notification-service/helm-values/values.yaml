@@ -5,25 +5,114 @@ image:
   tag: "build-100"
   pullPolicy: IfNotPresent
 
-serviceAccount:
-  create: true
-  name: ""
-
 service:
   type: ClusterIP
   name: web
   port: 80
   targetPort: 8080
 
-notification:
-  config:
-    SERVER_PORT: "8080"
-    REDIS_HOST: "172.16.0.86"
-    REDIS_PORT: "6379"
-    KAFKA_BOOTSTRAP_SERVERS: "broker.kafka.svc.cluster.local:9092"
-    ALIGO_SMS_API_URL: "https://apis.aligo.in/send/"
-    ALIGO_API_KEY: "eu0x6jq8ohfldehok2vvbecg0exhnrle"
-    ALIGO_USER_ID: "kingmandoo95"
-    ALIGO_SENDER: "01077948797"
-    FCM_IMAGE_URL: "https://example.com/images/ssok-logo.png"
-    FIREBASE_CONFIG_PATH: "classpath:firebase/firebase-adminsdk.json"
+applicationConfig:
+  server:
+    port: 8080
+  spring:
+    application:
+      name: ssok-notification-service
+    cloud:
+      kubernetes:
+        config:
+          enabled: true
+          name: ssok-notification-service
+          namespace: ssok
+          sources:
+            - name: ssok-notification-service
+        secrets:
+          enabled: false
+        reload:
+          enabled: true
+        discovery:
+          all-namespaces: false
+        loadbalancer:
+          mode: service
+  feign:
+    client:
+      config:
+        default:
+          connectTimeout: 20000
+          readTimeout: 20000
+          loggerLevel: full
+    hystrix:
+      command:
+        default:
+          execution:
+            isolation:
+              thread:
+                timeoutInMilliseconds: 30000
+  management:
+    endpoints:
+      web:
+        exposure:
+          include: "*"
+    endpoint:
+      health:
+        show-details: always
+      prometheus:
+        enabled: true
+  health:
+    kubernetes:
+      enabled: false
+  logging:
+    level:
+      kr.ssok.userservice.client: DEBUG
+
+fluentbit:
+  fluentBitConf: |-
+    [SERVICE]
+        Flush         1
+        Daemon        Off
+        Log_Level     info
+        Parsers_File  parsers.conf
+        HTTP_Server   On
+        HTTP_Listen   0.0.0.0
+        HTTP_Port     2020
+
+    [INPUT]
+        Name              tail
+        Path              /var/log/ssok-notification-service.log
+        Parser            json
+        Tag               notification.log
+        Refresh_Interval  5
+        Mem_Buf_Limit     10MB
+        Skip_Long_Lines   On
+
+    [OUTPUT]
+        Name              forward
+        Match             notification.*
+        Host              fluentd.logging.svc.cluster.local
+        Port              24224
+
+  parsersConf: |-
+    [PARSER]
+        Name              json
+        Format            json
+        Time_Key          time
+        Time_Format       %Y-%m-%dT%H:%M:%S.%L%z
+
+secrets:
+  redis:
+    host: "172.16.0.86"
+    port: "6379"
+  kafka:
+    bootstrapServers: "broker.kafka.svc.cluster.local:9092"
+    notificationTopic: "ssok.notification.topic"
+    groupId: "notification-group"
+  firebase:
+    configPath: "classpath:firebase/firebase-adminsdk.json"
+    enabled: "true"
+  fcm:
+    tokenTtlSeconds: "2592000"
+    imageUrl: "https://example.com/images/ssok-logo.png"
+  aligo:
+    smsApiUrl: "https://apis.aligo.in/send/"
+    apiKey: "eu0x6jq8ohfldehok2vvbecg0exhnrle"
+    userId: "kingmandoo95"
+    sender: "01077948797"

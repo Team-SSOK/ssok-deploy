@@ -7,71 +7,19 @@ metadata:
     {{- include "ssok-transfer-service.labels" . | nindent 4 }}
 data:
   application.yml: |
-    server:
-      port: {{ .Values.transfer.config.SERVER_PORT | quote }}
-    spring:
-      application:
-        name: ssok-transfer-service
-      cloud:
-        kubernetes:
-          config:
-            enabled: true
-            name: ssok-transfer-service
-            namespace: ssok
-            sources:
-              - name: ssok-transfer-service
-          secrets:
-            enabled: false
-          reload:
-            enabled: true
-          discovery:
-            all-namespaces: false
-          loadbalancer:
-            mode: service
+{{ toYaml .Values.applicationConfig | indent 4 }}
       datasource:
-        url: {{ .Values.transfer.config.DB_URL | quote }}
-        username: {{ .Values.transfer.config.DB_USERNAME | quote }}
-        password: {{ .Values.transfer.config.DB_PASSWORD | quote }}
-        driver-class-name: com.mysql.cj.jdbc.Driver
-      jpa:
-        hibernate:
-          ddl-auto: update
-        show-sql: false
+        url: ${SPRING_DATASOURCE_URL}
+        username: ${SPRING_DATASOURCE_USERNAME}
+        password: ${SPRING_DATASOURCE_PASSWORD}
     external:
       account-service:
-        url: {{ .Values.transfer.config.ACCOUNT_SERVICE_URL | quote }}
+        url: ${EXTERNAL_ACCOUNT_SERVICE_URL}
       notification-service:
-        url: {{ .Values.transfer.config.NOTIFICATION_SERVICE_URL | quote }}
+        url: ${EXTERNAL_NOTIFICATION_SERVICE_URL}
       openbanking-service:
-        url: {{ .Values.transfer.config.OPENBANKING_URL | quote }}
-        api-key: {{ .Values.transfer.config.OPENBANKING_API_KEY | quote }}
-    management:
-      endpoints:
-        web:
-          exposure:
-            include: "*"
-      endpoint:
-        health:
-          show-details: always
-        prometheus:
-          enabled: true
-    health:
-      kubernetes:
-        enabled: false
-    feign:
-      client:
-        config:
-          default:
-            connectTimeout: 20000
-            readTimeout: 20000
-            loggerLevel: full
-      hystrix:
-        command:
-          default:
-            execution:
-              isolation:
-                thread:
-                  timeoutInMilliseconds: 30000
+        url: ${EXTERNAL_OPENBANKING_URL}
+        api-key: ${EXTERNAL_OPENBANKING_API_KEY}
     kafka:
-      notification-topic: {{ .Values.transfer.config.KAFKA_NOTIFICATION_TOPIC | quote }}
-      bootstrap-servers: {{ .Values.transfer.config.KAFKA_BOOTSTRAP_SERVERS | quote }}
+      notification-topic: ${KAFKA_NOTIFICATION_TOPIC}
+      bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS}
