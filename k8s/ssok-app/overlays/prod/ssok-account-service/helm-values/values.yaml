@@ -2,12 +2,8 @@ replicaCount: 1
 
 image:
   repository: kudong/ssok-account-service
-  tag: "build-100"
+  tag: build-100
   pullPolicy: IfNotPresent
-
-serviceAccount:
-  create: true
-  name: ""
 
 service:
   type: ClusterIP
@@ -15,14 +11,98 @@ service:
   port: 80
   targetPort: 8080
 
-account:
-  config:
-    SERVER_PORT: "8080"
-    DB_URL: "jdbc:postgresql://172.16.0.86:5432/ssokdb"
-    DB_USERNAME: "ssokuser"
-    DB_PASSWORD: "ssokpw"
-    REDIS_HOST: "172.16.0.86"
-    REDIS_PORT: "6379"
-    OPENBANKING_URL: "http://172.16.1.194:8080"
-    OPENBANKING_API_KEY: "6ee92f1d-e70e-470b-9f13-1b0822374728"
-    USER_SERVICE_URL: "http://ssok-user-service.ssok.svc.cluster.local"
+applicationConfig:
+  server:
+    port: 8080
+  spring:
+    application:
+      name: ssok-account-service
+    cloud:
+      kubernetes:
+        config:
+          enabled: true
+          name: ssok-account-service
+          namespace: ssok
+          sources:
+            - name: ssok-account-service
+        secrets:
+          enabled: false
+        reload:
+          enabled: true
+        discovery:
+          all-namespaces: false
+        loadbalancer:
+          mode: service
+  management:
+    endpoints:
+      web:
+        exposure:
+          include: "*"
+    endpoint:
+      health:
+        show-details: always
+      prometheus:
+        enabled: true
+  health:
+    kubernetes:
+      enabled: false
+  feign:
+    client:
+      config:
+        default:
+          connectTimeout: 20000
+          readTimeout: 20000
+          loggerLevel: full
+    hystrix:
+      command:
+        default:
+          execution:
+            isolation:
+              thread:
+                timeoutInMilliseconds: 30000
+
+fluentbit:
+  fluentBitConf: |-
+    [SERVICE]
+        Flush         1
+        Daemon        Off
+        Log_Level     info
+        Parsers_File  parsers.conf
+        HTTP_Server   On
+        HTTP_Listen   0.0.0.0
+        HTTP_Port     2020
+
+    [INPUT]
+        Name              tail
+        Path              /var/log/ssok-account-service.log
+        Parser            json
+        Tag               account.log
+        Refresh_Interval 5
+        Mem_Buf_Limit    10MB
+        Skip_Long_Lines  On
+
+    [OUTPUT]
+        Name    forward
+        Match   account.*
+        Host    fluentd.logging.svc.cluster.local
+        Port    24224
+
+  parsersConf: |-
+    [PARSER]
+        Name        json
+        Format      json
+        Time_Key    time
+        Time_Format %Y-%m-%dT%H:%M:%S.%L%z
+
+secrets:
+  datasource:
+    url: jdbc:postgresql://172.16.0.86:5432/ssokdb
+    username: ssokuser
+    password: ssokpw
+  redis:
+    host: 172.16.0.86
+    port: "6379"
+  external:
+    openbankingService:
+      url: http://172.16.1.194:8080
+      apiKey: 6ee92f1d-e70e-470b-9f13-1b0822374728
