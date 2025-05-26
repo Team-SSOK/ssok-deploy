@@ -7,17 +7,17 @@ metadata:
     {{- include "ssok-account-service.labels" . | nindent 4 }}
 data:
   application.yml: |-
-{{ toYaml .Values.applicationConfig | indent 4 }}
-    spring:
-      datasource:
-        url: ${SPRING_DATASOURCE_URL}
-        username: ${SPRING_DATASOURCE_USERNAME}
-        password: ${SPRING_DATASOURCE_PASSWORD}
-      data:
-        redis:
-          host: ${SPRING_DATA_REDIS_HOST}
-          port: ${SPRING_DATA_REDIS_PORT}
-    external:
-      openbanking-service:
-        url: ${EXTERNAL_OPENBANKING_URL}
-        api-key: ${EXTERNAL_OPENBANKING_API_KEY}
+{{- toYaml .Values.applicationConfig | nindent 6 }}
+      spring:
+        datasource:
+          url: ${SPRING_DATASOURCE_URL}
+          username: ${SPRING_DATASOURCE_USERNAME}
+          password: ${SPRING_DATASOURCE_PASSWORD}
+        data:
+          redis:
+            host: ${SPRING_DATA_REDIS_HOST}
+            port: ${SPRING_DATA_REDIS_PORT}
+      external:
+        openbanking-service:
+          url: ${EXTERNAL_OPENBANKING_URL}
+          api-key: ${EXTERNAL_OPENBANKING_API_KEY}
