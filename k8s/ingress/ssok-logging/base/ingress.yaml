@@ -26,7 +26,7 @@ spec:
                 name: opensearch-cluster-master
                 port:
                   number: 9200
-          - path: /
+          - path: /dashboards
             pathType: Prefix
             backend:
               service:
