@@ -30,3 +30,9 @@ user:
     ALIGO_SENDER: ""
     NOTIFICATION_URL: ""
     BANK_SERVICE_URL: ""
+    # AWS S3 설정 추가
+    AWS_S3_ACCESS_KEY: ""  # IRSA 사용시 빈 값
+    AWS_S3_SECRET_KEY: ""  # IRSA 사용시 빈 값
+    AWS_S3_REGION: "ap-northeast-2"
+    AWS_S3_BUCKET: "ssok-project-bucket"
+    AWS_S3_PROFILE_IMAGE_PATH: "profile-images"

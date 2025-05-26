@@ -30,3 +30,9 @@ user:
     ALIGO_SENDER: "01077948797"
     NOTIFICATION_URL: "http://ssok-notification-service.ssok.svc.cluster.local"
     BANK_SERVICE_URL: "http://ssok-bank.bank.svc.cluster.local:8080"
+    # AWS S3 설정 추가 - IRSA 사용시 access-key와 secret-key는 빈 값으로 설정
+    AWS_S3_ACCESS_KEY: ""  # IRSA 사용시 빈 값
+    AWS_S3_SECRET_KEY: ""  # IRSA 사용시 빈 값
+    AWS_S3_REGION: "ap-northeast-2"
+    AWS_S3_BUCKET: "ssok-project-bucket"
+    AWS_S3_PROFILE_IMAGE_PATH: "profile-images"
