@@ -33,7 +33,7 @@ spec:
                 name: monitoring-stack-kube-prom-alertmanager
                 port:
                   number: 9093
-          - path: /grafana
+          - path: /
             pathType: Prefix
             backend:
               service:
