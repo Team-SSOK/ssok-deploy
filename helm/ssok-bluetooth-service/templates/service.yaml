@@ -11,6 +11,6 @@ spec:
     app.kubernetes.io/instance: {{ .Release.Name }}
   ports:
     - name: {{ .Values.service.name }}
-    - port: {{ .Values.service.port }}
+      port: {{ .Values.service.port }}
       targetPort: {{ .Values.service.targetPort }}
   type: {{ .Values.service.type }}
