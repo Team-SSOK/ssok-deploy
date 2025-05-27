@@ -15,7 +15,7 @@ data:
       jwt:
         secret: ${JWT_SECRET}
     auth:
-      whitelist: [${AUTH_WHITELIST}]
+      whitelist: ${AUTH_WHITELIST}
     external:
       notification-service:
         url: ${EXTERNAL_NOTIFICATION_SERVICE_URL}
