@@ -33,28 +33,6 @@ applicationConfig:
           all-namespaces: false
         loadbalancer:
           mode: service
-    gateway:
-      routes: |
-        - id: user-service
-          uri: http://ssok-user-service.ssok.svc.cluster.local
-          predicates:
-            - Path=/api/auth/**, /api/users/**
-        - id: account-service
-          uri: http://ssok-account-service.ssok.svc.cluster.local
-          predicates:
-            - Path=/api/accounts/**
-        - id: transfer-service
-          uri: http://ssok-transfer-service.ssok.svc.cluster.local
-          predicates:
-            - Path=/api/transfers/**
-        - id: notification-service
-          uri: http://ssok-notification-service.ssok.svc.cluster.local
-          predicates:
-            - Path=/api/notification/**
-        - id: bluetooth-service
-          uri: http://ssok-bluetooth-service.ssok.svc.cluster.local
-          predicates:
-            - Path=/api/bluetooth/**
   management:
     endpoints:
       web:
@@ -112,3 +90,5 @@ secrets:
   external:
     notificationService:
       url: http://localhost
+  gateway:
+    routes: ""

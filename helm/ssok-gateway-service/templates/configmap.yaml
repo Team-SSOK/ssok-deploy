@@ -8,6 +8,8 @@ metadata:
 data:
   application.yml: |
 {{ toYaml .Values.applicationConfig | indent 4 }}
+        gateway:
+          routes: ${GATEWAY_ROUTES}
       data:
         redis:
           host: ${SPRING_DATA_REDIS_HOST}
