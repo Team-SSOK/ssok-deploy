@@ -34,7 +34,7 @@ applicationConfig:
         loadbalancer:
           mode: service
       gateway:
-        routes: |
+        routes:
           - id: user-service
             uri: http://ssok-user-service.ssok.svc.cluster.local
             predicates:
