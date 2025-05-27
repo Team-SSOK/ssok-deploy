@@ -38,7 +38,7 @@ log:
           Name              forward
           Match             app.*
           Host              fluentd.logging.svc.cluster.local
-          Port              24224
+          Port              24231
   parsers:
     conf: |
       [PARSER]
