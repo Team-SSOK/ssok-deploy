@@ -14,8 +14,6 @@ data:
           port: ${SPRING_DATA_REDIS_PORT}
       jwt:
         secret: ${JWT_SECRET}
-      gateway:
-        routes: ${GATEWAY_ROUTES}
     auth:
       whitelist: ${AUTH_WHITELIST}
     external:
