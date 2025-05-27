@@ -46,7 +46,7 @@ log:
       [OUTPUT]
           Name              forward
           Match             app.*
-          Host              fluentd.logging.svc.cluster.local
+          Host              fluentd-aggregator.logging.svc.cluster.local
           Port              24224
   parsers:
     conf: |

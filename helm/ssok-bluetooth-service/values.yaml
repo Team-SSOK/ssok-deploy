@@ -84,7 +84,7 @@ fluentbit:
     [OUTPUT]
         Name              forward
         Match             bluetooth.*
-        Host              fluentd.logging.svc.cluster.local
+        Host              fluentd-aggregator.logging.svc.cluster.local
         Port              24224
   parsersConf: |-
     [PARSER]

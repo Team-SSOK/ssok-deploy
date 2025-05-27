@@ -88,7 +88,7 @@ fluentbit:
     [OUTPUT]
         Name              forward
         Match             transfer.*
-        Host              fluentd.logging.svc.cluster.local
+        Host              fluentd-aggregator.logging.svc.cluster.local
         Port              24224
 
   parsersConf: |-
