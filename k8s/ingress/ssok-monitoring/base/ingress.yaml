@@ -7,12 +7,11 @@ metadata:
     kubernetes.io/ingress.class: alb
     alb.ingress.kubernetes.io/scheme: internet-facing
     alb.ingress.kubernetes.io/target-type: ip
-    alb.ingress.kubernetes.io/listen-ports: '[{"HTTP":80}]'
     alb.ingress.kubernetes.io/group.name: ssok-group
     alb.ingress.kubernetes.io/subnets: subnet-0477299d6297b7a52,subnet-05bce5c34c2186ef4
-    # HTTPS 설정 시, 아래 참고
-    # alb.ingress.kubernetes.io/listen-ports: '[{"HTTP":80,"HTTPS":443}]'
-    # alb.ingress.kubernetes.io/certificate-arn: arn:aws:acm:ap-northeast-2:123456789012:certificate/abcde...
+    alb.ingress.kubernetes.io/listen-ports: '[{"HTTP":80,"HTTPS":443}]'
+    alb.ingress.kubernetes.io/certificate-arn: arn:aws:acm:ap-northeast-2:635091448057:certificate/eae8096f-587b-4bd8-9427-48735783d857
+    alb.ingress.kubernetes.io/ssl-redirect: '443'
 
 spec:
   rules:
