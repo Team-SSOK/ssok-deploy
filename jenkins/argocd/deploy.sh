@@ -28,7 +28,7 @@ create_ingress_application() {
 }
 
 CURRENT_DIR=$(pwd -P);
-DEPLOY_PROFILE="prod" # prod 아니면 dev
+DEPLOY_PROFILE="dev" # prod 아니면 dev
 separationPhrase="=====================================";
 
 echo $separationPhrase
