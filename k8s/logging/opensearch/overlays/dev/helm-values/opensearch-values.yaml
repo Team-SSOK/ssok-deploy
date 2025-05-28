@@ -37,7 +37,7 @@ persistence:
   enabled: true
   accessModes:
     - ReadWriteOnce
-  size: 5Gi
+  size: 30Gi
   storageClass: "local-storage" # 홈서버용
 
 service:

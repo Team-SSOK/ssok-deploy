@@ -11,7 +11,7 @@ metadata:
   name: opensearch-pv
 spec:
   capacity:
-    storage: 5Gi
+    storage: 30Gi
   accessModes:
     - ReadWriteOnce
   persistentVolumeReclaimPolicy: Retain
