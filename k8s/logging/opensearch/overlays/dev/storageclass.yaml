@@ -2,6 +2,9 @@ apiVersion: storage.k8s.io/v1
 kind: StorageClass
 metadata:
   name: local-storage
+  labels:
+    app.kubernetes.io/instance: opensearch
+    app.kubernetes.io/name: opensearch
 provisioner: kubernetes.io/no-provisioner
 volumeBindingMode: WaitForFirstConsumer
 reclaimPolicy: Retain
@@ -10,6 +13,9 @@ apiVersion: v1
 kind: PersistentVolume
 metadata:
   name: opensearch-pv
+  labels:
+    app.kubernetes.io/instance: opensearch
+    app.kubernetes.io/name: opensearch
 spec:
   capacity:
     storage: 30Gi
