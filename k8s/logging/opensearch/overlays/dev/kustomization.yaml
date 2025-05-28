@@ -9,4 +9,5 @@ helmCharts:
     namespace: logging
     valuesFile: helm-values/opensearch-values.yaml
 
-resources: []
+resources:
+- storageclass.yaml

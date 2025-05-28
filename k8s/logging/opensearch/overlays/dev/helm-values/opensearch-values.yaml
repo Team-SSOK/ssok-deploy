@@ -37,8 +37,8 @@ persistence:
   enabled: true
   accessModes:
     - ReadWriteOnce
-  size: 30Gi
-  # storageClass: "gp3" # 홈서버에 올리는 용으로 임시
+  size: 5Gi
+  storageClass: "local-storage" # 홈서버용
 
 service:
   type: ClusterIP
