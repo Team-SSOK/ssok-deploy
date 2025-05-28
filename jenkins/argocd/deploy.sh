@@ -28,6 +28,19 @@ create_argocd_application() {
     done
 }
 
+create_logging_application() {
+    local app=$1
+    local filter=${2:-"*.yaml"}
+    cd $CURRENT_DIR/k8s/logging/$app/argocd
+    SERVICE_FILES=$(ls $filter 2>/dev/null)
+    for file in $SERVICE_FILES; do
+        if [ "$DEPLOY_PROFILE" = "dev" ]; then
+            sed -i 's|overlays/prod|overlays/dev|g' $file
+        fi
+        argocd app create -f $file
+    done
+}
+
 create_ingress_application() {
     local app=$1
     local filter=${2:-"*.yaml"}
@@ -44,7 +57,8 @@ health_check(){
     while true; do
         status=$(argocd app get $app_name -o json | jq -r '.status.health.status')
         if [ "$status" = "Healthy" ]; then
-            echo "$app_name가 정상적으로 부팅되었습니다."
+            echo "현재 상태: $status. OK...!"
+            echo "$app_name가 정상적으로 실행되었습니다."
             break
         fi
         echo "현재 상태: $status. 기다리는 중..."
@@ -78,9 +92,13 @@ echo
 echo $separationPhrase
 
 create_argocd_application "ssok-kafka"
+health_check "ssok-kafka" # Health 상태가 될 때까지 대기
 
-# Health 상태가 될 때까지 대기
-health_check "ssok-kafka"
+create_logging_application "fluentd"
+health_check "fluentd"
+
+create_logging_application "opensearch"
+create_logging_application "opensearch-dashboard"
 
 create_argocd_application "ssok-app" "*-service.yaml"
 create_argocd_application "ssok-bank"
