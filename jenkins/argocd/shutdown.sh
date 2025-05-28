@@ -40,7 +40,7 @@ graceful_app_shutdown() {
     echo "$app gracefully shutdown completed"
 }
 
-ssh lgcns@172.21.1.22 /bin/bash <<'EOT'
+ssh lgcns@172.21.1.19 /bin/bash <<'EOT'
 
 DEPLOY_PROFILE="dev" # prod 아니면 dev
 
