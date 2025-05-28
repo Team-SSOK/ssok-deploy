@@ -29,7 +29,7 @@ graceful_app_shutdown() {
     local app_namespace=$(argocd app get $app -o json | jq -r '.spec.destination.namespace // "default"')
 
     # Deployment들 graceful 종료
-    echo "⬇3. Scaling down deployments..."
+    echo "3. Scaling down deployments..."
     kubectl get deployments -n $app_namespace -l app.kubernetes.io/instance=$app -o name | \
     while read deployment; do
         echo "Scaling down $deployment..."
@@ -59,7 +59,12 @@ MESSAGE_QUEUE_APPS=$(echo "$ARGOCD_APPS" | grep -E "^(ssok-kafka)$")
 LOGGING_APPS=$(echo "$ARGOCD_APPS" | grep -E "^(ssok-fluentd|ssok-opensearch)$")
 MONITORING_APPS=$(echo "$ARGOCD_APPS" | grep -E "^(ssok-grafana|ssok-prometheus)$")
 
+echo $separationPhrase
+echo
 echo "K8S Context ArgoCD 연결"
+echo 
+echo $separationPhrase
+echo
 
 if [ "$DEPLOY_PROFILE" = "prod" ]; then
     echo "Connecting to PRODUCTION ArgoCD..."
@@ -71,7 +76,13 @@ else
     kubectl config use-context kubernetes-admin@kubernetes
 fi
 
+echo $separationPhrase
+echo
 echo "ArgoCD AWS ALB Ingress 종료"
+echo 
+echo $separationPhrase
+echo
+
 for app in $INGRESS_APPS; do
     echo "Deleting $app..."
     argocd app delete $app --cascade --yes
@@ -82,29 +93,59 @@ for app in $INGRESS_APPS; do
     fi
 done
 
+echo $separationPhrase
+echo
 echo "ArgoCD SSOK-Backend 종료"
+echo 
+echo $separationPhrase
+echo
+
 for app in $SERVICE_APPS; do
-    graceful_app_shutdown $app
+    graceful_app_shutdown $app ssok
 done
 
+echo $separationPhrase
+echo
 echo "ArgoCD SSOK-Bank 종료"
+echo 
+echo $separationPhrase
+echo
+
 for app in $BANK_APPS; do
-    graceful_app_shutdown $app
+    graceful_app_shutdown $app bank
 done
 
+echo $separationPhrase
+echo
 echo "ArgoCD SSOK-Kafka 종료"
+echo 
+echo $separationPhrase
+echo
+
 for app in $MESSAGE_QUEUE_APPS; do
-    graceful_app_shutdown $app
+    graceful_app_shutdown $app kafka
 done
 
+echo $separationPhrase
+echo
 echo "ArgoCD SSOK-Logging 종료"
+echo 
+echo $separationPhrase
+echo
+
 for app in $LOGGING_APPS; do
-    graceful_app_shutdown $app
+    graceful_app_shutdown $app logging
 done
 
+echo $separationPhrase
+echo
 echo "ArgoCD SSOK-Monitoring 종료"
+echo 
+echo $separationPhrase
+echo
+
 for app in $MONITORING_APPS; do
-    graceful_app_shutdown $app
+    graceful_app_shutdown $app monitoring
 done
 
 
