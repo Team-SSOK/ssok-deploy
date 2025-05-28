@@ -100,8 +100,8 @@ fluentbit:
 
 secrets:
   datasource:
-    url: "jdbc:mysql://172.21.1.22:3306/ssok?characterEncoding=UTF-8&serverTimeZone=Asia/Seoul"
-    username: "ssok"
+    url: jdbc:mysql://172.21.1.22:3306/ssok?characterEncoding=UTF-8&serverTimeZone=Asia/Seoul
+    username: ssok
     password: "1234"
   kafka:
     bootstrapServers: "broker.kafka.svc.cluster.local:9092"
