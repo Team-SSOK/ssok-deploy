@@ -30,6 +30,20 @@ create_ingress_application() {
     done
 }
 
+health_check(){
+    local app_name=$1
+    echo "Waiting for $app_name to be healthy..."
+    while true; do
+        status=$(argocd app get $app_name -o json | jq -r '.status.health.status')
+        if [ "$status" = "Healthy" ]; then
+            echo "$app_name is healthy!"
+            break
+        fi
+        echo "Current status: $status. Waiting..."
+        sleep 10
+    done
+}
+
 CURRENT_DIR=$(pwd -P);
 DEPLOY_PROFILE="dev" # prod 아니면 dev
 separationPhrase="=====================================";
@@ -59,6 +73,10 @@ echo $separationPhrase
 echo
 
 create_argocd_application "ssok-kafka"
+
+# Health 상태가 될 때까지 대기
+health_check "ssok-kafka"
+
 create_argocd_application "ssok-app" "*-service.yaml"
 create_argocd_application "ssok-bank"
 create_argocd_application "ssok-bank-proxy"
