@@ -1,0 +1,12 @@
+image:
+  repository: kudong/ssok-bank-proxy
+  pullPolicy: IfNotPresent
+  tag: "1.7"
+
+replicaCount: 1
+
+proxy:
+  config:
+    SERVER_PORT: "8080"
+    KAFKA_BOOTSTRAP_SERVERS: "broker.kafka.svc.cluster.local:9092"
+    KAFKA_TRUSTED_PACKAGES: "kr.ssok.model"
