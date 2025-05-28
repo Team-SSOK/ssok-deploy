@@ -7,6 +7,8 @@ echo #
 echo ##############################
 echo 
 
+ssh lgcns@172.21.1.19 /bin/bash <<'EOT'
+
 create_argocd_application() {
     local app=$1
     local filter=${2:-"*.yaml"}
@@ -75,4 +77,5 @@ if [ "$DEPLOY_PROFILE" = "prod" ]; then
     create_ingress_application "ssok-monitoring"
 fi
 
+EOT
 

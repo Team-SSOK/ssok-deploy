@@ -50,7 +50,7 @@ ARGOCD_APPS=$(kubectl get applications -n $NAMESPACE --no-headers -o custom-colu
 INGRESS_APPS=$(echo "$ARGOCD_APPS" | grep "\-ingress$")
 SERVICE_APPS=$(echo "$ARGOCD_APPS" | grep "\-service$")
 BANK_APPS=$(echo "$ARGOCD_APPS" | grep -E "^(ssok-bank|ssok-bank-proxy)$")
-MESSAGE_QUEUE_APPS=$(echo "$ARGOCD_APPS" | grep -E "^(ssok-kakfa)$")
+MESSAGE_QUEUE_APPS=$(echo "$ARGOCD_APPS" | grep -E "^(ssok-kafka)$")
 LOGGING_APPS=$(echo "$ARGOCD_APPS" | grep -E "^(ssok-fluentd|ssok-opensearch)$")
 MONITORING_APPS=$(echo "$ARGOCD_APPS" | grep -E "^(ssok-grafana|ssok-prometheus)$")
 
