@@ -54,7 +54,7 @@ health_check(){
     while true; do
         status=$(argocd app get $app_name -o json | jq -r '.status.health.status')
         if [ "$status" = "Healthy" ]; then
-            echo "현재 상태: $status. OK...!"
+            echo "현재 상태: $status....OK!"
             echo "$app_name가 정상적으로 실행되었습니다."
             break
         fi
@@ -91,10 +91,12 @@ echo $separationPhrase
 create_argocd_application "ssok-kafka"
 health_check "ssok-kafka" # Health 상태가 될 때까지 대기
 
+create_logging_application "opensearch"
+health_check "opensearch"
+
 create_logging_application "fluentd"
 health_check "fluentd"
 
-create_logging_application "opensearch"
 create_logging_application "opensearch-dashboard"
 
 create_argocd_application "ssok-app" "*-service.yaml"
