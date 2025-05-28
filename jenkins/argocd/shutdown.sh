@@ -40,6 +40,8 @@ graceful_app_shutdown() {
     echo "$app gracefully shutdown completed"
 }
 
+ssh lgcns@172.21.1.22 /bin/bash <<'EOT'
+
 DEPLOY_PROFILE="dev" # prod 아니면 dev
 
 # Ingress 목록 리스트
@@ -99,7 +101,7 @@ for app in $MONITORING_APPS; do
     graceful_app_shutdown $app
 done
 
-
+EOT
 
 
 
