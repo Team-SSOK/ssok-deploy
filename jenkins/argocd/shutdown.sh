@@ -67,7 +67,7 @@ if [ "$DEPLOY_PROFILE" = "prod" ]; then
     kubectl config use-context arn:aws:eks:ap-northeast-2:635091448057:cluster/ssok-cluster
 else
     echo "Connecting to DEVELOPMENT ArgoCD..."
-    argocd login localhost:30080 --username admin --password 2t6mVPdg88jih0Lv --insecure
+    argocd login 172.21.1.19:30080 --username admin --password 2t6mVPdg88jih0Lv --insecure
     kubectl config use-context kubernetes-admin@kubernetes
 fi
 
