@@ -38,7 +38,7 @@ persistence:
   accessModes:
     - ReadWriteOnce
   size: 30Gi
-  storageClass: "local-storage" # 홈서버용
+  storageClass: local-storage # 홈서버용
 
 service:
   type: ClusterIP
