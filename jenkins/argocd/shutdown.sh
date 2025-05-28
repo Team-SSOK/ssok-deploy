@@ -1,13 +1,18 @@
 #!/bin/sh
 
+# Jenkins 컨테이너내 ArgoCD 설치
+# curl -sSL -o argocd-linux-amd64 https://github.com/argoproj/argo-cd/releases/latest/download/argocd-linux-amd64
+# sudo install -m 555 argocd-linux-amd64 /usr/local/bin/argocd
+# rm argocd-linux-amd64
+# Jenkins 컨테이너내 kubectl config 등록
+# ~/.kube/config
+
 echo ##############################
 echo #
 echo #   ARGOCD SHUTDOWN 스크립트
 echo #
 echo ##############################
 echo 
-
-ssh lgcns@172.21.1.19 /bin/bash <<'EOT'
 
 graceful_app_shutdown() {
     local app=$1
@@ -101,9 +106,6 @@ echo "ArgoCD SSOK-Monitoring 종료"
 for app in $MONITORING_APPS; do
     graceful_app_shutdown $app
 done
-
-EOT
-
 
 
 
