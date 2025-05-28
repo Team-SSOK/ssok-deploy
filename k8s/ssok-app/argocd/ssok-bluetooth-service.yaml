@@ -8,7 +8,7 @@ spec:
   source:
     repoURL: https://github.com/Team-SSOK/ssok-deploy.git
     targetRevision: main
-    # path: k8s/ssok-app/overlays/dev/ssok-bluetooth-service
+    # path: k8s/ssok-app/overlays/dev/ssok-bluetooth-service # 개발용(홈서버)
     path: k8s/ssok-app/overlays/prod/ssok-bluetooth-service
   destination:
     server: https://kubernetes.default.svc

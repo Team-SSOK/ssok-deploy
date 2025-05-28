@@ -125,15 +125,19 @@ function update_kustomization_file() {
 
     # 서비스 디렉토리 경로 수정 - DEPLOY_REPO_PATH에 따른 경로를 올바르게 구성
     # 현재 디렉토리를 기준으로 상대 경로 사용
-    local SERVICE_DIR="k8s/ssok-app/overlays/prod/$SERVICE_NAME/helm-values"
+    local SERVICE_DIR_DEV="k8s/ssok-app/overlays/dev/$SERVICE_NAME/helm-values"
+    local SERVICE_DIR_PROD="k8s/ssok-app/overlays/prod/$SERVICE_NAME/helm-values"
 
     # 디렉토리가 없으면 생성
-    mkdir -p "$SERVICE_DIR"
+    mkdir -p "$SERVICE_DIR_DEV"
+    mkdir -p "$SERVICE_DIR_PROD"
 
-    >&2 echo "Creating kustomization file at $SERVICE_DIR/values.yaml"
+    >&2 echo "Creating kustomization file at $SERVICE_DIR_DEV/values.yaml"
+    >&2 echo "Creating kustomization file at $SERVICE_DIR_PROD/values.yaml"
 
     YAML_FILE="values.yaml"
-    sed -i 's/\(  tag: \).*$/\1"'"$BUILD_TAG"'"/' ${SERVICE_DIR}/${YAML_FILE}
+    sed -i 's/\(  tag: \).*$/\1"'"$BUILD_TAG"'"/' ${SERVICE_DIR_DEV}/${YAML_FILE}
+    sed -i 's/\(  tag: \).*$/\1"'"$BUILD_TAG"'"/' ${SERVICE_DIR_PROD}/${YAML_FILE}
 
 #    # kustomization.yaml 파일 업데이트 (하드코딩된 DOCKER_REPO_NAME 사용)
 #    cat > "$SERVICE_DIR/values.yaml" << EOF
@@ -151,7 +155,8 @@ function update_kustomization_file() {
 
     >&2 echo "DEBUG: Created kustomization.yaml with newTag: '${BUILD_TAG}'"
     >&2 echo "DEBUG: Content of the created file:"
-    >&2 cat "$SERVICE_DIR/helm-values/values.yaml"
+    >&2 cat "$SERVICE_DIR_DEV/helm-values/values.yaml"
+    >&2 cat "$SERVICE_DIR_PROD/helm-values/values.yaml"
     
     # 아무런 출력이 없도록 함
     return 0
