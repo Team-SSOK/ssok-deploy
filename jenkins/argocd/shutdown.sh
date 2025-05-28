@@ -9,11 +9,11 @@
 # 3. jq 라이브러리 설치
 # apt-get install jq
 
-echo ##############################
-echo #
-echo #   ARGOCD SHUTDOWN 스크립트
-echo #
-echo ##############################
+echo ==============================
+echo 
+echo     ARGOCD SHUTDOWN 스크립트
+echo 
+echo ==============================
 echo 
 
 graceful_app_shutdown() {
@@ -69,7 +69,6 @@ echo
 echo "K8S Context ArgoCD 연결"
 echo 
 echo $separationPhrase
-echo
 
 if [ "$DEPLOY_PROFILE" = "prod" ]; then
     echo "Connecting to PRODUCTION ArgoCD..."
@@ -81,12 +80,14 @@ else
     kubectl config use-context kubernetes-admin@kubernetes
 fi
 
-echo $separationPhrase
-echo
-echo "ArgoCD AWS ALB Ingress 종료"
-echo 
-echo $separationPhrase
-echo
+if [ "$INGRESS_APPS" != "" ]; then
+    echo $separationPhrase
+    echo
+    echo "ArgoCD AWS ALB Ingress 종료"
+    echo 
+    echo $separationPhrase
+    echo
+fi
 
 for app in $INGRESS_APPS; do
     echo "Deleting $app..."
@@ -109,7 +110,6 @@ for app in $SERVICE_APPS; do
     graceful_app_shutdown $app
 done
 
-echo $separationPhrase
 echo
 echo "ArgoCD SSOK-Bank 종료"
 echo 
@@ -120,7 +120,6 @@ for app in $BANK_APPS; do
     graceful_app_shutdown $app
 done
 
-echo $separationPhrase
 echo
 echo "ArgoCD SSOK-Kafka 종료"
 echo 
@@ -131,7 +130,6 @@ for app in $MESSAGE_QUEUE_APPS; do
     graceful_app_shutdown $app
 done
 
-echo $separationPhrase
 echo
 echo "ArgoCD SSOK-Logging 종료"
 echo 
@@ -142,7 +140,6 @@ for app in $LOGGING_APPS; do
     graceful_app_shutdown $app
 done
 
-echo $separationPhrase
 echo
 echo "ArgoCD SSOK-Monitoring 종료"
 echo 
@@ -153,7 +150,11 @@ for app in $MONITORING_APPS; do
     graceful_app_shutdown $app
 done
 
-
+echo
+echo "ArgoCD의 모든 Application이 종료 되었습니다."
+echo 
+echo $separationPhrase
+echo
 
 
 

@@ -1,10 +1,10 @@
 #!/bin/sh
 
-echo ##############################
-echo #
-echo #   ARGOCD DEPLOY 스크립트
-echo #
-echo ##############################
+echo ==============================
+echo 
+echo     ARGOCD DEPLOY 스크립트
+echo 
+echo ==============================
 echo 
 
 create_argocd_application() {
