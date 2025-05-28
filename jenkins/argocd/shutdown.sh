@@ -63,7 +63,7 @@ LOGGING_APPS=$(echo "$ARGOCD_APPS" | grep -E "^(ssok-fluentd|ssok-opensearch)$")
 MONITORING_APPS=$(echo "$ARGOCD_APPS" | grep -E "^(ssok-grafana|ssok-prometheus)$")
 
 echo
-echo "  K8S Context ArgoCD 연결"
+echo "K8S Context ArgoCD 연결"
 echo 
 echo $separationPhrase
 
@@ -98,7 +98,7 @@ done
 
 echo $separationPhrase
 echo
-echo "  ArgoCD SSOK-Backend 종료"
+echo "ArgoCD SSOK-Backend 종료"
 echo 
 echo $separationPhrase
 
@@ -107,7 +107,7 @@ for app in $SERVICE_APPS; do
 done
 
 echo
-echo "  ArgoCD SSOK-Bank 종료"
+echo "ArgoCD SSOK-Bank 종료"
 echo 
 echo $separationPhrase
 
@@ -116,7 +116,7 @@ for app in $BANK_APPS; do
 done
 
 echo
-echo "  ArgoCD SSOK-Kafka 종료"
+echo "ArgoCD SSOK-Kafka 종료"
 echo 
 echo $separationPhrase
 echo
@@ -126,17 +126,16 @@ for app in $MESSAGE_QUEUE_APPS; do
 done
 
 echo
-echo "  ArgoCD SSOK-Logging 종료"
+echo "ArgoCD SSOK-Logging 종료"
 echo 
 echo $separationPhrase
-echo
 
 for app in $LOGGING_APPS; do
     graceful_app_shutdown $app
 done
 
 echo
-echo "  ArgoCD SSOK-Monitoring 종료"
+echo "ArgoCD SSOK-Monitoring 종료"
 echo 
 echo $separationPhrase
 
