@@ -13,6 +13,9 @@ create_argocd_application() {
     cd $CURRENT_DIR/k8s/$app/argocd
     SERVICE_FILES=$(ls $filter 2>/dev/null)
     for file in $SERVICE_FILES; do
+        if [ "$DEPLOY_PROFILE" = "prod" ]; then
+            sed -i 's|overlays/prod|overlays/dev|g' $file
+        fi
         argocd app create -f $file
     done
 }
