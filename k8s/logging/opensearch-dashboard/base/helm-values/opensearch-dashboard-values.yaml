@@ -1,0 +1,56 @@
+# opensearch-dashboards-values.yaml
+opensearchHosts: "http://opensearch-cluster-master.logging.svc.cluster.local:9200"
+
+replicas: 1
+
+# 네임스페이스 간 접근을 위한 설정
+extraEnvs:
+  - name: OPENSEARCH_USERNAME
+    value: "admin"
+  - name: OPENSEARCH_PASSWORD
+    value: "a1b2c3d4A1B2C3D4!"
+  - name: SERVER_BASEPATH
+    value: "/dashboards"  # sub-path 설정
+  - name: SERVER_REWRITEBASEPATH
+    value: "true"
+
+# 리소스 설정
+resources:
+  requests:
+    cpu: "100m"
+    memory: "512Mi"
+  limits:
+    cpu: "500m"
+    memory: "1Gi"
+
+config:
+  opensearch_dashboards.yml: |
+    server.name: opensearch-dashboards
+    server.host: 0.0.0.0
+    server.basePath: "/dashboards"
+    server.rewriteBasePath: true
+    
+    opensearch.hosts: ["http://opensearch-cluster-master.logging.svc.cluster.local:9200"]
+    opensearch.username: "admin"
+    opensearch.password: "a1b2c3d4A1B2C3D4!"
+    
+    # 보안 설정
+    opensearch.ssl.verificationMode: none
+    opensearch.requestHeadersWhitelist: ["authorization", "securitytenant"]
+
+
+service:
+  type: ClusterIP
+  port: 5601
+
+#     # 로깅 설정 수정 (새로운 형식)
+#    logging:
+#      appenders:
+#        default:
+#          type: console
+#          layout:
+#            type: json
+#      root:
+#        appenders:
+#          - default
+#        level: info
