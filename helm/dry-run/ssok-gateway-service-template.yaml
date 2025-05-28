@@ -1,0 +1,920 @@
+---
+# Source: ssok-gateway-service/templates/secret.yaml
+apiVersion: v1
+kind: Secret
+metadata:
+  name: ssok-gateway-service
+  namespace: ssok
+  labels:
+    app.kubernetes.io/name: ssok-gateway-service
+    app.kubernetes.io/instance: ssok-gateway-service
+    app.kubernetes.io/version: 1.0.0
+    app.kubernetes.io/managed-by: Helm
+type: Opaque
+stringData:
+  SPRING_DATA_REDIS_HOST: "localhost"
+  SPRING_DATA_REDIS_PORT: "6379"
+  JWT_SECRET: "defaultSecret"
+  AUTH_WHITELIST: "/api/auth/login,/api/auth/refresh,/api/users/signup,/api/users/phone,/api/users/phone/verify"
+  EXTERNAL_NOTIFICATION_SERVICE_URL: "http://localhost"
+---
+# Source: ssok-gateway-service/templates/configmap.yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: ssok-gateway-service
+  namespace: ssok
+  labels:
+    app.kubernetes.io/name: ssok-gateway-service
+    app.kubernetes.io/instance: ssok-gateway-service
+    app.kubernetes.io/version: 1.0.0
+    app.kubernetes.io/managed-by: Helm
+data:
+  application.yml: |
+    health:
+      kubernetes:
+        enabled: false
+    management:
+      endpoint:
+        health:
+          show-details: always
+        prometheus:
+          enabled: true
+      endpoints:
+        web:
+          exposure:
+            include: '*'
+    server:
+      port: 8080
+    spring:
+      application:
+        name: ssok-gateway-service
+      cloud:
+        gateway:
+          routes:
+          - id: user-service
+            predicates:
+            - Path=/api/auth/**, /api/users/**
+            uri: http://ssok-user-service.ssok.svc.cluster.local
+          - id: account-service
+            predicates:
+            - Path=/api/accounts/**
+            uri: http://ssok-account-service.ssok.svc.cluster.local
+          - id: transfer-service
+            predicates:
+            - Path=/api/transfers/**
+            uri: http://ssok-transfer-service.ssok.svc.cluster.local
+          - id: notification-service
+            predicates:
+            - Path=/api/notification/**
+            uri: http://ssok-notification-service.ssok.svc.cluster.local
+          - id: bluetooth-service
+            predicates:
+            - Path=/api/bluetooth/**
+            uri: http://ssok-bluetooth-service.ssok.svc.cluster.local
+        kubernetes:
+          config:
+            enabled: true
+            name: ssok-gateway-service
+            namespace: ssok
+            sources:
+            - name: ssok-gateway-service
+          discovery:
+            all-namespaces: false
+          loadbalancer:
+            mode: service
+          reload:
+            enabled: true
+          secrets:
+            enabled: false
+      data:
+        redis:
+          host: ${SPRING_DATA_REDIS_HOST}
+          port: ${SPRING_DATA_REDIS_PORT}
+      jwt:
+        secret: ${JWT_SECRET}
+    auth:
+      whitelist: ${AUTH_WHITELIST}
+    external:
+      notification-service:
+        url: ${EXTERNAL_NOTIFICATION_SERVICE_URL}
+---
+# Source: ssok-gateway-service/templates/fluentbit-config.yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: fluent-bit-config-gateway
+  namespace: ssok
+data:
+  fluent-bit.conf: |
+    [SERVICE]
+        Flush         1
+        Daemon        Off
+        Log_Level     info
+        Parsers_File  parsers.conf
+        HTTP_Server   On
+        HTTP_Listen   0.0.0.0
+        HTTP_Port     2020
+    
+    [INPUT]
+        Name              tail
+        Path              /var/log/ssok-gateway-service.log
+        Parser            json
+        Tag               gateway.log
+        Refresh_Interval  5
+        Mem_Buf_Limit     10MB
+        Skip_Long_Lines   On
+    
+    [OUTPUT]
+        Name              forward
+        Match             gateway.*
+        Host              fluentd-aggregator.logging.svc.cluster.local
+        Port              24224
+  parsers.conf: |-
+    [PARSER]
+        Name              json
+        Format            json
+        Time_Key          time
+        Time_Format       %Y-%m-%dT%H:%M:%S.%L%z
+---
+# Source: ssok-gateway-service/templates/service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: ssok-gateway-service
+  namespace: ssok
+  labels:
+    app.kubernetes.io/name: ssok-gateway-service
+    app.kubernetes.io/instance: ssok-gateway-service
+    app.kubernetes.io/version: 1.0.0
+    app.kubernetes.io/managed-by: Helm
+spec:
+  selector:
+    app.kubernetes.io/name: ssok-gateway-service
+    app.kubernetes.io/instance: ssok-gateway-service
+  ports:
+    - name: web
+      port: 80
+      targetPort: 8080
+  type: ClusterIP
+---
+# Source: ssok-gateway-service/templates/deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ssok-gateway-service
+  namespace: ssok
+  labels:
+    app.kubernetes.io/name: ssok-gateway-service
+    app.kubernetes.io/instance: ssok-gateway-service
+    app.kubernetes.io/version: 1.0.0
+    app.kubernetes.io/managed-by: Helm
+  annotations:
+    argocd.argoproj.io/sync-wave: "1"
+spec:
+  revisionHistoryLimit: 1
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: ssok-gateway-service
+      app.kubernetes.io/instance: ssok-gateway-service
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: ssok-gateway-service
+        app.kubernetes.io/instance: ssok-gateway-service
+    spec:
+      serviceAccountName: ssok-gateway-service-sa
+      containers:
+        - name: ssok-gateway-service
+          image: "kudong/ssok-gateway-service:latest"
+          imagePullPolicy: IfNotPresent
+          envFrom:
+            - secretRef:
+                name: ssok-gateway-service
+          ports:
+            - containerPort: 8080
+          volumeMounts:
+            - name: varlog
+              mountPath: /var/log
+            - name: config-volume
+              mountPath: /config
+          env:
+            - name: SPRING_CONFIG_LOCATION
+              value: file:/config/application.yml
+
+        - name: fluent-bit
+          image: cr.fluentbit.io/fluent/fluent-bit:4.0.2
+          imagePullPolicy: IfNotPresent
+          volumeMounts:
+            - name: varlog
+              mountPath: /var/log
+            - name: fluent-bit-config
+              mountPath: /fluent-bit/etc
+          resources:
+            limits:
+              memory: 100Mi
+              cpu: 100m
+
+      volumes:
+        - name: config-volume
+          configMap:
+            name: ssok-gateway-service
+        - name: varlog
+          emptyDir: {}
+        - name: fluent-bit-config
+          configMap:
+            name: fluent-bit-config-gateway
+---
+# Source: ssok-gateway-service/templates/secret.yaml
+apiVersion: v1
+kind: Secret
+metadata:
+  name: ssok-gateway-service
+  namespace: ssok
+  labels:
+    app.kubernetes.io/name: ssok-gateway-service
+    app.kubernetes.io/instance: ssok-gateway-service
+    app.kubernetes.io/version: 1.0.0
+    app.kubernetes.io/managed-by: Helm
+type: Opaque
+stringData:
+  SPRING_DATA_REDIS_HOST: "localhost"
+  SPRING_DATA_REDIS_PORT: "6379"
+  JWT_SECRET: "defaultSecret"
+  AUTH_WHITELIST: "/api/auth/login,/api/auth/refresh,/api/users/signup,/api/users/phone,/api/users/phone/verify"
+  EXTERNAL_NOTIFICATION_SERVICE_URL: "http://localhost"
+---
+# Source: ssok-gateway-service/templates/configmap.yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: ssok-gateway-service
+  namespace: ssok
+  labels:
+    app.kubernetes.io/name: ssok-gateway-service
+    app.kubernetes.io/instance: ssok-gateway-service
+    app.kubernetes.io/version: 1.0.0
+    app.kubernetes.io/managed-by: Helm
+data:
+  application.yml: |
+    health:
+      kubernetes:
+        enabled: false
+    management:
+      endpoint:
+        health:
+          show-details: always
+        prometheus:
+          enabled: true
+      endpoints:
+        web:
+          exposure:
+            include: '*'
+    server:
+      port: 8080
+    spring:
+      application:
+        name: ssok-gateway-service
+      cloud:
+        gateway:
+          routes:
+          - id: user-service
+            predicates:
+            - Path=/api/auth/**, /api/users/**
+            uri: http://ssok-user-service.ssok.svc.cluster.local
+          - id: account-service
+            predicates:
+            - Path=/api/accounts/**
+            uri: http://ssok-account-service.ssok.svc.cluster.local
+          - id: transfer-service
+            predicates:
+            - Path=/api/transfers/**
+            uri: http://ssok-transfer-service.ssok.svc.cluster.local
+          - id: notification-service
+            predicates:
+            - Path=/api/notification/**
+            uri: http://ssok-notification-service.ssok.svc.cluster.local
+          - id: bluetooth-service
+            predicates:
+            - Path=/api/bluetooth/**
+            uri: http://ssok-bluetooth-service.ssok.svc.cluster.local
+        kubernetes:
+          config:
+            enabled: true
+            name: ssok-gateway-service
+            namespace: ssok
+            sources:
+            - name: ssok-gateway-service
+          discovery:
+            all-namespaces: false
+          loadbalancer:
+            mode: service
+          reload:
+            enabled: true
+          secrets:
+            enabled: false
+      data:
+        redis:
+          host: ${SPRING_DATA_REDIS_HOST}
+          port: ${SPRING_DATA_REDIS_PORT}
+      jwt:
+        secret: ${JWT_SECRET}
+    auth:
+      whitelist: ${AUTH_WHITELIST}
+    external:
+      notification-service:
+        url: ${EXTERNAL_NOTIFICATION_SERVICE_URL}
+---
+# Source: ssok-gateway-service/templates/fluentbit-config.yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: fluent-bit-config-gateway
+  namespace: ssok
+data:
+  fluent-bit.conf: |
+    [SERVICE]
+        Flush         1
+        Daemon        Off
+        Log_Level     info
+        Parsers_File  parsers.conf
+        HTTP_Server   On
+        HTTP_Listen   0.0.0.0
+        HTTP_Port     2020
+    
+    [INPUT]
+        Name              tail
+        Path              /var/log/ssok-gateway-service.log
+        Parser            json
+        Tag               gateway.log
+        Refresh_Interval  5
+        Mem_Buf_Limit     10MB
+        Skip_Long_Lines   On
+    
+    [OUTPUT]
+        Name              forward
+        Match             gateway.*
+        Host              fluentd-aggregator.logging.svc.cluster.local
+        Port              24224
+  parsers.conf: |-
+    [PARSER]
+        Name              json
+        Format            json
+        Time_Key          time
+        Time_Format       %Y-%m-%dT%H:%M:%S.%L%z
+---
+# Source: ssok-gateway-service/templates/service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: ssok-gateway-service
+  namespace: ssok
+  labels:
+    app.kubernetes.io/name: ssok-gateway-service
+    app.kubernetes.io/instance: ssok-gateway-service
+    app.kubernetes.io/version: 1.0.0
+    app.kubernetes.io/managed-by: Helm
+spec:
+  selector:
+    app.kubernetes.io/name: ssok-gateway-service
+    app.kubernetes.io/instance: ssok-gateway-service
+  ports:
+    - name: web
+      port: 80
+      targetPort: 8080
+    - name: dev
+      port: 31080
+      targetPort: 8080
+      nodePort: 31080
+  type: NodePort
+---
+# Source: ssok-gateway-service/templates/deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ssok-gateway-service
+  namespace: ssok
+  labels:
+    app.kubernetes.io/name: ssok-gateway-service
+    app.kubernetes.io/instance: ssok-gateway-service
+    app.kubernetes.io/version: 1.0.0
+    app.kubernetes.io/managed-by: Helm
+  annotations:
+    argocd.argoproj.io/sync-wave: "1"
+spec:
+  revisionHistoryLimit: 1
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: ssok-gateway-service
+      app.kubernetes.io/instance: ssok-gateway-service
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: ssok-gateway-service
+        app.kubernetes.io/instance: ssok-gateway-service
+    spec:
+      serviceAccountName: ssok-gateway-service-sa
+      containers:
+        - name: ssok-gateway-service
+          image: "kudong/ssok-gateway-service:latest"
+          imagePullPolicy: IfNotPresent
+          envFrom:
+            - secretRef:
+                name: ssok-gateway-service
+          ports:
+            - containerPort: 8080
+          volumeMounts:
+            - name: varlog
+              mountPath: /var/log
+            - name: config-volume
+              mountPath: /config
+          env:
+            - name: SPRING_CONFIG_LOCATION
+              value: file:/config/application.yml
+
+        - name: fluent-bit
+          image: cr.fluentbit.io/fluent/fluent-bit:4.0.2
+          imagePullPolicy: IfNotPresent
+          volumeMounts:
+            - name: varlog
+              mountPath: /var/log
+            - name: fluent-bit-config
+              mountPath: /fluent-bit/etc
+          resources:
+            limits:
+              memory: 100Mi
+              cpu: 100m
+
+      volumes:
+        - name: config-volume
+          configMap:
+            name: ssok-gateway-service
+        - name: varlog
+          emptyDir: {}
+        - name: fluent-bit-config
+          configMap:
+            name: fluent-bit-config-gateway
+---
+# Source: ssok-gateway-service/templates/secret.yaml
+apiVersion: v1
+kind: Secret
+metadata:
+  name: ssok-gateway-service
+  namespace: ssok
+  labels:
+    app.kubernetes.io/name: ssok-gateway-service
+    app.kubernetes.io/instance: ssok-gateway-service
+    app.kubernetes.io/version: 1.0.0
+    app.kubernetes.io/managed-by: Helm
+type: Opaque
+stringData:
+  SPRING_DATA_REDIS_HOST: "localhost"
+  SPRING_DATA_REDIS_PORT: "6379"
+  JWT_SECRET: "defaultSecret"
+  AUTH_WHITELIST: "/api/auth/login,/api/auth/refresh,/api/users/signup,/api/users/phone,/api/users/phone/verify"
+  EXTERNAL_NOTIFICATION_SERVICE_URL: "http://localhost"
+---
+# Source: ssok-gateway-service/templates/configmap.yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: ssok-gateway-service
+  namespace: ssok
+  labels:
+    app.kubernetes.io/name: ssok-gateway-service
+    app.kubernetes.io/instance: ssok-gateway-service
+    app.kubernetes.io/version: 1.0.0
+    app.kubernetes.io/managed-by: Helm
+data:
+  application.yml: |
+    health:
+      kubernetes:
+        enabled: false
+    management:
+      endpoint:
+        health:
+          show-details: always
+        prometheus:
+          enabled: true
+      endpoints:
+        web:
+          exposure:
+            include: '*'
+    server:
+      port: 8080
+    spring:
+      application:
+        name: ssok-gateway-service
+      cloud:
+        gateway:
+          routes:
+          - id: user-service
+            predicates:
+            - Path=/api/auth/**, /api/users/**
+            uri: http://ssok-user-service.ssok.svc.cluster.local
+          - id: account-service
+            predicates:
+            - Path=/api/accounts/**
+            uri: http://ssok-account-service.ssok.svc.cluster.local
+          - id: transfer-service
+            predicates:
+            - Path=/api/transfers/**
+            uri: http://ssok-transfer-service.ssok.svc.cluster.local
+          - id: notification-service
+            predicates:
+            - Path=/api/notification/**
+            uri: http://ssok-notification-service.ssok.svc.cluster.local
+          - id: bluetooth-service
+            predicates:
+            - Path=/api/bluetooth/**
+            uri: http://ssok-bluetooth-service.ssok.svc.cluster.local
+        kubernetes:
+          config:
+            enabled: true
+            name: ssok-gateway-service
+            namespace: ssok
+            sources:
+            - name: ssok-gateway-service
+          discovery:
+            all-namespaces: false
+          loadbalancer:
+            mode: service
+          reload:
+            enabled: true
+          secrets:
+            enabled: false
+      data:
+        redis:
+          host: ${SPRING_DATA_REDIS_HOST}
+          port: ${SPRING_DATA_REDIS_PORT}
+      jwt:
+        secret: ${JWT_SECRET}
+    auth:
+      whitelist: ${AUTH_WHITELIST}
+    external:
+      notification-service:
+        url: ${EXTERNAL_NOTIFICATION_SERVICE_URL}
+---
+# Source: ssok-gateway-service/templates/fluentbit-config.yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: fluent-bit-config-gateway
+  namespace: ssok
+data:
+  fluent-bit.conf: |
+    [SERVICE]
+        Flush         1
+        Daemon        Off
+        Log_Level     info
+        Parsers_File  parsers.conf
+        HTTP_Server   On
+        HTTP_Listen   0.0.0.0
+        HTTP_Port     2020
+    
+    [INPUT]
+        Name              tail
+        Path              /var/log/ssok-gateway-service.log
+        Parser            json
+        Tag               gateway.log
+        Refresh_Interval  5
+        Mem_Buf_Limit     10MB
+        Skip_Long_Lines   On
+    
+    [OUTPUT]
+        Name              forward
+        Match             gateway.*
+        Host              fluentd-aggregator.logging.svc.cluster.local
+        Port              24224
+  parsers.conf: |-
+    [PARSER]
+        Name              json
+        Format            json
+        Time_Key          time
+        Time_Format       %Y-%m-%dT%H:%M:%S.%L%z
+---
+# Source: ssok-gateway-service/templates/service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: ssok-gateway-service
+  namespace: ssok
+  labels:
+    app.kubernetes.io/name: ssok-gateway-service
+    app.kubernetes.io/instance: ssok-gateway-service
+    app.kubernetes.io/version: 1.0.0
+    app.kubernetes.io/managed-by: Helm
+spec:
+  selector:
+    app.kubernetes.io/name: ssok-gateway-service
+    app.kubernetes.io/instance: ssok-gateway-service
+  ports:
+    - name: web
+      port: 80
+      targetPort: 8080
+    - name: dev
+      port: 31080
+      targetPort: 8080
+      nodePort: 31080
+  type: NodePort
+---
+# Source: ssok-gateway-service/templates/deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ssok-gateway-service
+  namespace: ssok
+  labels:
+    app.kubernetes.io/name: ssok-gateway-service
+    app.kubernetes.io/instance: ssok-gateway-service
+    app.kubernetes.io/version: 1.0.0
+    app.kubernetes.io/managed-by: Helm
+  annotations:
+    argocd.argoproj.io/sync-wave: "1"
+spec:
+  revisionHistoryLimit: 1
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: ssok-gateway-service
+      app.kubernetes.io/instance: ssok-gateway-service
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: ssok-gateway-service
+        app.kubernetes.io/instance: ssok-gateway-service
+    spec:
+      serviceAccountName: ssok-gateway-service-sa
+      containers:
+        - name: ssok-gateway-service
+          image: "kudong/ssok-gateway-service:latest"
+          imagePullPolicy: IfNotPresent
+          envFrom:
+            - secretRef:
+                name: ssok-gateway-service
+          ports:
+            - containerPort: 8080
+          volumeMounts:
+            - name: varlog
+              mountPath: /var/log
+            - name: config-volume
+              mountPath: /config
+          env:
+            - name: SPRING_CONFIG_LOCATION
+              value: file:/config/application.yml
+
+        - name: fluent-bit
+          image: cr.fluentbit.io/fluent/fluent-bit:4.0.2
+          imagePullPolicy: IfNotPresent
+          volumeMounts:
+            - name: varlog
+              mountPath: /var/log
+            - name: fluent-bit-config
+              mountPath: /fluent-bit/etc
+          resources:
+            limits:
+              memory: 100Mi
+              cpu: 100m
+
+      volumes:
+        - name: config-volume
+          configMap:
+            name: ssok-gateway-service
+        - name: varlog
+          emptyDir: {}
+        - name: fluent-bit-config
+          configMap:
+            name: fluent-bit-config-gateway
+---
+# Source: ssok-gateway-service/templates/secret.yaml
+apiVersion: v1
+kind: Secret
+metadata:
+  name: ssok-gateway-service
+  namespace: ssok
+  labels:
+    app.kubernetes.io/name: ssok-gateway-service
+    app.kubernetes.io/instance: ssok-gateway-service
+    app.kubernetes.io/version: 1.0.0
+    app.kubernetes.io/managed-by: Helm
+type: Opaque
+stringData:
+  SPRING_DATA_REDIS_HOST: "localhost"
+  SPRING_DATA_REDIS_PORT: "6379"
+  JWT_SECRET: "defaultSecret"
+  AUTH_WHITELIST: "/api/auth/login,/api/auth/refresh,/api/users/signup,/api/users/phone,/api/users/phone/verify"
+  EXTERNAL_NOTIFICATION_SERVICE_URL: "http://localhost"
+---
+# Source: ssok-gateway-service/templates/configmap.yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: ssok-gateway-service
+  namespace: ssok
+  labels:
+    app.kubernetes.io/name: ssok-gateway-service
+    app.kubernetes.io/instance: ssok-gateway-service
+    app.kubernetes.io/version: 1.0.0
+    app.kubernetes.io/managed-by: Helm
+data:
+  application.yml: |
+    health:
+      kubernetes:
+        enabled: false
+    management:
+      endpoint:
+        health:
+          show-details: always
+        prometheus:
+          enabled: true
+      endpoints:
+        web:
+          exposure:
+            include: '*'
+    server:
+      port: 8080
+    spring:
+      application:
+        name: ssok-gateway-service
+      cloud:
+        gateway:
+          routes:
+          - id: user-service
+            predicates:
+            - Path=/api/auth/**, /api/users/**
+            uri: http://ssok-user-service.ssok.svc.cluster.local
+          - id: account-service
+            predicates:
+            - Path=/api/accounts/**
+            uri: http://ssok-account-service.ssok.svc.cluster.local
+          - id: transfer-service
+            predicates:
+            - Path=/api/transfers/**
+            uri: http://ssok-transfer-service.ssok.svc.cluster.local
+          - id: notification-service
+            predicates:
+            - Path=/api/notification/**
+            uri: http://ssok-notification-service.ssok.svc.cluster.local
+          - id: bluetooth-service
+            predicates:
+            - Path=/api/bluetooth/**
+            uri: http://ssok-bluetooth-service.ssok.svc.cluster.local
+        kubernetes:
+          config:
+            enabled: true
+            name: ssok-gateway-service
+            namespace: ssok
+            sources:
+            - name: ssok-gateway-service
+          discovery:
+            all-namespaces: false
+          loadbalancer:
+            mode: service
+          reload:
+            enabled: true
+          secrets:
+            enabled: false
+      data:
+        redis:
+          host: ${SPRING_DATA_REDIS_HOST}
+          port: ${SPRING_DATA_REDIS_PORT}
+      jwt:
+        secret: ${JWT_SECRET}
+    auth:
+      whitelist: ${AUTH_WHITELIST}
+    external:
+      notification-service:
+        url: ${EXTERNAL_NOTIFICATION_SERVICE_URL}
+---
+# Source: ssok-gateway-service/templates/fluentbit-config.yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: fluent-bit-config-gateway
+  namespace: ssok
+data:
+  fluent-bit.conf: |
+    [SERVICE]
+        Flush         1
+        Daemon        Off
+        Log_Level     info
+        Parsers_File  parsers.conf
+        HTTP_Server   On
+        HTTP_Listen   0.0.0.0
+        HTTP_Port     2020
+    
+    [INPUT]
+        Name              tail
+        Path              /var/log/ssok-gateway-service.log
+        Parser            json
+        Tag               gateway.log
+        Refresh_Interval  5
+        Mem_Buf_Limit     10MB
+        Skip_Long_Lines   On
+    
+    [OUTPUT]
+        Name              forward
+        Match             gateway.*
+        Host              fluentd-aggregator.logging.svc.cluster.local
+        Port              24224
+  parsers.conf: |-
+    [PARSER]
+        Name              json
+        Format            json
+        Time_Key          time
+        Time_Format       %Y-%m-%dT%H:%M:%S.%L%z
+---
+# Source: ssok-gateway-service/templates/service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: ssok-gateway-service
+  namespace: ssok
+  labels:
+    app.kubernetes.io/name: ssok-gateway-service
+    app.kubernetes.io/instance: ssok-gateway-service
+    app.kubernetes.io/version: 1.0.0
+    app.kubernetes.io/managed-by: Helm
+spec:
+  selector:
+    app.kubernetes.io/name: ssok-gateway-service
+    app.kubernetes.io/instance: ssok-gateway-service
+  ports:
+    - name: web
+      port: 80
+      targetPort: 8080
+    - name: dev
+      port: 31080
+      targetPort: 8080
+      nodePort: 31080
+  type: NodePort
+---
+# Source: ssok-gateway-service/templates/deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ssok-gateway-service
+  namespace: ssok
+  labels:
+    app.kubernetes.io/name: ssok-gateway-service
+    app.kubernetes.io/instance: ssok-gateway-service
+    app.kubernetes.io/version: 1.0.0
+    app.kubernetes.io/managed-by: Helm
+  annotations:
+    argocd.argoproj.io/sync-wave: "1"
+spec:
+  revisionHistoryLimit: 1
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: ssok-gateway-service
+      app.kubernetes.io/instance: ssok-gateway-service
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: ssok-gateway-service
+        app.kubernetes.io/instance: ssok-gateway-service
+    spec:
+      serviceAccountName: ssok-gateway-service-sa
+      containers:
+        - name: ssok-gateway-service
+          image: "kudong/ssok-gateway-service:latest"
+          imagePullPolicy: IfNotPresent
+          envFrom:
+            - secretRef:
+                name: ssok-gateway-service
+          ports:
+            - containerPort: 8080
+          volumeMounts:
+            - name: varlog
+              mountPath: /var/log
+            - name: config-volume
+              mountPath: /config
+          env:
+            - name: SPRING_CONFIG_LOCATION
+              value: file:/config/application.yml
+
+        - name: fluent-bit
+          image: cr.fluentbit.io/fluent/fluent-bit:4.0.2
+          imagePullPolicy: IfNotPresent
+          volumeMounts:
+            - name: varlog
+              mountPath: /var/log
+            - name: fluent-bit-config
+              mountPath: /fluent-bit/etc
+          resources:
+            limits:
+              memory: 100Mi
+              cpu: 100m
+
+      volumes:
+        - name: config-volume
+          configMap:
+            name: ssok-gateway-service
+        - name: varlog
+          emptyDir: {}
+        - name: fluent-bit-config
+          configMap:
+            name: fluent-bit-config-gateway

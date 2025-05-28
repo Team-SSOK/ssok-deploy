@@ -1,0 +1,300 @@
+---
+# Source: ssok-openbanking/templates/secret.yaml
+apiVersion: v1
+kind: Secret
+metadata:
+  name: ssok-openbanking-db-secrets
+  namespace: default
+  labels:
+    helm.sh/chart: ssok-openbanking-0.1.0
+    app.kubernetes.io/name: ssok-openbanking
+    app.kubernetes.io/instance: ssok-openbanking
+    app.kubernetes.io/version: "0.1.0"
+    app.kubernetes.io/managed-by: Helm
+type: Opaque
+data:
+  DB_PASSWORD: dGxkcHNkcHRt
+  DB_USERNAME: bGdjbnM=
+---
+# Source: ssok-openbanking/templates/configmap.yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: ssok-openbanking-cm
+  namespace: default
+  labels:
+    helm.sh/chart: ssok-openbanking-0.1.0
+    app.kubernetes.io/name: ssok-openbanking
+    app.kubernetes.io/instance: ssok-openbanking
+    app.kubernetes.io/version: "0.1.0"
+    app.kubernetes.io/managed-by: Helm
+data:
+  BANK_API_URL: http://ssok-bank.bank.svc.cluster.local:8080
+  DB_URL: jdbc:mariadb://172.21.1.22:3306/moni?useUnicode=true&characterEncoding=utf-8&serverTimeZone=Asia/Seoul
+  KAFKA_BOOTSTRAP_SERVERS: broker.bank.svc.cluster.local:9092
+  KAFKA_TRUSTED_PACKAGES: kr.ssok.model
+  REDIS_HOST: 172.21.1.22
+  REDIS_PORT: "6379"
+  SERVER_PORT: "8080"
+---
+# Source: ssok-openbanking/templates/service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: ssok-openbanking
+  namespace: default
+  labels:
+    helm.sh/chart: ssok-openbanking-0.1.0
+    app.kubernetes.io/name: ssok-openbanking
+    app.kubernetes.io/instance: ssok-openbanking
+    app.kubernetes.io/version: "0.1.0"
+    app.kubernetes.io/managed-by: Helm
+spec:
+  type: NodePort
+  selector:
+    app.kubernetes.io/name: ssok-openbanking
+    app.kubernetes.io/instance: ssok-openbanking
+  sessionAffinity: None
+  ports:
+    - port: 8080 # 다른 pod exec 접속후 curl http://ssok-openbanking-service:8080 로 접근
+      targetPort: 8080 # openbanking의 타겟 포트
+      nodePort: 31002  # 외부에서 http://kudong.kr:55028
+---
+# Source: ssok-openbanking/templates/deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ssok-openbanking
+  namespace: default
+  labels:
+    helm.sh/chart: ssok-openbanking-0.1.0
+    app.kubernetes.io/name: ssok-openbanking
+    app.kubernetes.io/instance: ssok-openbanking
+    app.kubernetes.io/version: "0.1.0"
+    app.kubernetes.io/managed-by: Helm
+  annotations:
+    argocd.argoproj.io/sync-wave: "1"
+spec:
+  revisionHistoryLimit: 1
+  replicas: 3
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: ssok-openbanking
+      app.kubernetes.io/instance: ssok-openbanking
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: ssok-openbanking
+        app.kubernetes.io/instance: ssok-openbanking
+    spec:
+      containers:
+      - name: ssok-openbanking
+        image: "kudong/ssok-openbanking:latest"
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 8080
+        envFrom:
+          - configMapRef:
+              name: ssok-openbanking-cm
+          - secretRef:
+              name: ssok-openbanking-db-secrets
+---
+# Source: ssok-openbanking/templates/secret.yaml
+apiVersion: v1
+kind: Secret
+metadata:
+  name: ssok-openbanking-db-secrets
+  namespace: default
+  labels:
+    helm.sh/chart: ssok-openbanking-0.1.0
+    app.kubernetes.io/name: ssok-openbanking
+    app.kubernetes.io/instance: ssok-openbanking
+    app.kubernetes.io/version: "0.1.0"
+    app.kubernetes.io/managed-by: Helm
+type: Opaque
+data:
+  DB_PASSWORD: dGxkcHNkcHRt
+  DB_USERNAME: bGdjbnM=
+---
+# Source: ssok-openbanking/templates/configmap.yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: ssok-openbanking-cm
+  namespace: default
+  labels:
+    helm.sh/chart: ssok-openbanking-0.1.0
+    app.kubernetes.io/name: ssok-openbanking
+    app.kubernetes.io/instance: ssok-openbanking
+    app.kubernetes.io/version: "0.1.0"
+    app.kubernetes.io/managed-by: Helm
+data:
+  BANK_API_URL: http://ssok-bank.bank.svc.cluster.local:8080
+  DB_URL: jdbc:mariadb://172.21.1.22:3306/moni?useUnicode=true&characterEncoding=utf-8&serverTimeZone=Asia/Seoul
+  KAFKA_BOOTSTRAP_SERVERS: broker.bank.svc.cluster.local:9092
+  KAFKA_TRUSTED_PACKAGES: kr.ssok.model
+  REDIS_HOST: 172.21.1.22
+  REDIS_PORT: "6379"
+  SERVER_PORT: "8080"
+---
+# Source: ssok-openbanking/templates/service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: ssok-openbanking
+  namespace: default
+  labels:
+    helm.sh/chart: ssok-openbanking-0.1.0
+    app.kubernetes.io/name: ssok-openbanking
+    app.kubernetes.io/instance: ssok-openbanking
+    app.kubernetes.io/version: "0.1.0"
+    app.kubernetes.io/managed-by: Helm
+spec:
+  type: NodePort
+  selector:
+    app.kubernetes.io/name: ssok-openbanking
+    app.kubernetes.io/instance: ssok-openbanking
+  sessionAffinity: None
+  ports:
+    - port: 8080 # 다른 pod exec 접속후 curl http://ssok-openbanking-service:8080 로 접근
+      targetPort: 8080 # openbanking의 타겟 포트
+      nodePort: 31002  # 외부에서 http://kudong.kr:55028
+---
+# Source: ssok-openbanking/templates/deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ssok-openbanking
+  namespace: default
+  labels:
+    helm.sh/chart: ssok-openbanking-0.1.0
+    app.kubernetes.io/name: ssok-openbanking
+    app.kubernetes.io/instance: ssok-openbanking
+    app.kubernetes.io/version: "0.1.0"
+    app.kubernetes.io/managed-by: Helm
+  annotations:
+    argocd.argoproj.io/sync-wave: "1"
+spec:
+  revisionHistoryLimit: 1
+  replicas: 3
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: ssok-openbanking
+      app.kubernetes.io/instance: ssok-openbanking
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: ssok-openbanking
+        app.kubernetes.io/instance: ssok-openbanking
+    spec:
+      containers:
+      - name: ssok-openbanking
+        image: "kudong/ssok-openbanking:latest"
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 8080
+        envFrom:
+          - configMapRef:
+              name: ssok-openbanking-cm
+          - secretRef:
+              name: ssok-openbanking-db-secrets
+---
+# Source: ssok-openbanking/templates/secret.yaml
+apiVersion: v1
+kind: Secret
+metadata:
+  name: ssok-openbanking-db-secrets
+  namespace: openbanking
+  labels:
+    helm.sh/chart: ssok-openbanking-0.1.0
+    app.kubernetes.io/name: ssok-openbanking
+    app.kubernetes.io/instance: ssok-openbanking
+    app.kubernetes.io/version: "0.1.0"
+    app.kubernetes.io/managed-by: Helm
+type: Opaque
+data:
+  DB_PASSWORD: dGxkcHNkcHRt
+  DB_USERNAME: bGdjbnM=
+---
+# Source: ssok-openbanking/templates/configmap.yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: ssok-openbanking-cm
+  namespace: openbanking
+  labels:
+    helm.sh/chart: ssok-openbanking-0.1.0
+    app.kubernetes.io/name: ssok-openbanking
+    app.kubernetes.io/instance: ssok-openbanking
+    app.kubernetes.io/version: "0.1.0"
+    app.kubernetes.io/managed-by: Helm
+data:
+  BANK_API_URL: http://ssok-bank.bank.svc.cluster.local:8080
+  DB_URL: jdbc:mariadb://172.21.1.22:3306/moni?useUnicode=true&characterEncoding=utf-8&serverTimeZone=Asia/Seoul
+  KAFKA_BOOTSTRAP_SERVERS: broker.bank.svc.cluster.local:9092
+  KAFKA_TRUSTED_PACKAGES: kr.ssok.model
+  REDIS_HOST: 172.21.1.22
+  REDIS_PORT: "6379"
+  SERVER_PORT: "8080"
+---
+# Source: ssok-openbanking/templates/service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: ssok-openbanking
+  namespace: openbanking
+  labels:
+    helm.sh/chart: ssok-openbanking-0.1.0
+    app.kubernetes.io/name: ssok-openbanking
+    app.kubernetes.io/instance: ssok-openbanking
+    app.kubernetes.io/version: "0.1.0"
+    app.kubernetes.io/managed-by: Helm
+spec:
+  type: NodePort
+  selector:
+    app.kubernetes.io/name: ssok-openbanking
+    app.kubernetes.io/instance: ssok-openbanking
+  sessionAffinity: None
+  ports:
+    - port: 8080 # 다른 pod exec 접속후 curl http://ssok-openbanking-service:8080 로 접근
+      targetPort: 8080 # openbanking의 타겟 포트
+      nodePort: 31002  # 외부에서 http://kudong.kr:55028
+---
+# Source: ssok-openbanking/templates/deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ssok-openbanking
+  namespace: openbanking
+  labels:
+    helm.sh/chart: ssok-openbanking-0.1.0
+    app.kubernetes.io/name: ssok-openbanking
+    app.kubernetes.io/instance: ssok-openbanking
+    app.kubernetes.io/version: "0.1.0"
+    app.kubernetes.io/managed-by: Helm
+  annotations:
+    argocd.argoproj.io/sync-wave: "1"
+spec:
+  revisionHistoryLimit: 1
+  replicas: 3
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: ssok-openbanking
+      app.kubernetes.io/instance: ssok-openbanking
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: ssok-openbanking
+        app.kubernetes.io/instance: ssok-openbanking
+    spec:
+      containers:
+      - name: ssok-openbanking
+        image: "kudong/ssok-openbanking:latest"
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 8080
+        envFrom:
+          - configMapRef:
+              name: ssok-openbanking-cm
+          - secretRef:
+              name: ssok-openbanking-db-secrets

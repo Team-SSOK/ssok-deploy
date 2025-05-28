@@ -13,4 +13,8 @@ spec:
     - name: {{ .Values.service.name }}
       port: {{ .Values.service.port }}
       targetPort: {{ .Values.service.targetPort }}
+    - name: dev
+      port: 31080
+      targetPort: 8080
+      nodePort: 31080
   type: {{ .Values.service.type }}

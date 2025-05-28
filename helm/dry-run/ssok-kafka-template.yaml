@@ -1,0 +1,376 @@
+---
+# Source: ssok-kafka/templates/configmap.yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: kafka-cm
+  namespace: default
+data:
+  KAFKA_ADVERTISED_LISTENERS: "INTERNAL://broker.kafka.svc.cluster.local:9092,EXTERNAL://172.21.1.22:31001"
+  KAFKA_CONTROLLER_LISTENER_NAMES: "CONTROLLER"
+  KAFKA_CONTROLLER_QUORUM_VOTERS: "1@broker:9093"
+  KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS: "0"
+  KAFKA_INTER_BROKER_LISTENER_NAME: "INTERNAL"
+  KAFKA_LISTENERS: "INTERNAL://0.0.0.0:9092,CONTROLLER://0.0.0.0:9093,EXTERNAL://0.0.0.0:31001"
+  KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: "CONTROLLER:PLAINTEXT,INTERNAL:PLAINTEXT,EXTERNAL:PLAINTEXT"
+  KAFKA_NODE_ID: "1"
+  KAFKA_NUM_PARTITIONS: "3"
+  KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: "1"
+  KAFKA_PROCESS_ROLES: "broker,controller"
+  KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: "1"
+  KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: "1"
+---
+# Source: ssok-kafka/templates/service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: broker
+  namespace: default
+  labels:
+    helm.sh/chart: ssok-kafka-0.1.0
+    app.kubernetes.io/name: ssok-kafka
+    app.kubernetes.io/instance: ssok-kafka
+    app.kubernetes.io/version: "0.1.0"
+    app.kubernetes.io/managed-by: Helm
+spec:
+  type: NodePort
+  selector:
+    app.kubernetes.io/name: ssok-kafka
+    app.kubernetes.io/instance: ssok-kafka
+  ports:
+    - name: internal
+      port: 9092
+      targetPort: 9092
+    - name: external
+      nodePort: 31001
+      port: 31001
+      targetPort: 31001
+    - name: controller
+      port: 9093
+      targetPort: 9093
+---
+# Source: ssok-kafka/templates/deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kafka-deployment
+  namespace: default
+  labels:
+    helm.sh/chart: ssok-kafka-0.1.0
+    app.kubernetes.io/name: ssok-kafka
+    app.kubernetes.io/instance: ssok-kafka
+    app.kubernetes.io/version: "0.1.0"
+    app.kubernetes.io/managed-by: Helm
+  annotations:
+    argocd.argoproj.io/sync-wave: "1"
+spec:
+  revisionHistoryLimit: 1
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: ssok-kafka
+      app.kubernetes.io/instance: ssok-kafka
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: ssok-kafka
+        app.kubernetes.io/instance: ssok-kafka
+    spec:
+      containers:
+      - name: ssok-kafka
+        image: "apache/kafka:latest"
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 9092
+        - containerPort: 9093
+        envFrom:
+          - configMapRef:
+              name: kafka-cm
+        volumeMounts:
+        - name: kafka-data
+          mountPath: /var/kafka/data      
+      volumes:
+      - name: kafka-data
+        emptyDir: {}  # 개발용. 프로덕션은 PVC 사용
+---
+# Source: ssok-kafka/templates/configmap.yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: kafka-cm
+  namespace: default
+data:
+  KAFKA_ADVERTISED_LISTENERS: "INTERNAL://broker.kafka.svc.cluster.local:9092,EXTERNAL://172.21.1.22:31001"
+  KAFKA_CONTROLLER_LISTENER_NAMES: "CONTROLLER"
+  KAFKA_CONTROLLER_QUORUM_VOTERS: "1@broker:9093"
+  KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS: "0"
+  KAFKA_INTER_BROKER_LISTENER_NAME: "INTERNAL"
+  KAFKA_LISTENERS: "INTERNAL://0.0.0.0:9092,CONTROLLER://0.0.0.0:9093,EXTERNAL://0.0.0.0:31001"
+  KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: "CONTROLLER:PLAINTEXT,INTERNAL:PLAINTEXT,EXTERNAL:PLAINTEXT"
+  KAFKA_NODE_ID: "1"
+  KAFKA_NUM_PARTITIONS: "3"
+  KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: "1"
+  KAFKA_PROCESS_ROLES: "broker,controller"
+  KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: "1"
+  KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: "1"
+---
+# Source: ssok-kafka/templates/service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: broker
+  namespace: default
+  labels:
+    helm.sh/chart: ssok-kafka-0.1.0
+    app.kubernetes.io/name: ssok-kafka
+    app.kubernetes.io/instance: ssok-kafka
+    app.kubernetes.io/version: "0.1.0"
+    app.kubernetes.io/managed-by: Helm
+spec:
+  type: NodePort
+  selector:
+    app.kubernetes.io/name: ssok-kafka
+    app.kubernetes.io/instance: ssok-kafka
+  ports:
+    - name: internal
+      port: 9092
+      targetPort: 9092
+    - name: external
+      nodePort: 31001
+      port: 31001
+      targetPort: 31001
+    - name: controller
+      port: 9093
+      targetPort: 9093
+---
+# Source: ssok-kafka/templates/deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kafka-deployment
+  namespace: default
+  labels:
+    helm.sh/chart: ssok-kafka-0.1.0
+    app.kubernetes.io/name: ssok-kafka
+    app.kubernetes.io/instance: ssok-kafka
+    app.kubernetes.io/version: "0.1.0"
+    app.kubernetes.io/managed-by: Helm
+  annotations:
+    argocd.argoproj.io/sync-wave: "1"
+spec:
+  revisionHistoryLimit: 1
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: ssok-kafka
+      app.kubernetes.io/instance: ssok-kafka
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: ssok-kafka
+        app.kubernetes.io/instance: ssok-kafka
+    spec:
+      containers:
+      - name: ssok-kafka
+        image: "apache/kafka:latest"
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 9092
+        - containerPort: 9093
+        envFrom:
+          - configMapRef:
+              name: kafka-cm
+        volumeMounts:
+        - name: kafka-data
+          mountPath: /var/kafka/data      
+      volumes:
+      - name: kafka-data
+        emptyDir: {}  # 개발용. 프로덕션은 PVC 사용
+---
+# Source: ssok-kafka/templates/configmap.yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: kafka-cm
+  namespace: kafka
+data:
+  KAFKA_ADVERTISED_LISTENERS: "INTERNAL://broker.kafka.svc.cluster.local:9092,EXTERNAL://172.21.1.22:31001"
+  KAFKA_CONTROLLER_LISTENER_NAMES: "CONTROLLER"
+  KAFKA_CONTROLLER_QUORUM_VOTERS: "1@broker:9093"
+  KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS: "0"
+  KAFKA_INTER_BROKER_LISTENER_NAME: "INTERNAL"
+  KAFKA_LISTENERS: "INTERNAL://0.0.0.0:9092,CONTROLLER://0.0.0.0:9093,EXTERNAL://0.0.0.0:31001"
+  KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: "CONTROLLER:PLAINTEXT,INTERNAL:PLAINTEXT,EXTERNAL:PLAINTEXT"
+  KAFKA_NODE_ID: "1"
+  KAFKA_NUM_PARTITIONS: "3"
+  KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: "1"
+  KAFKA_PROCESS_ROLES: "broker,controller"
+  KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: "1"
+  KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: "1"
+---
+# Source: ssok-kafka/templates/service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: broker
+  namespace: kafka
+  labels:
+    helm.sh/chart: ssok-kafka-0.1.0
+    app.kubernetes.io/name: ssok-kafka
+    app.kubernetes.io/instance: ssok-kafka
+    app.kubernetes.io/version: "0.1.0"
+    app.kubernetes.io/managed-by: Helm
+spec:
+  type: NodePort
+  selector:
+    app.kubernetes.io/name: ssok-kafka
+    app.kubernetes.io/instance: ssok-kafka
+  ports:
+    - name: internal
+      port: 9092
+      targetPort: 9092
+    - name: external
+      nodePort: 31001
+      port: 31001
+      targetPort: 31001
+    - name: controller
+      port: 9093
+      targetPort: 9093
+---
+# Source: ssok-kafka/templates/deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kafka-deployment
+  namespace: kafka
+  labels:
+    helm.sh/chart: ssok-kafka-0.1.0
+    app.kubernetes.io/name: ssok-kafka
+    app.kubernetes.io/instance: ssok-kafka
+    app.kubernetes.io/version: "0.1.0"
+    app.kubernetes.io/managed-by: Helm
+  annotations:
+    argocd.argoproj.io/sync-wave: "1"
+spec:
+  revisionHistoryLimit: 1
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: ssok-kafka
+      app.kubernetes.io/instance: ssok-kafka
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: ssok-kafka
+        app.kubernetes.io/instance: ssok-kafka
+    spec:
+      containers:
+      - name: ssok-kafka
+        image: "apache/kafka:latest"
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 9092
+        - containerPort: 9093
+        envFrom:
+          - configMapRef:
+              name: kafka-cm
+        volumeMounts:
+        - name: kafka-data
+          mountPath: /var/kafka/data      
+      volumes:
+      - name: kafka-data
+        emptyDir: {}  # 개발용. 프로덕션은 PVC 사용
+---
+# Source: ssok-kafka/templates/configmap.yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: kafka-cm
+  namespace: kafka
+data:
+  KAFKA_ADVERTISED_LISTENERS: "INTERNAL://broker.kafka.svc.cluster.local:9092,EXTERNAL://172.21.1.22:31001"
+  KAFKA_CONTROLLER_LISTENER_NAMES: "CONTROLLER"
+  KAFKA_CONTROLLER_QUORUM_VOTERS: "1@broker:9093"
+  KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS: "0"
+  KAFKA_INTER_BROKER_LISTENER_NAME: "INTERNAL"
+  KAFKA_LISTENERS: "INTERNAL://0.0.0.0:9092,CONTROLLER://0.0.0.0:9093,EXTERNAL://0.0.0.0:31001"
+  KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: "CONTROLLER:PLAINTEXT,INTERNAL:PLAINTEXT,EXTERNAL:PLAINTEXT"
+  KAFKA_NODE_ID: "1"
+  KAFKA_NUM_PARTITIONS: "3"
+  KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: "1"
+  KAFKA_PROCESS_ROLES: "broker,controller"
+  KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: "1"
+  KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: "1"
+---
+# Source: ssok-kafka/templates/service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: broker
+  namespace: kafka
+  labels:
+    helm.sh/chart: ssok-kafka-0.1.0
+    app.kubernetes.io/name: ssok-kafka
+    app.kubernetes.io/instance: ssok-kafka
+    app.kubernetes.io/version: "0.1.0"
+    app.kubernetes.io/managed-by: Helm
+spec:
+  type: NodePort
+  selector:
+    app.kubernetes.io/name: ssok-kafka
+    app.kubernetes.io/instance: ssok-kafka
+  ports:
+    - name: internal
+      port: 9092
+      targetPort: 9092
+    - name: external
+      nodePort: 31001
+      port: 31001
+      targetPort: 31001
+    - name: controller
+      port: 9093
+      targetPort: 9093
+---
+# Source: ssok-kafka/templates/deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kafka-deployment
+  namespace: kafka
+  labels:
+    helm.sh/chart: ssok-kafka-0.1.0
+    app.kubernetes.io/name: ssok-kafka
+    app.kubernetes.io/instance: ssok-kafka
+    app.kubernetes.io/version: "0.1.0"
+    app.kubernetes.io/managed-by: Helm
+  annotations:
+    argocd.argoproj.io/sync-wave: "1"
+spec:
+  revisionHistoryLimit: 1
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: ssok-kafka
+      app.kubernetes.io/instance: ssok-kafka
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: ssok-kafka
+        app.kubernetes.io/instance: ssok-kafka
+    spec:
+      containers:
+      - name: ssok-kafka
+        image: "apache/kafka:latest"
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 9092
+        - containerPort: 9093
+        envFrom:
+          - configMapRef:
+              name: kafka-cm
+        volumeMounts:
+        - name: kafka-data
+          mountPath: /var/kafka/data      
+      volumes:
+      - name: kafka-data
+        emptyDir: {}  # 개발용. 프로덕션은 PVC 사용
