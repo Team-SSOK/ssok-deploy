@@ -1,0 +1,114 @@
+replicaCount: 1
+
+image:
+  repository: kudong/ssok-gateway-service
+  tag: "build-103"
+  pullPolicy: IfNotPresent
+
+service:
+  type: ClusterIP
+  name: web
+  port: 80
+  targetPort: 8080
+
+applicationConfig:
+  server:
+    port: 8080
+  spring:
+    application:
+      name: ssok-gateway-service
+    cloud:
+      kubernetes:
+        config:
+          enabled: true
+          name: ssok-gateway-service
+          namespace: ssok
+          sources:
+            - name: ssok-gateway-service
+        secrets:
+          enabled: false
+        reload:
+          enabled: true
+        discovery:
+          all-namespaces: false
+        loadbalancer:
+          mode: service
+      gateway:
+        routes:
+          - id: user-service
+            uri: http://ssok-user-service.ssok.svc.cluster.local
+            predicates:
+              - Path=/api/auth/**, /api/users/**
+          - id: account-service
+            uri: http://ssok-account-service.ssok.svc.cluster.local
+            predicates:
+              - Path=/api/accounts/**
+          - id: transfer-service
+            uri: http://ssok-transfer-service.ssok.svc.cluster.local
+            predicates:
+              - Path=/api/transfers/**
+          - id: notification-service
+            uri: http://ssok-notification-service.ssok.svc.cluster.local
+            predicates:
+              - Path=/api/notification/**
+          - id: bluetooth-service
+            uri: http://ssok-bluetooth-service.ssok.svc.cluster.local
+            predicates:
+              - Path=/api/bluetooth/**
+  management:
+    endpoints:
+      web:
+        exposure:
+          include: "*"
+    endpoint:
+      health:
+        show-details: always
+      prometheus:
+        enabled: true
+    health:
+      kubernetes:
+        enabled: false
+
+fluentbit:
+  fluentBitConf: |-
+    [SERVICE]
+        Flush         1
+        Daemon        Off
+        Log_Level     info
+        Parsers_File  parsers.conf
+        HTTP_Server   On
+        HTTP_Listen   0.0.0.0
+        HTTP_Port     2020
+
+    [INPUT]
+        Name              tail
+        Path              /var/log/ssok-gateway-service.log
+        Parser            json
+        Tag               gateway.log
+        Refresh_Interval  5
+        Mem_Buf_Limit     10MB
+        Skip_Long_Lines   On
+
+    [OUTPUT]
+        Name              forward
+        Match             gateway.*
+        Host              fluentd-aggregator.logging.svc.cluster.local
+        Port              24224
+  parsersConf: |-
+    [PARSER]
+        Name              json
+        Format            json
+        Time_Key          time
+        Time_Format       %Y-%m-%dT%H:%M:%S.%L%z
+
+secrets:
+  redis:
+    host: 172.21.1.22
+    port: "6379"
+  jwt:
+    secret: ssokAppFinTechSecretKey1234567890ABCDEFGHIJKLMN
+  auth:
+    whitelist: "/api/auth/login,/api/auth/refresh,/api/users/signup,/api/users/phone,/api/users/phone/verify"
+  external:
+    notificationService:
+      url: http://ssok-notification-service.ssok.svc.cluster.local
