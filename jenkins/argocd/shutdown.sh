@@ -43,6 +43,7 @@ graceful_app_shutdown() {
 ssh lgcns@172.21.1.19 /bin/bash <<'EOT'
 
 DEPLOY_PROFILE="dev" # prod 아니면 dev
+NAMESPACE="argocd"
 
 # Ingress 목록 리스트
 ARGOCD_APPS=$(kubectl get applications -n $NAMESPACE --no-headers -o custom-columns=NAME:.metadata.name)
