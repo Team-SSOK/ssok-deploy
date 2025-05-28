@@ -55,7 +55,7 @@ health_check(){
     local app_name=$1
     echo "$app_name 가 Healthy 상태가 될때까지 기다리는 중..."
     while true; do
-        status=$(argocd app get $app_name -o json | jq -r '.status.health.status')
+        status=$(argocd app get $app_name -o json | jq -r '.status.health.status // "Initializing"')
         if [ "$status" = "Healthy" ]; then
             echo "현재 상태: $status....OK!"
             echo "$app_name가 정상적으로 실행되었습니다."

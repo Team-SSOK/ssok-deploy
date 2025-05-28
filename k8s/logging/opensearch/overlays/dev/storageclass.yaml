@@ -4,6 +4,7 @@ metadata:
   name: local-storage
 provisioner: kubernetes.io/no-provisioner
 volumeBindingMode: WaitForFirstConsumer
+reclaimPolicy: Retain
 ---
 apiVersion: v1
 kind: PersistentVolume
@@ -17,4 +18,5 @@ spec:
   persistentVolumeReclaimPolicy: Retain
   storageClassName: local-storage
   hostPath:
-    path: /home/lgcns/opensearch-data
+    path: /home/lgcns/opensearch-data-0
+    type: DirectoryOrCreate
