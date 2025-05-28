@@ -38,7 +38,7 @@ echo
 echo $separationPhrase
 echo
 
-if [ "$DEPLOY_PROFILE" = "dev" ]; then
+if [ "$DEPLOY_PROFILE" = "prod" ]; then
     echo "Connecting to PRODUCTION ArgoCD..."
     argocd login argocd.ssok.kr --username admin --password ssok0414! --insecure
     kubectl config use-context arn:aws:eks:ap-northeast-2:635091448057:cluster/ssok-cluster
