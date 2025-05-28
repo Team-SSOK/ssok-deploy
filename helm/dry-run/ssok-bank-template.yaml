@@ -163,3 +163,498 @@ spec:
         - name: fluent-bit-config
           configMap:
             name: ssok-bank-fluent-bit-config
+---
+# Source: ssok-bank/templates/secret.yaml
+apiVersion: v1
+kind: Secret
+metadata:
+  name: ssok-bank-db-secrets
+  namespace: default
+  labels:
+    helm.sh/chart: ssok-bank-0.1.0
+    app.kubernetes.io/name: ssok-bank
+    app.kubernetes.io/instance: ssok-bank
+    app.kubernetes.io/version: "0.1.0"
+    app.kubernetes.io/managed-by: Helm
+type: Opaque
+data:
+  DB_PASSWORD: dGxkcHNkcHRt
+  DB_USERNAME: bGdjbnM=
+---
+# Source: ssok-bank/templates/configmap.yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: ssok-bank-cm
+  namespace: default
+  labels:
+    helm.sh/chart: ssok-bank-0.1.0
+    app.kubernetes.io/name: ssok-bank
+    app.kubernetes.io/instance: ssok-bank
+    app.kubernetes.io/version: "0.1.0"
+    app.kubernetes.io/managed-by: Helm
+data:
+  DB_URL: jdbc:mariadb://172.21.1.22:3306/moni?useUnicode=true&characterEncoding=utf-8&serverTimeZone=Asia/Seoul
+  ENCRYPTION_KEY: ss0k-bank-admin1
+  KAFKA_BOOTSTRAP_SERVERS: broker.kafka.svc.cluster.local:9092
+  KAFKA_TRUSTED_PACKAGES: kr.ssok.model
+  SERVER_PORT: "8080"
+---
+# Source: ssok-bank/templates/fluentbit-config.yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: ssok-bank-fluent-bit-config
+  namespace: bank
+data:
+  fluent-bit.conf: |
+    [SERVICE]
+        Flush         1
+        Daemon        Off
+        Log_Level     info
+        Parsers_File  parsers.conf
+    
+    [INPUT]
+        Name              tail
+        Path              /var/log/ssok-bank.log
+        Parser            json
+        Tag               app.log 
+        Refresh_Interval  5
+        Mem_Buf_Limit     10MB
+        Skip_Long_Lines   On
+    
+    [OUTPUT]
+        Name              stdout
+        Match             app.*
+    
+    [OUTPUT]
+        Name              forward
+        Match             app.*
+        Host              fluentd-aggregator.logging.svc.cluster.local
+        Port              24224
+    
+  parsers.conf: |
+    [PARSER]
+        Name              json
+        Format            json
+        Time_Key          time
+        Time_Format       %Y-%m-%dT%H:%M:%S.%L
+---
+# Source: ssok-bank/templates/service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: ssok-bank
+  namespace: default
+  labels:
+    helm.sh/chart: ssok-bank-0.1.0
+    app.kubernetes.io/name: ssok-bank
+    app.kubernetes.io/instance: ssok-bank
+    app.kubernetes.io/version: "0.1.0"
+    app.kubernetes.io/managed-by: Helm
+spec:
+  type: NodePort
+  selector:
+    app.kubernetes.io/name: ssok-bank
+    app.kubernetes.io/instance: ssok-bank
+  sessionAffinity: None
+  ports:
+    - name: web       # ← 반드시 포트 이름 지정
+      port: 80
+      targetPort: 8080
+    - name: api
+      port: 8080 # 다른 pod exec 접속후 curl http://ssok-bank-service:8080 로 접근
+      targetPort: 8080 # nginx의 타겟 포트
+      nodePort: 31000  # 외부에서 http://kudong.kr:55027
+---
+# Source: ssok-bank/templates/deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ssok-bank
+  namespace: default
+  labels:
+    helm.sh/chart: ssok-bank-0.1.0
+    app.kubernetes.io/name: ssok-bank
+    app.kubernetes.io/instance: ssok-bank
+    app.kubernetes.io/version: "0.1.0"
+    app.kubernetes.io/managed-by: Helm
+  annotations:
+    argocd.argoproj.io/sync-wave: "1"
+spec:
+  revisionHistoryLimit: 1
+  replicas: 3
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: ssok-bank
+      app.kubernetes.io/instance: ssok-bank
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: ssok-bank
+        app.kubernetes.io/instance: ssok-bank
+    spec:
+      containers:
+      - name: ssok-bank
+        image: "kudong/ssok-bank:latest"
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 8080
+        envFrom:
+          - configMapRef:
+              name: ssok-bank-cm
+          - secretRef:
+              name: ssok-bank-db-secrets
+        volumeMounts:
+          - name: varlog
+            mountPath: /var/log
+            
+      - name: fluent-bit
+        image: cr.fluentbit.io/fluent/fluent-bit:4.0.2
+        imagePullPolicy: IfNotPresent
+        volumeMounts:
+          - name: varlog
+            mountPath: /var/log
+          - name: fluent-bit-config
+            mountPath: /fluent-bit/etc
+        resources:
+          limits:
+            memory: 100Mi
+            cpu: 100m
+
+      volumes:
+        - name: varlog
+          emptyDir: {}
+        - name: fluent-bit-config
+          configMap:
+            name: ssok-bank-fluent-bit-config
+---
+# Source: ssok-bank/templates/secret.yaml
+apiVersion: v1
+kind: Secret
+metadata:
+  name: ssok-bank-db-secrets
+  namespace: bank
+  labels:
+    helm.sh/chart: ssok-bank-0.1.0
+    app.kubernetes.io/name: ssok-bank
+    app.kubernetes.io/instance: ssok-bank
+    app.kubernetes.io/version: "0.1.0"
+    app.kubernetes.io/managed-by: Helm
+type: Opaque
+data:
+  DB_PASSWORD: dGxkcHNkcHRt
+  DB_USERNAME: bGdjbnM=
+---
+# Source: ssok-bank/templates/configmap.yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: ssok-bank-cm
+  namespace: bank
+  labels:
+    helm.sh/chart: ssok-bank-0.1.0
+    app.kubernetes.io/name: ssok-bank
+    app.kubernetes.io/instance: ssok-bank
+    app.kubernetes.io/version: "0.1.0"
+    app.kubernetes.io/managed-by: Helm
+data:
+  DB_URL: jdbc:mariadb://172.21.1.22:3306/moni?useUnicode=true&characterEncoding=utf-8&serverTimeZone=Asia/Seoul
+  ENCRYPTION_KEY: ss0k-bank-admin1
+  KAFKA_BOOTSTRAP_SERVERS: broker.kafka.svc.cluster.local:9092
+  KAFKA_TRUSTED_PACKAGES: kr.ssok.model
+  SERVER_PORT: "8080"
+---
+# Source: ssok-bank/templates/fluentbit-config.yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: ssok-bank-fluent-bit-config
+  namespace: bank
+data:
+  fluent-bit.conf: |
+    [SERVICE]
+        Flush         1
+        Daemon        Off
+        Log_Level     info
+        Parsers_File  parsers.conf
+    
+    [INPUT]
+        Name              tail
+        Path              /var/log/ssok-bank.log
+        Parser            json
+        Tag               app.log 
+        Refresh_Interval  5
+        Mem_Buf_Limit     10MB
+        Skip_Long_Lines   On
+    
+    [OUTPUT]
+        Name              stdout
+        Match             app.*
+    
+    [OUTPUT]
+        Name              forward
+        Match             app.*
+        Host              fluentd-aggregator.logging.svc.cluster.local
+        Port              24224
+    
+  parsers.conf: |
+    [PARSER]
+        Name              json
+        Format            json
+        Time_Key          time
+        Time_Format       %Y-%m-%dT%H:%M:%S.%L
+---
+# Source: ssok-bank/templates/service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: ssok-bank
+  namespace: bank
+  labels:
+    helm.sh/chart: ssok-bank-0.1.0
+    app.kubernetes.io/name: ssok-bank
+    app.kubernetes.io/instance: ssok-bank
+    app.kubernetes.io/version: "0.1.0"
+    app.kubernetes.io/managed-by: Helm
+spec:
+  type: NodePort
+  selector:
+    app.kubernetes.io/name: ssok-bank
+    app.kubernetes.io/instance: ssok-bank
+  sessionAffinity: None
+  ports:
+    - name: web       # ← 반드시 포트 이름 지정
+      port: 80
+      targetPort: 8080
+    - name: api
+      port: 8080 # 다른 pod exec 접속후 curl http://ssok-bank-service:8080 로 접근
+      targetPort: 8080 # nginx의 타겟 포트
+      nodePort: 31000  # 외부에서 http://kudong.kr:55027
+---
+# Source: ssok-bank/templates/deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ssok-bank
+  namespace: bank
+  labels:
+    helm.sh/chart: ssok-bank-0.1.0
+    app.kubernetes.io/name: ssok-bank
+    app.kubernetes.io/instance: ssok-bank
+    app.kubernetes.io/version: "0.1.0"
+    app.kubernetes.io/managed-by: Helm
+  annotations:
+    argocd.argoproj.io/sync-wave: "1"
+spec:
+  revisionHistoryLimit: 1
+  replicas: 3
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: ssok-bank
+      app.kubernetes.io/instance: ssok-bank
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: ssok-bank
+        app.kubernetes.io/instance: ssok-bank
+    spec:
+      containers:
+      - name: ssok-bank
+        image: "kudong/ssok-bank:latest"
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 8080
+        envFrom:
+          - configMapRef:
+              name: ssok-bank-cm
+          - secretRef:
+              name: ssok-bank-db-secrets
+        volumeMounts:
+          - name: varlog
+            mountPath: /var/log
+            
+      - name: fluent-bit
+        image: cr.fluentbit.io/fluent/fluent-bit:4.0.2
+        imagePullPolicy: IfNotPresent
+        volumeMounts:
+          - name: varlog
+            mountPath: /var/log
+          - name: fluent-bit-config
+            mountPath: /fluent-bit/etc
+        resources:
+          limits:
+            memory: 100Mi
+            cpu: 100m
+
+      volumes:
+        - name: varlog
+          emptyDir: {}
+        - name: fluent-bit-config
+          configMap:
+            name: ssok-bank-fluent-bit-config
+---
+# Source: ssok-bank/templates/secret.yaml
+apiVersion: v1
+kind: Secret
+metadata:
+  name: ssok-bank-db-secrets
+  namespace: bank
+  labels:
+    helm.sh/chart: ssok-bank-0.1.0
+    app.kubernetes.io/name: ssok-bank
+    app.kubernetes.io/instance: ssok-bank
+    app.kubernetes.io/version: "0.1.0"
+    app.kubernetes.io/managed-by: Helm
+type: Opaque
+data:
+  DB_PASSWORD: dGxkcHNkcHRt
+  DB_USERNAME: bGdjbnM=
+---
+# Source: ssok-bank/templates/configmap.yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: ssok-bank-cm
+  namespace: bank
+  labels:
+    helm.sh/chart: ssok-bank-0.1.0
+    app.kubernetes.io/name: ssok-bank
+    app.kubernetes.io/instance: ssok-bank
+    app.kubernetes.io/version: "0.1.0"
+    app.kubernetes.io/managed-by: Helm
+data:
+  DB_URL: jdbc:mariadb://172.21.1.22:3306/moni?useUnicode=true&characterEncoding=utf-8&serverTimeZone=Asia/Seoul
+  ENCRYPTION_KEY: ss0k-bank-admin1
+  KAFKA_BOOTSTRAP_SERVERS: broker.kafka.svc.cluster.local:9092
+  KAFKA_TRUSTED_PACKAGES: kr.ssok.model
+  SERVER_PORT: "8080"
+---
+# Source: ssok-bank/templates/fluentbit-config.yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: ssok-bank-fluent-bit-config
+  namespace: bank
+data:
+  fluent-bit.conf: |
+    [SERVICE]
+        Flush         1
+        Daemon        Off
+        Log_Level     info
+        Parsers_File  parsers.conf
+    
+    [INPUT]
+        Name              tail
+        Path              /var/log/ssok-bank.log
+        Parser            json
+        Tag               app.log 
+        Refresh_Interval  5
+        Mem_Buf_Limit     10MB
+        Skip_Long_Lines   On
+    
+    [OUTPUT]
+        Name              stdout
+        Match             app.*
+    
+    [OUTPUT]
+        Name              forward
+        Match             app.*
+        Host              fluentd-aggregator.logging.svc.cluster.local
+        Port              24224
+    
+  parsers.conf: |
+    [PARSER]
+        Name              json
+        Format            json
+        Time_Key          time
+        Time_Format       %Y-%m-%dT%H:%M:%S.%L
+---
+# Source: ssok-bank/templates/service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: ssok-bank
+  namespace: bank
+  labels:
+    helm.sh/chart: ssok-bank-0.1.0
+    app.kubernetes.io/name: ssok-bank
+    app.kubernetes.io/instance: ssok-bank
+    app.kubernetes.io/version: "0.1.0"
+    app.kubernetes.io/managed-by: Helm
+spec:
+  type: NodePort
+  selector:
+    app.kubernetes.io/name: ssok-bank
+    app.kubernetes.io/instance: ssok-bank
+  sessionAffinity: None
+  ports:
+    - name: web       # ← 반드시 포트 이름 지정
+      port: 80
+      targetPort: 8080
+    - name: api
+      port: 8080 # 다른 pod exec 접속후 curl http://ssok-bank-service:8080 로 접근
+      targetPort: 8080 # nginx의 타겟 포트
+      nodePort: 31000  # 외부에서 http://kudong.kr:55027
+---
+# Source: ssok-bank/templates/deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ssok-bank
+  namespace: bank
+  labels:
+    helm.sh/chart: ssok-bank-0.1.0
+    app.kubernetes.io/name: ssok-bank
+    app.kubernetes.io/instance: ssok-bank
+    app.kubernetes.io/version: "0.1.0"
+    app.kubernetes.io/managed-by: Helm
+  annotations:
+    argocd.argoproj.io/sync-wave: "1"
+spec:
+  revisionHistoryLimit: 1
+  replicas: 3
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: ssok-bank
+      app.kubernetes.io/instance: ssok-bank
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: ssok-bank
+        app.kubernetes.io/instance: ssok-bank
+    spec:
+      containers:
+      - name: ssok-bank
+        image: "kudong/ssok-bank:latest"
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 8080
+        envFrom:
+          - configMapRef:
+              name: ssok-bank-cm
+          - secretRef:
+              name: ssok-bank-db-secrets
+        volumeMounts:
+          - name: varlog
+            mountPath: /var/log
+            
+      - name: fluent-bit
+        image: cr.fluentbit.io/fluent/fluent-bit:4.0.2
+        imagePullPolicy: IfNotPresent
+        volumeMounts:
+          - name: varlog
+            mountPath: /var/log
+          - name: fluent-bit-config
+            mountPath: /fluent-bit/etc
+        resources:
+          limits:
+            memory: 100Mi
+            cpu: 100m
+
+      volumes:
+        - name: varlog
+          emptyDir: {}
+        - name: fluent-bit-config
+          configMap:
+            name: ssok-bank-fluent-bit-config

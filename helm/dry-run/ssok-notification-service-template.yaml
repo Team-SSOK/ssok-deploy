@@ -236,3 +236,717 @@ spec:
         - name: fluent-bit-config
           configMap:
             name: fluent-bit-config-notification
+---
+# Source: ssok-notification-service/templates/secret.yaml
+apiVersion: v1
+kind: Secret
+metadata:
+  name: ssok-notification-service
+  namespace: ssok
+  labels:
+    app.kubernetes.io/name: ssok-notification-service
+    app.kubernetes.io/instance: ssok-notification-service
+    app.kubernetes.io/version: 1.0.0
+    app.kubernetes.io/managed-by: Helm
+type: Opaque
+stringData:
+  SPRING_DATA_REDIS_HOST:      "localhost"
+  SPRING_DATA_REDIS_PORT:      "6379"
+  KAFKA_BOOTSTRAP_SERVERS:     "broker.localhost:9092"
+  KAFKA_NOTIFICATION_TOPIC:    "ssok.notification.topic"
+  KAFKA_GROUP_ID:              "notification-group"
+  FIREBASE_CONFIG_PATH:        "classpath:firebase/firebase-adminsdk.json"
+  FIREBASE_ENABLED:            "true"
+  FCM_TOKEN_TTL_SECONDS:       "2592000"
+  FCM_IMAGE_URL:               "https://example.com/images/ssok-logo.png"
+  ALIGO_SMS_API_URL:           "https://apis.aligo.in/send/"
+  ALIGO_API_KEY:               ""
+  ALIGO_USER_ID:               ""
+  ALIGO_SENDER:                ""
+---
+# Source: ssok-notification-service/templates/configmap.yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: ssok-notification-service
+  namespace: ssok
+  labels:
+    app.kubernetes.io/name: ssok-notification-service
+    app.kubernetes.io/instance: ssok-notification-service
+    app.kubernetes.io/version: 1.0.0
+    app.kubernetes.io/managed-by: Helm
+data:
+  application.yml: |
+    feign:
+      client:
+        config:
+          default:
+            connectTimeout: 20000
+            loggerLevel: full
+            readTimeout: 20000
+      hystrix:
+        command:
+          default:
+            execution:
+              isolation:
+                thread:
+                  timeoutInMilliseconds: 30000
+    health:
+      kubernetes:
+        enabled: false
+    logging:
+      level:
+        kr.ssok.userservice.client: DEBUG
+    management:
+      endpoint:
+        health:
+          show-details: always
+        prometheus:
+          enabled: true
+      endpoints:
+        web:
+          exposure:
+            include: '*'
+    server:
+      port: 8080
+    spring:
+      application:
+        name: ssok-notification-service
+      cloud:
+        kubernetes:
+          config:
+            enabled: true
+            name: ssok-notification-service
+            namespace: ssok
+            sources:
+            - name: ssok-notification-service
+          discovery:
+            all-namespaces: false
+          loadbalancer:
+            mode: service
+          reload:
+            enabled: true
+          secrets:
+            enabled: false
+      data:
+        redis:
+          host: ${SPRING_DATA_REDIS_HOST}
+          port: ${SPRING_DATA_REDIS_PORT}
+    kafka:
+      bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS}
+      notification-topic: ${KAFKA_NOTIFICATION_TOPIC}
+      group-id: ${KAFKA_GROUP_ID}
+    firebase:
+      config-path: ${FIREBASE_CONFIG_PATH}
+      enabled: ${FIREBASE_ENABLED}
+    fcm:
+      token-ttl-seconds: ${FCM_TOKEN_TTL_SECONDS}
+      image-url: ${FCM_IMAGE_URL}
+    aligo:
+      smsApiUrl: ${ALIGO_SMS_API_URL}
+      apiKey: ${ALIGO_API_KEY}
+      userId: ${ALIGO_USER_ID}
+      sender: ${ALIGO_SENDER}
+---
+# Source: ssok-notification-service/templates/fluentbit-config.yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: fluent-bit-config-notification
+  namespace: ssok
+data:
+  fluent-bit.conf: |-
+    [SERVICE]
+        Flush         1
+        Daemon        Off
+        Log_Level     info
+        Parsers_File  parsers.conf
+        HTTP_Server   On
+        HTTP_Listen   0.0.0.0
+        HTTP_Port     2020
+    
+    [INPUT]
+        Name              tail
+        Path              /var/log/ssok-notification-service.log
+        Parser            json
+        Tag               notification.log
+        Refresh_Interval  5
+        Mem_Buf_Limit     10MB
+        Skip_Long_Lines   On
+    
+    [OUTPUT]
+        Name              forward
+        Match             notification.*
+        Host              fluentd-aggregator.logging.svc.cluster.local
+        Port              24224
+  parsers.conf: |-
+    [PARSER]
+        Name              json
+        Format            json
+        Time_Key          time
+        Time_Format       %Y-%m-%dT%H:%M:%S.%L%z
+---
+# Source: ssok-notification-service/templates/service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: ssok-notification-service
+  namespace: ssok
+  labels:
+    app.kubernetes.io/name: ssok-notification-service
+    app.kubernetes.io/instance: ssok-notification-service
+    app.kubernetes.io/version: 1.0.0
+    app.kubernetes.io/managed-by: Helm
+spec:
+  selector:
+    app.kubernetes.io/name: ssok-notification-service
+    app.kubernetes.io/instance: ssok-notification-service
+  ports:
+    - name: web
+      port: 80
+      targetPort: 8080
+  type: ClusterIP
+---
+# Source: ssok-notification-service/templates/deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ssok-notification-service
+  namespace: ssok
+  labels:
+    app.kubernetes.io/name: ssok-notification-service
+    app.kubernetes.io/instance: ssok-notification-service
+    app.kubernetes.io/version: 1.0.0
+    app.kubernetes.io/managed-by: Helm
+  annotations:
+    argocd.argoproj.io/sync-wave: "1"
+spec:
+  revisionHistoryLimit: 1
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: ssok-notification-service
+      app.kubernetes.io/instance: ssok-notification-service
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: ssok-notification-service
+        app.kubernetes.io/instance: ssok-notification-service
+    spec:
+      serviceAccountName: ssok-notification-service-sa
+      containers:
+        - name: ssok-notification-service
+          image: "kudong/ssok-notification-service:latest"
+          imagePullPolicy: IfNotPresent
+          envFrom:
+            - secretRef:
+                name: ssok-notification-service
+          ports:
+            - containerPort: 8080
+          volumeMounts:
+            - name: varlog
+              mountPath: /var/log
+            - name: config-volume
+              mountPath: /config
+          env:
+            - name: SPRING_CONFIG_LOCATION
+              value: file:/config/application.yml
+
+        - name: fluent-bit
+          image: cr.fluentbit.io/fluent/fluent-bit:4.0.2
+          imagePullPolicy: IfNotPresent
+          volumeMounts:
+            - name: varlog
+              mountPath: /var/log
+            - name: fluent-bit-config
+              mountPath: /fluent-bit/etc
+          resources:
+            limits:
+              memory: 100Mi
+              cpu: 100m
+
+      volumes:
+        - name: config-volume
+          configMap:
+            name: ssok-notification-service
+        - name: varlog
+          emptyDir: {}
+        - name: fluent-bit-config
+          configMap:
+            name: fluent-bit-config-notification
+---
+# Source: ssok-notification-service/templates/secret.yaml
+apiVersion: v1
+kind: Secret
+metadata:
+  name: ssok-notification-service
+  namespace: ssok
+  labels:
+    app.kubernetes.io/name: ssok-notification-service
+    app.kubernetes.io/instance: ssok-notification-service
+    app.kubernetes.io/version: 1.0.0
+    app.kubernetes.io/managed-by: Helm
+type: Opaque
+stringData:
+  SPRING_DATA_REDIS_HOST:      "localhost"
+  SPRING_DATA_REDIS_PORT:      "6379"
+  KAFKA_BOOTSTRAP_SERVERS:     "broker.localhost:9092"
+  KAFKA_NOTIFICATION_TOPIC:    "ssok.notification.topic"
+  KAFKA_GROUP_ID:              "notification-group"
+  FIREBASE_CONFIG_PATH:        "classpath:firebase/firebase-adminsdk.json"
+  FIREBASE_ENABLED:            "true"
+  FCM_TOKEN_TTL_SECONDS:       "2592000"
+  FCM_IMAGE_URL:               "https://example.com/images/ssok-logo.png"
+  ALIGO_SMS_API_URL:           "https://apis.aligo.in/send/"
+  ALIGO_API_KEY:               ""
+  ALIGO_USER_ID:               ""
+  ALIGO_SENDER:                ""
+---
+# Source: ssok-notification-service/templates/configmap.yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: ssok-notification-service
+  namespace: ssok
+  labels:
+    app.kubernetes.io/name: ssok-notification-service
+    app.kubernetes.io/instance: ssok-notification-service
+    app.kubernetes.io/version: 1.0.0
+    app.kubernetes.io/managed-by: Helm
+data:
+  application.yml: |
+    feign:
+      client:
+        config:
+          default:
+            connectTimeout: 20000
+            loggerLevel: full
+            readTimeout: 20000
+      hystrix:
+        command:
+          default:
+            execution:
+              isolation:
+                thread:
+                  timeoutInMilliseconds: 30000
+    health:
+      kubernetes:
+        enabled: false
+    logging:
+      level:
+        kr.ssok.userservice.client: DEBUG
+    management:
+      endpoint:
+        health:
+          show-details: always
+        prometheus:
+          enabled: true
+      endpoints:
+        web:
+          exposure:
+            include: '*'
+    server:
+      port: 8080
+    spring:
+      application:
+        name: ssok-notification-service
+      cloud:
+        kubernetes:
+          config:
+            enabled: true
+            name: ssok-notification-service
+            namespace: ssok
+            sources:
+            - name: ssok-notification-service
+          discovery:
+            all-namespaces: false
+          loadbalancer:
+            mode: service
+          reload:
+            enabled: true
+          secrets:
+            enabled: false
+      data:
+        redis:
+          host: ${SPRING_DATA_REDIS_HOST}
+          port: ${SPRING_DATA_REDIS_PORT}
+    kafka:
+      bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS}
+      notification-topic: ${KAFKA_NOTIFICATION_TOPIC}
+      group-id: ${KAFKA_GROUP_ID}
+    firebase:
+      config-path: ${FIREBASE_CONFIG_PATH}
+      enabled: ${FIREBASE_ENABLED}
+    fcm:
+      token-ttl-seconds: ${FCM_TOKEN_TTL_SECONDS}
+      image-url: ${FCM_IMAGE_URL}
+    aligo:
+      smsApiUrl: ${ALIGO_SMS_API_URL}
+      apiKey: ${ALIGO_API_KEY}
+      userId: ${ALIGO_USER_ID}
+      sender: ${ALIGO_SENDER}
+---
+# Source: ssok-notification-service/templates/fluentbit-config.yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: fluent-bit-config-notification
+  namespace: ssok
+data:
+  fluent-bit.conf: |-
+    [SERVICE]
+        Flush         1
+        Daemon        Off
+        Log_Level     info
+        Parsers_File  parsers.conf
+        HTTP_Server   On
+        HTTP_Listen   0.0.0.0
+        HTTP_Port     2020
+    
+    [INPUT]
+        Name              tail
+        Path              /var/log/ssok-notification-service.log
+        Parser            json
+        Tag               notification.log
+        Refresh_Interval  5
+        Mem_Buf_Limit     10MB
+        Skip_Long_Lines   On
+    
+    [OUTPUT]
+        Name              forward
+        Match             notification.*
+        Host              fluentd-aggregator.logging.svc.cluster.local
+        Port              24224
+  parsers.conf: |-
+    [PARSER]
+        Name              json
+        Format            json
+        Time_Key          time
+        Time_Format       %Y-%m-%dT%H:%M:%S.%L%z
+---
+# Source: ssok-notification-service/templates/service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: ssok-notification-service
+  namespace: ssok
+  labels:
+    app.kubernetes.io/name: ssok-notification-service
+    app.kubernetes.io/instance: ssok-notification-service
+    app.kubernetes.io/version: 1.0.0
+    app.kubernetes.io/managed-by: Helm
+spec:
+  selector:
+    app.kubernetes.io/name: ssok-notification-service
+    app.kubernetes.io/instance: ssok-notification-service
+  ports:
+    - name: web
+      port: 80
+      targetPort: 8080
+  type: ClusterIP
+---
+# Source: ssok-notification-service/templates/deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ssok-notification-service
+  namespace: ssok
+  labels:
+    app.kubernetes.io/name: ssok-notification-service
+    app.kubernetes.io/instance: ssok-notification-service
+    app.kubernetes.io/version: 1.0.0
+    app.kubernetes.io/managed-by: Helm
+  annotations:
+    argocd.argoproj.io/sync-wave: "1"
+spec:
+  revisionHistoryLimit: 1
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: ssok-notification-service
+      app.kubernetes.io/instance: ssok-notification-service
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: ssok-notification-service
+        app.kubernetes.io/instance: ssok-notification-service
+    spec:
+      serviceAccountName: ssok-notification-service-sa
+      containers:
+        - name: ssok-notification-service
+          image: "kudong/ssok-notification-service:latest"
+          imagePullPolicy: IfNotPresent
+          envFrom:
+            - secretRef:
+                name: ssok-notification-service
+          ports:
+            - containerPort: 8080
+          volumeMounts:
+            - name: varlog
+              mountPath: /var/log
+            - name: config-volume
+              mountPath: /config
+          env:
+            - name: SPRING_CONFIG_LOCATION
+              value: file:/config/application.yml
+
+        - name: fluent-bit
+          image: cr.fluentbit.io/fluent/fluent-bit:4.0.2
+          imagePullPolicy: IfNotPresent
+          volumeMounts:
+            - name: varlog
+              mountPath: /var/log
+            - name: fluent-bit-config
+              mountPath: /fluent-bit/etc
+          resources:
+            limits:
+              memory: 100Mi
+              cpu: 100m
+
+      volumes:
+        - name: config-volume
+          configMap:
+            name: ssok-notification-service
+        - name: varlog
+          emptyDir: {}
+        - name: fluent-bit-config
+          configMap:
+            name: fluent-bit-config-notification
+---
+# Source: ssok-notification-service/templates/secret.yaml
+apiVersion: v1
+kind: Secret
+metadata:
+  name: ssok-notification-service
+  namespace: ssok
+  labels:
+    app.kubernetes.io/name: ssok-notification-service
+    app.kubernetes.io/instance: ssok-notification-service
+    app.kubernetes.io/version: 1.0.0
+    app.kubernetes.io/managed-by: Helm
+type: Opaque
+stringData:
+  SPRING_DATA_REDIS_HOST:      "localhost"
+  SPRING_DATA_REDIS_PORT:      "6379"
+  KAFKA_BOOTSTRAP_SERVERS:     "broker.localhost:9092"
+  KAFKA_NOTIFICATION_TOPIC:    "ssok.notification.topic"
+  KAFKA_GROUP_ID:              "notification-group"
+  FIREBASE_CONFIG_PATH:        "classpath:firebase/firebase-adminsdk.json"
+  FIREBASE_ENABLED:            "true"
+  FCM_TOKEN_TTL_SECONDS:       "2592000"
+  FCM_IMAGE_URL:               "https://example.com/images/ssok-logo.png"
+  ALIGO_SMS_API_URL:           "https://apis.aligo.in/send/"
+  ALIGO_API_KEY:               ""
+  ALIGO_USER_ID:               ""
+  ALIGO_SENDER:                ""
+---
+# Source: ssok-notification-service/templates/configmap.yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: ssok-notification-service
+  namespace: ssok
+  labels:
+    app.kubernetes.io/name: ssok-notification-service
+    app.kubernetes.io/instance: ssok-notification-service
+    app.kubernetes.io/version: 1.0.0
+    app.kubernetes.io/managed-by: Helm
+data:
+  application.yml: |
+    feign:
+      client:
+        config:
+          default:
+            connectTimeout: 20000
+            loggerLevel: full
+            readTimeout: 20000
+      hystrix:
+        command:
+          default:
+            execution:
+              isolation:
+                thread:
+                  timeoutInMilliseconds: 30000
+    health:
+      kubernetes:
+        enabled: false
+    logging:
+      level:
+        kr.ssok.userservice.client: DEBUG
+    management:
+      endpoint:
+        health:
+          show-details: always
+        prometheus:
+          enabled: true
+      endpoints:
+        web:
+          exposure:
+            include: '*'
+    server:
+      port: 8080
+    spring:
+      application:
+        name: ssok-notification-service
+      cloud:
+        kubernetes:
+          config:
+            enabled: true
+            name: ssok-notification-service
+            namespace: ssok
+            sources:
+            - name: ssok-notification-service
+          discovery:
+            all-namespaces: false
+          loadbalancer:
+            mode: service
+          reload:
+            enabled: true
+          secrets:
+            enabled: false
+      data:
+        redis:
+          host: ${SPRING_DATA_REDIS_HOST}
+          port: ${SPRING_DATA_REDIS_PORT}
+    kafka:
+      bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS}
+      notification-topic: ${KAFKA_NOTIFICATION_TOPIC}
+      group-id: ${KAFKA_GROUP_ID}
+    firebase:
+      config-path: ${FIREBASE_CONFIG_PATH}
+      enabled: ${FIREBASE_ENABLED}
+    fcm:
+      token-ttl-seconds: ${FCM_TOKEN_TTL_SECONDS}
+      image-url: ${FCM_IMAGE_URL}
+    aligo:
+      smsApiUrl: ${ALIGO_SMS_API_URL}
+      apiKey: ${ALIGO_API_KEY}
+      userId: ${ALIGO_USER_ID}
+      sender: ${ALIGO_SENDER}
+---
+# Source: ssok-notification-service/templates/fluentbit-config.yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: fluent-bit-config-notification
+  namespace: ssok
+data:
+  fluent-bit.conf: |-
+    [SERVICE]
+        Flush         1
+        Daemon        Off
+        Log_Level     info
+        Parsers_File  parsers.conf
+        HTTP_Server   On
+        HTTP_Listen   0.0.0.0
+        HTTP_Port     2020
+    
+    [INPUT]
+        Name              tail
+        Path              /var/log/ssok-notification-service.log
+        Parser            json
+        Tag               notification.log
+        Refresh_Interval  5
+        Mem_Buf_Limit     10MB
+        Skip_Long_Lines   On
+    
+    [OUTPUT]
+        Name              forward
+        Match             notification.*
+        Host              fluentd-aggregator.logging.svc.cluster.local
+        Port              24224
+  parsers.conf: |-
+    [PARSER]
+        Name              json
+        Format            json
+        Time_Key          time
+        Time_Format       %Y-%m-%dT%H:%M:%S.%L%z
+---
+# Source: ssok-notification-service/templates/service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: ssok-notification-service
+  namespace: ssok
+  labels:
+    app.kubernetes.io/name: ssok-notification-service
+    app.kubernetes.io/instance: ssok-notification-service
+    app.kubernetes.io/version: 1.0.0
+    app.kubernetes.io/managed-by: Helm
+spec:
+  selector:
+    app.kubernetes.io/name: ssok-notification-service
+    app.kubernetes.io/instance: ssok-notification-service
+  ports:
+    - name: web
+      port: 80
+      targetPort: 8080
+  type: ClusterIP
+---
+# Source: ssok-notification-service/templates/deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ssok-notification-service
+  namespace: ssok
+  labels:
+    app.kubernetes.io/name: ssok-notification-service
+    app.kubernetes.io/instance: ssok-notification-service
+    app.kubernetes.io/version: 1.0.0
+    app.kubernetes.io/managed-by: Helm
+  annotations:
+    argocd.argoproj.io/sync-wave: "1"
+spec:
+  revisionHistoryLimit: 1
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: ssok-notification-service
+      app.kubernetes.io/instance: ssok-notification-service
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: ssok-notification-service
+        app.kubernetes.io/instance: ssok-notification-service
+    spec:
+      serviceAccountName: ssok-notification-service-sa
+      containers:
+        - name: ssok-notification-service
+          image: "kudong/ssok-notification-service:latest"
+          imagePullPolicy: IfNotPresent
+          envFrom:
+            - secretRef:
+                name: ssok-notification-service
+          ports:
+            - containerPort: 8080
+          volumeMounts:
+            - name: varlog
+              mountPath: /var/log
+            - name: config-volume
+              mountPath: /config
+          env:
+            - name: SPRING_CONFIG_LOCATION
+              value: file:/config/application.yml
+
+        - name: fluent-bit
+          image: cr.fluentbit.io/fluent/fluent-bit:4.0.2
+          imagePullPolicy: IfNotPresent
+          volumeMounts:
+            - name: varlog
+              mountPath: /var/log
+            - name: fluent-bit-config
+              mountPath: /fluent-bit/etc
+          resources:
+            limits:
+              memory: 100Mi
+              cpu: 100m
+
+      volumes:
+        - name: config-volume
+          configMap:
+            name: ssok-notification-service
+        - name: varlog
+          emptyDir: {}
+        - name: fluent-bit-config
+          configMap:
+            name: fluent-bit-config-notification
