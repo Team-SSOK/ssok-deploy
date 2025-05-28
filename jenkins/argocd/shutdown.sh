@@ -1,11 +1,13 @@
 #!/bin/sh
 
-# Jenkins 컨테이너내 ArgoCD 설치
+# 1. Jenkins 컨테이너내 ArgoCD 설치
 # curl -sSL -o argocd-linux-amd64 https://github.com/argoproj/argo-cd/releases/latest/download/argocd-linux-amd64
 # sudo install -m 555 argocd-linux-amd64 /usr/local/bin/argocd
 # rm argocd-linux-amd64
-# Jenkins 컨테이너내 kubectl config 등록
+# 2. Jenkins 컨테이너내 kubectl config 등록
 # ~/.kube/config
+# 3. jq 라이브러리 설치
+# apt-get install jq
 
 echo ##############################
 echo #
@@ -45,10 +47,13 @@ graceful_app_shutdown() {
     argocd app delete $app --cascade --yes
 
     echo "$app gracefully shutdown completed"
+    echo
+    echo $separationPhrase
 }
 
 DEPLOY_PROFILE="dev" # prod 아니면 dev
 NAMESPACE="argocd"
+separationPhrase="=====================================";
 
 # Ingress 목록 리스트
 ARGOCD_APPS=$(kubectl get applications -n $NAMESPACE --no-headers -o custom-columns=NAME:.metadata.name)
@@ -101,7 +106,7 @@ echo $separationPhrase
 echo
 
 for app in $SERVICE_APPS; do
-    graceful_app_shutdown $app ssok
+    graceful_app_shutdown $app
 done
 
 echo $separationPhrase
@@ -112,7 +117,7 @@ echo $separationPhrase
 echo
 
 for app in $BANK_APPS; do
-    graceful_app_shutdown $app bank
+    graceful_app_shutdown $app
 done
 
 echo $separationPhrase
@@ -123,7 +128,7 @@ echo $separationPhrase
 echo
 
 for app in $MESSAGE_QUEUE_APPS; do
-    graceful_app_shutdown $app kafka
+    graceful_app_shutdown $app
 done
 
 echo $separationPhrase
@@ -134,7 +139,7 @@ echo $separationPhrase
 echo
 
 for app in $LOGGING_APPS; do
-    graceful_app_shutdown $app logging
+    graceful_app_shutdown $app
 done
 
 echo $separationPhrase
@@ -145,7 +150,7 @@ echo $separationPhrase
 echo
 
 for app in $MONITORING_APPS; do
-    graceful_app_shutdown $app monitoring
+    graceful_app_shutdown $app
 done
 
 
