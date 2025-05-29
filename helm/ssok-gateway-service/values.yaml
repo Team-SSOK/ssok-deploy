@@ -59,12 +59,17 @@ applicationConfig:
     endpoints:
       web:
         exposure:
-          include: "*"
+          include: health,info,prometheus
     endpoint:
       health:
         show-details: always
-      prometheus:
-        enabled: true
+        show-components: always
+        probes:
+          enabled: true
+    prometheus:
+      metrics:
+        export:
+          enabled: true
   health:
     kubernetes:
       enabled: false
