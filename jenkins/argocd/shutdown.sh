@@ -166,7 +166,7 @@ echo
 echo $separationPhrase
 
 for app in $LOGGING_APPS; do
-    if [ "$app" = "opensearch" || "$app" == "fluentd" ]; then
+    if [[ "$app" = "opensearch" || "$app" = "fluentd" ]]; then
         graceful_stateful_app_shutdown $app
     else
         graceful_app_shutdown $app
