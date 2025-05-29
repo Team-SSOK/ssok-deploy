@@ -112,13 +112,19 @@ else
     kubectl config use-context kubernetes-admin@kubernetes
 fi
 
+echo $separationPhrase
+echo
+echo "ArgoCD Active Application 리스트"
+echo 
+echo $separationPhrase
+echo $ARGOCD_APPS
+
 if [ "$INGRESS_APPS" != "" ]; then
     echo $separationPhrase
     echo
-    echo "  ArgoCD AWS ALB Ingress 종료"
+    echo "ArgoCD AWS ALB Ingress 종료"
     echo 
     echo $separationPhrase
-    echo
 fi
 
 for app in $INGRESS_APPS; do
