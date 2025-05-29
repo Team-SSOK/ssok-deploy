@@ -8,8 +8,8 @@ spec:
     apiVersion: apps/v1
     kind: Deployment
     name: {{ include "ssok-bank.fullname" . }}
-  minReplicas: {{ .Values.image.minReplicas }}
-  maxReplicas: {{ .Values.image.maxReplicas }}
+  minReplicas: {{ .Values.minReplicas }}
+  maxReplicas: {{ .Values.maxReplicas }}
   metrics:
   - type: Resource
     resource:
