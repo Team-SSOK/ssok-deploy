@@ -5,10 +5,8 @@ replicas: 1
 
 # 네임스페이스 간 접근을 위한 설정
 extraEnvs:
-  - name: OPENSEARCH_USERNAME
-    value: "admin"
-  - name: OPENSEARCH_PASSWORD
-    value: "a1b2c3d4A1B2C3D4!"
+  - name: DISABLE_SECURITY_DASHBOARDS_PLUGIN
+    value: "true"
 
 # 리소스 설정
 resources:
@@ -24,14 +22,15 @@ config:
     server.name: opensearch-dashboards
     server.host: 0.0.0.0
     server.port: 5601
-    
+
     opensearch.hosts: ["http://opensearch-cluster-master.logging.svc.cluster.local:9200"]
-    opensearch.username: "admin"
-    opensearch.password: "a1b2c3d4A1B2C3D4!"
-    
-    # 보안 설정
+
     opensearch.ssl.verificationMode: none
-    opensearch.requestHeadersWhitelist: ["authorization", "securitytenant"]
+    
+    # Security plugin이 비활성화된 상태에서는 username/password 설정 제거
+    # opensearch.username: "admin"
+    # opensearch.password: "Tldpsdptm123!"
+    # opensearch.requestHeadersWhitelist: ["authorization", "securitytenant"]
 
 
 service:
