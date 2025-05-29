@@ -1,3 +1,9 @@
+# 생성
+# kubectl apply -f opensearch-pv.yaml
+# 삭제
+# kubectl patch pv opensearch-pv --type json -p='[{"op": "remove", "path": "/metadata/finalizers"}]'
+# kubectl patch pvc opensearch-cluster-master-opensearch-cluster-master-0 -n logging --type json -p='[{"op": "remove", "path": "/metadata/finalizers"}]'
+
 apiVersion: storage.k8s.io/v1
 kind: StorageClass
 metadata:

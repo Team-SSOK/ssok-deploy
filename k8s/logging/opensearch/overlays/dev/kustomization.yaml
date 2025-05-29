@@ -8,6 +8,3 @@ helmCharts:
     releaseName: opensearch
     namespace: logging
     valuesFile: helm-values/opensearch-values.yaml
-
-resources:
-- storageclass.yaml
