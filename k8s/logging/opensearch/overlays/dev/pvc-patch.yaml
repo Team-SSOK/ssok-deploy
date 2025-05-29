@@ -1,7 +1,0 @@
-apiVersion: v1
-kind: PersistentVolumeClaim
-metadata:
-  name: opensearch-cluster-master-opensearch-cluster-master-0
-  namespace: logging
-spec:
-  storageClassName: local-storage

@@ -12,5 +12,11 @@ helmCharts:
 resources:
 - storageclass.yaml
 
-patchesStrategicMerge:
-- pvc-patch.yaml
+patches:
+- target:
+    kind: PersistentVolumeClaim
+    name: opensearch-cluster-master-opensearch-cluster-master-0
+  patch: |-
+    - op: add
+      path: /spec/storageClassName
+      value: local-storage
