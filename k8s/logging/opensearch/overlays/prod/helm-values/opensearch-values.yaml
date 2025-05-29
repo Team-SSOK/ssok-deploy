@@ -32,6 +32,8 @@ extraEnvs:
     value: "true"
   - name: DISABLE_SECURITY_PLUGIN
     value: "true"
+  - name: DISABLE_SECURITY_DASHBOARDS_PLUGIN
+    value: "true"
 
 persistence:
   enabled: true
