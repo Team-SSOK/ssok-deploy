@@ -17,7 +17,7 @@ metadata:
     app.kubernetes.io/name: opensearch
 spec:
   capacity:
-    storage: 30Gi
+    storage: 4Gi
   accessModes:
     - ReadWriteOnce
   storageClassName: local-storage

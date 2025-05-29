@@ -11,3 +11,6 @@ helmCharts:
 
 resources:
 - storageclass.yaml
+
+patchesStrategicMerge:
+- pvc-patch.yaml

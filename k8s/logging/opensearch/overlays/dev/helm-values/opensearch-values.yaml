@@ -37,7 +37,7 @@ persistence:
   enabled: true
   accessModes:
     - ReadWriteOnce
-  size: 30Gi
+  size: 4Gi
   labels:
     # Add default labels for the volumeClaimTemplate of the StatefulSet
     enabled: true
