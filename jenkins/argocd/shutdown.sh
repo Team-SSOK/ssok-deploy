@@ -84,7 +84,7 @@ graceful_stateful_app_shutdown() {
 }
 
 
-DEPLOY_PROFILE="prod" # prod 아니면 dev
+# DEPLOY_PROFILE="prod" # prod 아니면 dev
 NAMESPACE="argocd"
 separationPhrase="=====================================";
 
