@@ -7,7 +7,6 @@ metadata:
     app.kubernetes.io/name: opensearch
 provisioner: kubernetes.io/no-provisioner
 volumeBindingMode: WaitForFirstConsumer
-reclaimPolicy: Retain
 ---
 apiVersion: v1
 kind: PersistentVolume
@@ -21,7 +20,6 @@ spec:
     storage: 30Gi
   accessModes:
     - ReadWriteOnce
-  persistentVolumeReclaimPolicy: Retain
   storageClassName: local-storage
   hostPath:
     path: /home/lgcns/opensearch-data-0
