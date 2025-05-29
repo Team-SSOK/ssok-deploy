@@ -1,5 +1,5 @@
 ---
-# Source: ssok-bank/templates/bank-hpa.yaml
+# Source: ssok-bank/templates/hpa.yaml
 apiVersion: policy/v1
 kind: PodDisruptionBudget
 metadata:
@@ -196,7 +196,7 @@ spec:
           configMap:
             name: ssok-bank-fluent-bit-config
 ---
-# Source: ssok-bank/templates/bank-hpa.yaml
+# Source: ssok-bank/templates/hpa.yaml
 apiVersion: autoscaling/v2beta2
 kind: HorizontalPodAutoscaler
 metadata:
