@@ -67,7 +67,7 @@ health_check(){
 }
 
 CURRENT_DIR=$(pwd -P);
-DEPLOY_PROFILE="dev" # prod 아니면 dev
+DEPLOY_PROFILE="prod" # prod 아니면 dev
 separationPhrase="=====================================";
 
 echo
