@@ -49,6 +49,41 @@ graceful_app_shutdown() {
     echo $separationPhrase
 }
 
+graceful_stateful_app_shutdown() {
+    local app=$1
+    local namespace=${2:-"argocd"}
+
+    echo
+    echo "$app의 Graceful shutdown을 수행합니다..."
+
+    # 동기화 정책 비활성화
+    echo "Sync policy 비활성화..."
+    argocd app set $app --sync-policy none
+
+    local app_namespace=$(argocd app get $app -o json | jq -r '.spec.destination.namespace // "default"')
+
+    # Deployment들 graceful 종료
+    echo "$app의 Replicas 스케일 값을 0으로 변경하였습니다."
+    kubectl get statefulsets -n $app_namespace -l app.kubernetes.io/instance=$app -o name | \
+    while read statefulset; do
+        echo "Scaling down $statefulset..."
+        kubectl scale $statefulset --replicas=0 -n $app_namespace
+    done
+
+    # Pod 종료 대기
+    echo "Pod가 graceful하게 종료되기 까지 기다리는중..."
+    kubectl wait --for=delete pod -l app.kubernetes.io/instance=$app -n $app_namespace --timeout=120s
+
+    # 3단계: ArgoCD Application 삭제
+    echo "ArgoCD application - $app 삭제중..."
+    argocd app delete $app --cascade --yes
+
+    echo "$app gracefully shutdown completed"
+    echo
+    echo $separationPhrase
+}
+
+
 DEPLOY_PROFILE="dev" # prod 아니면 dev
 NAMESPACE="argocd"
 separationPhrase="=====================================";
@@ -131,7 +166,11 @@ echo
 echo $separationPhrase
 
 for app in $LOGGING_APPS; do
-    graceful_app_shutdown $app
+    if [ "$app" = "opensearch" || "$app" == "fluentd" ]; then
+        graceful_stateful_app_shutdown $app
+    else
+        graceful_app_shutdown $app
+    fi
 done
 
 echo
