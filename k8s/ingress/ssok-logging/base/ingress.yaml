@@ -15,16 +15,19 @@ metadata:
 
 spec:
   rules:
-    - host: log.ssok.kr
+    - host: os.ssok.kr
       http:
         paths:
-          - path: /opensearch
+          - path: /
             pathType: Prefix
             backend:
               service:
                 name: opensearch-cluster-master
                 port:
                   number: 9200
+    - host: log.ssok.kr
+      http:
+        paths:
           - path: /
             pathType: Prefix
             backend:
