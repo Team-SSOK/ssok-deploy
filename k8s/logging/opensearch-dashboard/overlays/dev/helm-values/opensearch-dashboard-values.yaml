@@ -24,7 +24,6 @@ config:
     server.name: opensearch-dashboards
     server.host: 0.0.0.0
     server.port: 5601
-    server.publicBaseUrl: "http://kudong.kr"
     
     opensearch.hosts: ["http://opensearch-cluster-master.logging.svc.cluster.local:9200"]
     opensearch.username: "admin"
@@ -36,8 +35,9 @@ config:
 
 
 service:
-  type: ClusterIP
+  type: NodePort
   port: 5601
+  nodePort: 31103  # 55035 포트로 외부 노출
 
 #     # 로깅 설정 수정 (새로운 형식)
 #    logging:
