@@ -3,6 +3,8 @@ kind: HorizontalPodAutoscaler
 metadata:
   name: ssok-bank-hpa
   namespace: {{ .Release.Namespace }}
+  annotations:
+    argocd.argoproj.io/sync-wave: "2"
 spec:
   scaleTargetRef:
     apiVersion: apps/v1
@@ -40,6 +42,8 @@ kind: PodDisruptionBudget
 metadata:
   name: ssok-bank-pdb
   namespace: {{ .Release.Namespace }}
+  annotations:
+    argocd.argoproj.io/sync-wave: "2"
 spec:
   minAvailable: 1
   selector:
