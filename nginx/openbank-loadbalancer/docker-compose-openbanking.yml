@@ -1,0 +1,95 @@
+services:
+  openbank-loadbalancer:
+    image: kudong/openbank-loadbalancer:latest
+    container_name: openbank-loadbalancer
+    restart: always
+    ports:
+      - 8080:80
+    networks:
+      - my-network
+
+  openbank-1:
+    image: kudong/ssok-openbanking:latest
+    container_name: openbank-1
+    restart: always
+    ports:
+      - 8801:8080
+    environment:
+      DB_USERNAME: lgcns
+      DB_PASSWORD: tldpsdptm
+      DB_URL: jdbc:mariadb://172.16.1.194:3306/moni?useUnicode=true&characterEncoding=utf-8&serverTimeZone=Asia/Seoul
+      REDIS_HOST: 172.16.1.194
+      REDIS_PORT: 6379
+      BANK_API_URL: https://bank.ssok.kr
+    networks:
+      - my-network
+
+  openbank-2:
+    image: kudong/ssok-openbanking:latest
+    container_name: openbank-2
+    restart: always
+    ports:
+      - 8802:8080
+    environment:
+      DB_USERNAME: lgcns
+      DB_PASSWORD: tldpsdptm
+      DB_URL: jdbc:mariadb://172.16.1.194:3306/moni?useUnicode=true&characterEncoding=utf-8&serverTimeZone=Asia/Seoul
+      REDIS_HOST: 172.16.1.194
+      REDIS_PORT: 6379
+      BANK_API_URL: https://bank.ssok.kr
+    networks:
+      - my-network
+
+  openbank-3:
+    image: kudong/ssok-openbanking:latest
+    container_name: openbank-3
+    restart: always
+    ports:
+      - 8803:8080
+    environment:
+      DB_USERNAME: lgcns
+      DB_PASSWORD: tldpsdptm
+      DB_URL: jdbc:mariadb://172.16.1.194:3306/moni?useUnicode=true&characterEncoding=utf-8&serverTimeZone=Asia/Seoul
+      REDIS_HOST: 172.16.1.194
+      REDIS_PORT: 6379
+      BANK_API_URL: https://bank.ssok.kr
+    networks:
+      - my-network
+
+  redis-1:
+    image: redis:6.2.6-alpine
+    container_name: redis-1
+    restart: always
+    ports:
+      - 6379:6379
+    command: redis-server --save 60 1 --loglevel warning
+    volumes:
+      - redis_data1:/data
+    networks:
+      - my-network
+
+  mariadb-1:
+    image: mariadb:latest
+    container_name: mariadb-1
+    restart: always
+    ports:
+    - 3306:3306
+    environment:
+      TZ: "Asia/Seoul"
+      MARIADB_ROOT_PASSWORD: tldpsdptm
+      MARIADB_DATABASE: moni
+      MARIADB_USER: lgcns
+      MARIADB_PASSWORD: tldpsdptm
+    volumes:
+      - mariadb_data1:/var/lib/mysql
+    networks:
+      - my-network
+
+networks:
+  my-network:
+    driver: bridge
+
+volumes:
+  redis_data1:
+  mariadb_data1:
+                         
