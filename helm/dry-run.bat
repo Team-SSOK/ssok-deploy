@@ -1,5 +1,5 @@
 @Echo off
-
+del .\dry-run\*.yaml
 helm template --dry-run --debug --namespace kafka ssok-kafka ./ssok-kafka >> ./dry-run/ssok-kafka-template.yaml
 helm template --dry-run --debug --namespace bank ssok-bank ./ssok-bank >> ./dry-run/ssok-bank-template.yaml
 helm template --dry-run --debug --namespace bank ssok-bank-proxy ./ssok-bank-proxy >> ./dry-run/ssok-bank-proxy-template.yaml

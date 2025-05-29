@@ -1,6 +1,9 @@
 # SSOK-BANK 기본 values 입니다.
 
-replicaCount: 3
+# replicaCount: 3 # HPA로 대체
+
+minReplicas: 1
+maxReplicas: 3
 
 image:
   repository: kudong/ssok-bank
@@ -14,6 +17,14 @@ serviceAccount:
   create: true
   annotations: {}
   name: ""
+
+resources:
+  requests:
+    cpu: "200m"      # 최소 0.2 CPU 코어
+    memory: "512Mi"  # 512MB
+  limits:
+    cpu: "500m"     # 최대 0.5 CPU 코어
+    memory: "1Gi"    # 1GB 
 
 bank:
   config:
