@@ -23,6 +23,8 @@ config:
   opensearch_dashboards.yml: |
     server.name: opensearch-dashboards
     server.host: 0.0.0.0
+    server.port: 5601
+    server.publicBaseUrl: "http://kudong.kr:55035"
     
     opensearch.hosts: ["http://opensearch-cluster-master.logging.svc.cluster.local:9200"]
     opensearch.username: "admin"
