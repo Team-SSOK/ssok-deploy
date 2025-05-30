@@ -274,7 +274,6 @@ spec:
         - sh
         - -c
         - |
-          TIMESTAMP=$(date +'%Y-%m-%d %H:%M:%S')
           curl -H "Content-Type: application/json" \
                -X POST \
                -d "{
@@ -295,7 +294,7 @@ spec:
                      },
                      {
                        \"name\": \"⏰ 배포 시간\",
-                       \"value\": \"$TIMESTAMP\",
+                       \"value\": \"$(date \"+%Y-%m-%d %H:%M:%S\")\",
                        \"inline\": false
                      }
                    ],
