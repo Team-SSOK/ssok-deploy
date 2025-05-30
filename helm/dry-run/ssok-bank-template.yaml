@@ -334,26 +334,32 @@ spec:
         - sh
         - -c
         - |
+          DEPLOY_TIME=$(date "+%Y-%m-%d %H:%M:%S")
           curl -H "Content-Type: application/json" \
                -X POST \
-               -d '{
-                 "embeds": [{
-                   "title": "❌ 배포 실패",
-                   "description": "ssok-bank 배포 중 오류가 발생했습니다.",
-                   "color": 16711680,
-                   "fields": [
+               -d "{
+                 \"embeds\": [{
+                   \"title\": \"❌ ssok-bank 배포 실패\",
+                   \"description\": \"ssok-bank 배포 중 오류가 발생했습니다.\",
+                   \"color\": 16711680,
+                   \"fields\": [
                      {
-                       "name": "🏦 애플리케이션",
-                       "value": "ssok-bank",
-                       "inline": true
+                       \"name\": \"🏦 애플리케이션\",
+                       \"value\": \"ssok-bank\",
+                       \"inline\": true
                      },
                      {
-                       "name": "⏰ 시간",
-                       "value": "'$(date +'%Y-%m-%d %H:%M:%S')'",
-                       "inline": true
+                       \"name\": \"📦 네임스페이스\",
+                       \"value\": \"bank\", 
+                       \"inline\": true
+                     },
+                     {
+                       \"name\": \"⏰ 시간\",
+                       \"value\": \"$DEPLOY_TIME\",
+                       \"inline\": false
                      }
                    ]
                  }]
-               }' \
+               }" \
                "$WEBHOOK_URL"
       restartPolicy: Never
