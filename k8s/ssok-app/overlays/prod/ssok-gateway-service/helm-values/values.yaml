@@ -38,7 +38,7 @@ applicationConfig:
           - id: user-service
             uri: http://ssok-user-service.ssok.svc.cluster.local
             predicates:
-              - Path=/api/auth/**, /api/users/**
+              - Path=/api/auth/**, /api/users/**, /api/profiles/**
           - id: account-service
             uri: http://ssok-account-service.ssok.svc.cluster.local
             predicates:
