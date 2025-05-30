@@ -280,7 +280,7 @@ spec:
   scaleTargetRef:
     apiVersion: apps/v1
     kind: Deployment
-    name: ssok-transfer-service-ssok-transfer-service
+    name: ssok-transfer-service
   minReplicas: 1
   maxReplicas: 3
   metrics:
