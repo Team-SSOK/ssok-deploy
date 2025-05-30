@@ -26,33 +26,33 @@ spec:
           TIMESTAMP=$(date +'%Y-%m-%d %H:%M:%S')
           curl -H "Content-Type: application/json" \
                -X POST \
-               -d '{
-                 "embeds": [{
-                   "title": "✅ ssok-bank 배포 성공",
-                   "description": "모든 컴포넌트가 정상적으로 배포되었습니다.",
-                   "color": 65280,
-                   "fields": [
+               -d "{
+                 \"embeds\": [{
+                   \"title\": \"✅ ssok-bank 배포 성공\",
+                   \"description\": \"모든 컴포넌트가 정상적으로 배포되었습니다.\",
+                   \"color\": 65280,
+                   \"fields\": [
                      {
-                       "name": "🏦 애플리케이션",
-                       "value": "ssok-bank",
-                       "inline": true
+                       \"name\": \"🏦 애플리케이션\",
+                       \"value\": \"ssok-bank\",
+                       \"inline\": true
                      },
                      {
-                       "name": "📦 네임스페이스",
-                       "value": "bank", 
-                       "inline": true
+                       \"name\": \"📦 네임스페이스\",
+                       \"value\": \"bank\", 
+                       \"inline\": true
                      },
                      {
-                       "name": "⏰ 배포 시간",
-                       "value": "${TIMESTAMP}",
-                       "inline": false
+                       \"name\": \"⏰ 배포 시간\",
+                       \"value\": \"$TIMESTAMP\",
+                       \"inline\": false
                      }
                    ],
-                   "footer": {
-                     "text": "ArgoCD PostSync Hook"
+                   \"footer\": {
+                     \"text\": \"ArgoCD PostSync Hook\"
                    }
                  }]
-               }' \
+               }" \
                "$WEBHOOK_URL"
       restartPolicy: Never
       serviceAccountName: default  # kubectl 권한 필요 시 별도 ServiceAccount 생성
