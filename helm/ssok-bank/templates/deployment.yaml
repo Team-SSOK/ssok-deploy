@@ -10,7 +10,7 @@ metadata:
     argocd.argoproj.io/sync-wave: "1"
 spec:
   revisionHistoryLimit: 1
-  replicas: {{ .Values.replicaCount }}
+  # replicas: {{ .Values.replicaCount }} # HPA로 대체
   selector:
     matchLabels:
       {{- include "ssok-bank.selectorLabels" . | nindent 6 }}
@@ -33,7 +33,23 @@ spec:
         volumeMounts:
           - name: varlog
             mountPath: /var/log
-            
+        readinessProbe:
+          httpGet:
+            path: /actuator/health/readiness
+            port: 8080
+          initialDelaySeconds: 10
+          periodSeconds: 20
+        livenessProbe:
+          httpGet:
+            path: /actuator/health/liveness
+            port: 8080
+          initialDelaySeconds: 20
+          periodSeconds: 20
+        resources:
+          {{- with .Values.resources }}
+          {{- toYaml . | nindent 10 }}
+          {{- end }}
+
       - name: fluent-bit
         image: cr.fluentbit.io/fluent/fluent-bit:4.0.2
         imagePullPolicy: IfNotPresent

@@ -88,15 +88,6 @@ graceful_stateful_app_shutdown() {
 NAMESPACE="argocd"
 separationPhrase="=====================================";
 
-# Ingress 목록 리스트
-ARGOCD_APPS=$(kubectl get applications -n $NAMESPACE --no-headers -o custom-columns=NAME:.metadata.name)
-INGRESS_APPS=$(echo "$ARGOCD_APPS" | grep "\-ingress$")
-SERVICE_APPS=$(echo "$ARGOCD_APPS" | grep "\-service$")
-BANK_APPS=$(echo "$ARGOCD_APPS" | grep -E "^(ssok-bank|ssok-bank-proxy)$")
-MESSAGE_QUEUE_APPS=$(echo "$ARGOCD_APPS" | grep -E "^(ssok-kafka)$")
-LOGGING_APPS=$(echo "$ARGOCD_APPS" | grep -E "^(fluentd|opensearch|opensearch-dashboards)$")
-MONITORING_APPS=$(echo "$ARGOCD_APPS" | grep -E "^(ssok-grafana|ssok-prometheus)$")
-
 echo
 echo "K8S Context ArgoCD 연결"
 echo 
@@ -111,6 +102,15 @@ else
     argocd login 172.21.1.19:30080 --username admin --password 2t6mVPdg88jih0Lv --insecure
     kubectl config use-context kubernetes-admin@kubernetes
 fi
+
+# Ingress 목록 리스트
+ARGOCD_APPS=$(kubectl get applications -n $NAMESPACE --no-headers -o custom-columns=NAME:.metadata.name)
+INGRESS_APPS=$(echo "$ARGOCD_APPS" | grep "\-ingress$")
+SERVICE_APPS=$(echo "$ARGOCD_APPS" | grep "\-service$")
+BANK_APPS=$(echo "$ARGOCD_APPS" | grep -E "^(ssok-bank|ssok-bank-proxy)$")
+MESSAGE_QUEUE_APPS=$(echo "$ARGOCD_APPS" | grep -E "^(ssok-kafka)$")
+LOGGING_APPS=$(echo "$ARGOCD_APPS" | grep -E "^(fluentd|opensearch|opensearch-dashboards)$")
+MONITORING_APPS=$(echo "$ARGOCD_APPS" | grep -E "^(ssok-grafana|ssok-prometheus)$")
 
 echo $separationPhrase
 echo
