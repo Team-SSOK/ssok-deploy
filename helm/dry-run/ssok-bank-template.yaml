@@ -274,9 +274,6 @@ spec:
         - sh
         - -c
         - |
-          # HPA 상태 확인
-          HPA_STATUS=$(kubectl get hpa ssok-bank-hpa -n bank -o jsonpath='{.status.currentReplicas}')
-          
           curl -H "Content-Type: application/json" \
                -X POST \
                -d '{
@@ -293,11 +290,6 @@ spec:
                      {
                        "name": "📦 네임스페이스",
                        "value": "bank", 
-                       "inline": true
-                     },
-                     {
-                       "name": "🔄 현재 Pod 수",
-                       "value": "'$HPA_STATUS'",
                        "inline": true
                      },
                      {
@@ -356,7 +348,7 @@ spec:
                      },
                      {
                        "name": "⏰ 시간",
-                       "value": "'$(date)'",
+                       "value": "'$(date +'%Y-%m-%d %H:%M:%S')'",
                        "inline": true
                      }
                    ]
