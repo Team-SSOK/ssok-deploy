@@ -1,0 +1,123 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: ssok-bank-discord-notification
+  namespace: bank
+  annotations:
+    argocd.argoproj.io/hook: PostSync
+    argocd.argoproj.io/hook-delete-policy: HookSucceeded
+    argocd.argoproj.io/sync-wave: "10"  # 모든 배포 완료 후
+spec:
+  template:
+    spec:
+      containers:
+      - name: discord-notify
+        image: curlimages/curl:latest
+        env:
+        - name: WEBHOOK_URL
+          valueFrom:
+            secretKeyRef:
+              name: ssok-bank-discord-webhook
+              key: webhook-url
+        command:
+        - sh
+        - -c
+        - |
+          # HPA 상태 확인
+          HPA_STATUS=$(kubectl get hpa ssok-bank-hpa -n bank -o jsonpath='{.status.currentReplicas}')
+          
+          curl -H "Content-Type: application/json" \
+               -X POST \
+               -d '{
+                 "embeds": [{
+                   "title": "✅ ssok-bank 배포 성공",
+                   "description": "모든 컴포넌트가 정상적으로 배포되었습니다.",
+                   "color": 65280,
+                   "fields": [
+                     {
+                       "name": "🏦 애플리케이션",
+                       "value": "ssok-bank",
+                       "inline": true
+                     },
+                     {
+                       "name": "📦 네임스페이스",
+                       "value": "bank", 
+                       "inline": true
+                     },
+                     {
+                       "name": "🔄 현재 Pod 수",
+                       "value": "'$HPA_STATUS'",
+                       "inline": true
+                     },
+                     {
+                       "name": "⏰ 배포 시간",
+                       "value": "'$(date +'%Y-%m-%d %H:%M:%S')'",
+                       "inline": false
+                     }
+                   ],
+                   "footer": {
+                     "text": "ArgoCD PostSync Hook"
+                   }
+                 }]
+               }' \
+               "$WEBHOOK_URL"
+      restartPolicy: Never
+      serviceAccountName: default  # kubectl 권한 필요 시 별도 ServiceAccount 생성
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: ssok-bank-discord-failure-notification
+  namespace: bank
+  annotations:
+    argocd.argoproj.io/hook: SyncFail
+    argocd.argoproj.io/hook-delete-policy: HookSucceeded
+    argocd.argoproj.io/sync-wave: "10"  # 모든 배포 완료 후
+spec:
+  template:
+    spec:
+      containers:
+      - name: discord-notify
+        image: curlimages/curl:latest
+        env:
+        - name: WEBHOOK_URL
+          valueFrom:
+            secretKeyRef:
+              name: ssok-bank-discord-webhook
+              key: webhook-url
+        command:
+        - sh
+        - -c
+        - |
+          curl -H "Content-Type: application/json" \
+               -X POST \
+               -d '{
+                 "embeds": [{
+                   "title": "❌ 배포 실패",
+                   "description": "ssok-bank 배포 중 오류가 발생했습니다.",
+                   "color": 16711680,
+                   "fields": [
+                     {
+                       "name": "🏦 애플리케이션",
+                       "value": "ssok-bank",
+                       "inline": true
+                     },
+                     {
+                       "name": "⏰ 시간",
+                       "value": "'$(date)'",
+                       "inline": true
+                     }
+                   ]
+                 }]
+               }' \
+               "$WEBHOOK_URL"
+      restartPolicy: Never
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: ssok-bank-discord-webhook
+  namespace: bank
+type: Opaque
+stringData:
+  webhook-url: "https://discord.com/api/webhooks/1377886188312068146/eFtja7Ax7h84bD9z5CZhm7jligL1wDIRRLvQgr-UnxnACEUSkyI4Gm9NsenVFwnwKnLK"
