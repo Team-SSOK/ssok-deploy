@@ -3,6 +3,46 @@ image:
   pullPolicy: IfNotPresent
   tag: "1.80"
 
+notification:
+  profile: "[DEV]"
+  webhook-url: "https://discord.com/api/webhooks/1377886188312068146/eFtja7Ax7h84bD9z5CZhm7jligL1wDIRRLvQgr-UnxnACEUSkyI4Gm9NsenVFwnwKnLK"
+
+resources:
+  requests:
+    cpu: "200m"      # 최소 0.2 CPU 코어
+    memory: "512Mi"  # 512MB
+  limits:
+    cpu: "500m"     # 최대 0.5 CPU 코어
+    memory: "1Gi"    # 1GB 
+
+hpa:
+  minReplicas: 1
+  maxReplicas: 3
+  metrics:
+  - type: Resource
+    resource:
+      name: cpu
+      target:
+        type: Utilization
+        averageUtilization: 90 # CPU 이용률 90% 이상시
+  behavior:
+    scaleDown:
+      stabilizationWindowSeconds: 300 # 5분 대기, 30초 주기, 점진적 감소
+      policies:
+      - type: Percent
+        value: 50
+        periodSeconds: 30
+    scaleUp:
+      stabilizationWindowSeconds: 0 # 0초 대기, 15초 주기, 최대 증가
+      policies:
+      - type: Percent
+        value: 100          # 현재 Pod 수의 100% 증가
+        periodSeconds: 15   # 15초마다
+      - type: Pods          
+        value: 2            # 또는 2개씩 증가
+        periodSeconds: 15   # 15초마다
+      selectPolicy: Max # 정책 2개중 가장 큰것을 선택
+
 bank:
   config:
     SERVER_PORT: "8080"
