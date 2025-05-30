@@ -409,7 +409,7 @@ spec:
                -X POST \
                -d "{
                  \"embeds\": [{
-                   \"title\": \"❌ ssok-transfer-service 배포 실패\",
+                   \"title\": \"❌ [DEV] ssok-transfer-service 배포 실패\",
                    \"description\": \"ssok-transfer-service 배포 중 오류가 발생했습니다.\",
                    \"color\": 16711680,
                    \"fields\": [
