@@ -17,10 +17,10 @@ notification:
 
 resources:
   requests:
-    cpu: "200m"      # 최소 0.2 CPU 코어
+    cpu: "100m"      # 최소 0.2 CPU 코어
     memory: "512Mi"  # 512MB
   limits:
-    cpu: "500m"     # 최대 0.5 CPU 코어
+    cpu: "250m"     # 최대 0.5 CPU 코어
     memory: "1Gi"    # 1GB 
 
 hpa:
