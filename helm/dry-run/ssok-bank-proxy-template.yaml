@@ -1,4 +1,19 @@
 ---
+# Source: ssok-bank-proxy/templates/hpa.yaml
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: ssok-bank-proxy-pdb
+  namespace: bank
+  annotations:
+    argocd.argoproj.io/sync-wave: "2"
+spec:
+  minAvailable: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: ssok-bank-proxy
+      app.kubernetes.io/instance: ssok-bank-proxy
+---
 # Source: ssok-bank-proxy/templates/configmap.yaml
 apiVersion: v1
 kind: ConfigMap
@@ -99,7 +114,6 @@ metadata:
     argocd.argoproj.io/sync-wave: "1"
 spec:
   revisionHistoryLimit: 1
-  replicas: 1
   selector:
     matchLabels:
       app.kubernetes.io/name: ssok-bank-proxy
@@ -122,7 +136,26 @@ spec:
         volumeMounts:
           - name: varlog
             mountPath: /var/log
-            
+        readinessProbe:
+          httpGet:
+            path: /actuator/health/readiness
+            port: 8080
+          initialDelaySeconds: 10
+          periodSeconds: 20
+        livenessProbe:
+          httpGet:
+            path: /actuator/health/liveness
+            port: 8080
+          initialDelaySeconds: 180
+          periodSeconds: 20
+        resources:
+          limits:
+            cpu: 500m
+            memory: 1Gi
+          requests:
+            cpu: 200m
+            memory: 512Mi
+
       - name: fluent-bit
         image: cr.fluentbit.io/fluent/fluent-bit:4.0.2
         imagePullPolicy: IfNotPresent
@@ -142,3 +175,43 @@ spec:
         - name: fluent-bit-config
           configMap:
             name: ssok-bank-proxy-fluent-bit-config
+---
+# Source: ssok-bank-proxy/templates/hpa.yaml
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: ssok-bank-proxy-hpa
+  namespace: bank
+  annotations:
+    argocd.argoproj.io/sync-wave: "2"
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: ssok-bank-proxy
+  minReplicas: 1
+  maxReplicas: 3
+  metrics:
+  - resource:
+      name: cpu
+      target:
+        averageUtilization: 90
+        type: Utilization
+    type: Resource
+  behavior:
+    scaleDown:
+      policies:
+      - periodSeconds: 30
+        type: Percent
+        value: 50
+      stabilizationWindowSeconds: 300
+    scaleUp:
+      policies:
+      - periodSeconds: 15
+        type: Percent
+        value: 100
+      - periodSeconds: 15
+        type: Pods
+        value: 2
+      selectPolicy: Max
+      stabilizationWindowSeconds: 0

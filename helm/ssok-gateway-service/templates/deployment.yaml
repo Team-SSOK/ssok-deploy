@@ -38,6 +38,10 @@ spec:
           env:
             - name: SPRING_CONFIG_LOCATION
               value: file:/config/application.yml
+          resources:
+            {{- with .Values.resources }}
+            {{- toYaml . | nindent 12 }}
+            {{- end }}
 
         - name: fluent-bit
           image: cr.fluentbit.io/fluent/fluent-bit:4.0.2
