@@ -28,7 +28,7 @@ spec:
                -X POST \
                -d "{
                  \"embeds\": [{
-                   \"title\": \"✅ ssok-bank 배포 성공\",
+                   \"title\": \"✅ {{ .Values.notification.profile }} ssok-bank 배포 성공\",
                    \"description\": \"모든 컴포넌트가 정상적으로 배포되었습니다.\",
                    \"color\": 65280,
                    \"fields\": [
@@ -119,4 +119,4 @@ metadata:
   namespace: bank
 type: Opaque
 stringData:
-  webhook-url: "https://discord.com/api/webhooks/1377886188312068146/eFtja7Ax7h84bD9z5CZhm7jligL1wDIRRLvQgr-UnxnACEUSkyI4Gm9NsenVFwnwKnLK"
+  webhook-url: {{ index .Values.notification "webhook-url" }}
