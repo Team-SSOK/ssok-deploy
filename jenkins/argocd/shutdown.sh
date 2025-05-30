@@ -119,23 +119,23 @@ echo
 echo $separationPhrase
 echo $ARGOCD_APPS
 
-if [ "$INGRESS_APPS" != "" ]; then
-    echo $separationPhrase
-    echo
-    echo "ArgoCD AWS ALB Ingress 종료"
-    echo 
-    echo $separationPhrase
-fi
+# if [ "$INGRESS_APPS" != "" ]; then
+#     echo $separationPhrase
+#     echo
+#     echo "ArgoCD AWS ALB Ingress 종료"
+#     echo 
+#     echo $separationPhrase
+# fi
 
-for app in $INGRESS_APPS; do
-    echo "Deleting $app..."
-    argocd app delete $app --cascade --yes
-    if [ $? -eq 0 ]; then
-        echo "$app 삭제 완료"      # 성공 (종료코드 0)
-    else
-        echo "$app 삭제 실패"      # 실패 (종료코드 1-255)
-    fi
-done
+# for app in $INGRESS_APPS; do
+#     echo "Deleting $app..."
+#     argocd app delete $app --cascade --yes
+#     if [ $? -eq 0 ]; then
+#         echo "$app 삭제 완료"      # 성공 (종료코드 0)
+#     else
+#         echo "$app 삭제 실패"      # 실패 (종료코드 1-255)
+#     fi
+# done
 
 echo $separationPhrase
 echo
