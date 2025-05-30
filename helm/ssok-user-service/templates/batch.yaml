@@ -1,0 +1,122 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: ssok-user-service-discord-notification
+  namespace: ssok
+  annotations:
+    argocd.argoproj.io/hook: PostSync
+    argocd.argoproj.io/hook-delete-policy: HookSucceeded
+    argocd.argoproj.io/sync-wave: "10"  # 모든 배포 완료 후
+spec:
+  template:
+    spec:
+      containers:
+      - name: discord-notify
+        image: curlimages/curl:latest
+        env:
+        - name: WEBHOOK_URL
+          valueFrom:
+            secretKeyRef:
+              name: ssok-user-service-discord-webhook
+              key: webhook-url
+        command:
+        - sh
+        - -c
+        - |
+          DEPLOY_TIME=$(date "+%Y-%m-%d %H:%M:%S")
+          curl -H "Content-Type: application/json" \
+               -X POST \
+               -d "{
+                 \"embeds\": [{
+                   \"title\": \"✅ {{ .Values.notification.profile }} ssok-user-service 배포 성공\",
+                   \"description\": \"모든 컴포넌트가 정상적으로 배포되었습니다.\",
+                   \"color\": 65280,
+                   \"fields\": [
+                     {
+                       \"name\": \"🏦 애플리케이션\",
+                       \"value\": \"ssok-user-service\",
+                       \"inline\": true
+                     },
+                     {
+                       \"name\": \"📦 네임스페이스\",
+                       \"value\": \"ssok\", 
+                       \"inline\": true
+                     },
+                     {
+                       \"name\": \"⏰ 배포 시간\",
+                       \"value\": \"$DEPLOY_TIME\",
+                       \"inline\": false
+                     }
+                   ],
+                   \"footer\": {
+                     \"text\": \"ArgoCD PostSync Hook\"
+                   }
+                 }]
+               }" \
+               "$WEBHOOK_URL"
+      restartPolicy: Never
+      serviceAccountName: default  # kubectl 권한 필요 시 별도 ServiceAccount 생성
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: ssok-user-service-discord-failure-notification
+  namespace: ssok
+  annotations:
+    argocd.argoproj.io/hook: SyncFail
+    argocd.argoproj.io/hook-delete-policy: HookSucceeded
+    argocd.argoproj.io/sync-wave: "10"  # 모든 배포 완료 후
+spec:
+  template:
+    spec:
+      containers:
+      - name: discord-notify
+        image: curlimages/curl:latest
+        env:
+        - name: WEBHOOK_URL
+          valueFrom:
+            secretKeyRef:
+              name: ssok-user-service-discord-webhook
+              key: webhook-url
+        command:
+        - sh
+        - -c
+        - |
+          DEPLOY_TIME=$(date "+%Y-%m-%d %H:%M:%S")
+          curl -H "Content-Type: application/json" \
+               -X POST \
+               -d "{
+                 \"embeds\": [{
+                   \"title\": \"❌ ssok-user-service 배포 실패\",
+                   \"description\": \"ssok-user-service 배포 중 오류가 발생했습니다.\",
+                   \"color\": 16711680,
+                   \"fields\": [
+                     {
+                       \"name\": \"🏦 애플리케이션\",
+                       \"value\": \"ssok-user-service\",
+                       \"inline\": true
+                     },
+                     {
+                       \"name\": \"📦 네임스페이스\",
+                       \"value\": \"ssok\", 
+                       \"inline\": true
+                     },
+                     {
+                       \"name\": \"⏰ 시간\",
+                       \"value\": \"$DEPLOY_TIME\",
+                       \"inline\": false
+                     }
+                   ]
+                 }]
+               }" \
+               "$WEBHOOK_URL"
+      restartPolicy: Never
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: ssok-user-service-discord-webhook
+  namespace: ssok
+type: Opaque
+stringData:
+  webhook-url: {{ index .Values.notification "webhook-url" }}

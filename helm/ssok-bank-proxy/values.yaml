@@ -1,7 +1,5 @@
 # SSOK-BANK-PROXY values 입니다.
 
-# replicaCount: 1
-
 image:
   repository: kudong/ssok-bank-proxy
   pullPolicy: IfNotPresent
@@ -14,6 +12,10 @@ serviceAccount:
   create: true
   annotations: {}
   name: ""
+
+notification:
+  profile: "[DEV]"
+  webhook-url: "https://discord.com/api/webhooks/1377886188312068146/eFtja7Ax7h84bD9z5CZhm7jligL1wDIRRLvQgr-UnxnACEUSkyI4Gm9NsenVFwnwKnLK"
 
 resources:
   requests:
