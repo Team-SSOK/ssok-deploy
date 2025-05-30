@@ -1,4 +1,19 @@
 ---
+# Source: ssok-user-service/templates/hpa.yaml
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: ssok-user-service-pdb
+  namespace: ssok
+  annotations:
+    argocd.argoproj.io/sync-wave: "2"
+spec:
+  minAvailable: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: ssok-user-service
+      app.kubernetes.io/instance: ssok-user-service
+---
 # Source: ssok-user-service/templates/secret.yaml
 apiVersion: v1
 kind: Secret
@@ -212,7 +227,6 @@ metadata:
     argocd.argoproj.io/sync-wave: "1"
 spec:
   revisionHistoryLimit: 1
-  replicas: 1
   selector:
     matchLabels:
       app.kubernetes.io/name: ssok-user-service
@@ -241,6 +255,25 @@ spec:
           env:
             - name: SPRING_CONFIG_LOCATION
               value: file:/config/application.yml
+          readinessProbe:
+            httpGet:
+              path: /actuator/health/readiness
+              port: 8080
+            initialDelaySeconds: 10
+            periodSeconds: 20
+          livenessProbe:
+            httpGet:
+              path: /actuator/health/liveness
+              port: 8080
+            initialDelaySeconds: 20
+            periodSeconds: 20
+          resources:
+            limits:
+              cpu: 500m
+              memory: 1Gi
+            requests:
+              cpu: 200m
+              memory: 512Mi
 
         - name: fluent-bit
           image: cr.fluentbit.io/fluent/fluent-bit:4.0.2
@@ -264,3 +297,43 @@ spec:
         - name: fluent-bit-config
           configMap:
             name: fluent-bit-config-user
+---
+# Source: ssok-user-service/templates/hpa.yaml
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: ssok-user-service-hpa
+  namespace: ssok
+  annotations:
+    argocd.argoproj.io/sync-wave: "2"
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: ssok-user-service
+  minReplicas: 1
+  maxReplicas: 3
+  metrics:
+  - resource:
+      name: cpu
+      target:
+        averageUtilization: 90
+        type: Utilization
+    type: Resource
+  behavior:
+    scaleDown:
+      policies:
+      - periodSeconds: 30
+        type: Percent
+        value: 50
+      stabilizationWindowSeconds: 300
+    scaleUp:
+      policies:
+      - periodSeconds: 15
+        type: Percent
+        value: 100
+      - periodSeconds: 15
+        type: Pods
+        value: 2
+      selectPolicy: Max
+      stabilizationWindowSeconds: 0
