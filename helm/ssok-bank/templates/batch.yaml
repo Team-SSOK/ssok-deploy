@@ -23,6 +23,7 @@ spec:
         - sh
         - -c
         - |
+          DEPLOY_TIME=$(date "+%Y-%m-%d %H:%M:%S")
           curl -H "Content-Type: application/json" \
                -X POST \
                -d "{
@@ -43,7 +44,7 @@ spec:
                      },
                      {
                        \"name\": \"⏰ 배포 시간\",
-                       \"value\": \"$(date \"+%Y-%m-%d %H:%M:%S\")\",
+                       \"value\": \"$DEPLOY_TIME\",
                        \"inline\": false
                      }
                    ],
