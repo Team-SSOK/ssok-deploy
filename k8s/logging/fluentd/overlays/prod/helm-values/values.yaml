@@ -845,7 +845,6 @@ aggregator:
     fluentd-output.conf: |
       <match account.log>
         @type opensearch
-        @id out_opensearch
         host opensearch-cluster-master.logging.svc.cluster.local
         port 9200
         scheme http
@@ -858,7 +857,6 @@ aggregator:
       
       <match bluetooth.log>
         @type opensearch
-        @id out_opensearch
         host opensearch-cluster-master.logging.svc.cluster.local
         port 9200
         scheme http
@@ -871,7 +869,6 @@ aggregator:
       
       <match gateway.log>
         @type opensearch
-        @id out_opensearch
         host opensearch-cluster-master.logging.svc.cluster.local
         port 9200
         scheme http
@@ -884,7 +881,6 @@ aggregator:
       
       <match notification.log>
         @type opensearch
-        @id out_opensearch
         host opensearch-cluster-master.logging.svc.cluster.local
         port 9200
         scheme http
@@ -897,7 +893,6 @@ aggregator:
       
       <match transfer.log>
         @type opensearch
-        @id out_opensearch
         host opensearch-cluster-master.logging.svc.cluster.local
         port 9200
         scheme http
@@ -910,7 +905,6 @@ aggregator:
       
       <match user.log>
         @type opensearch
-        @id out_opensearch
         host opensearch-cluster-master.logging.svc.cluster.local
         port 9200
         scheme http
@@ -923,7 +917,6 @@ aggregator:
       
       <match app.log>
         @type opensearch
-        @id out_opensearch
         host opensearch-cluster-master.logging.svc.cluster.local
         port 9200
         scheme http
