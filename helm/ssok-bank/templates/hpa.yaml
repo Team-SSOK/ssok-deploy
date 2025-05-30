@@ -10,32 +10,16 @@ spec:
     apiVersion: apps/v1
     kind: Deployment
     name: {{ include "ssok-bank.fullname" . }}
-  minReplicas: {{ .Values.minReplicas }}
-  maxReplicas: {{ .Values.maxReplicas }}
+  minReplicas: {{ .Values.hpa.minReplicas }}
+  maxReplicas: {{ .Values.hpa.maxReplicas }}
   metrics:
-  - type: Resource
-    resource:
-      name: cpu
-      target:
-        type: Utilization
-        averageUtilization: 90 # CPU 이용률 90% 이상시
+  {{- with .Values.hpa.metrics }}
+  {{- toYaml . | nindent 2 }}
+  {{- end }}
   behavior:
-    scaleDown:
-      stabilizationWindowSeconds: 300 # 5분 대기, 30초 주기, 점진적 감소
-      policies:
-      - type: Percent
-        value: 50
-        periodSeconds: 30
-    scaleUp:
-      stabilizationWindowSeconds: 0 # 0초 대기, 15초 주기, 최대 증가
-      policies:
-      - type: Percent
-        value: 100          # 현재 Pod 수의 100% 증가
-        periodSeconds: 15   # 15초마다
-      - type: Pods          
-        value: 2            # 또는 2개씩 증가
-        periodSeconds: 15   # 15초마다
-      selectPolicy: Max # 정책 2개중 가장 큰것을 선택
+  {{- with .Values.hpa.behavior }}
+  {{- toYaml . | nindent 4 }}
+  {{- end }}
 ---
 apiVersion: policy/v1
 kind: PodDisruptionBudget
