@@ -211,18 +211,6 @@ spec:
           env:
             - name: SPRING_CONFIG_LOCATION
               value: file:/config/application.yml
-          readinessProbe:
-            httpGet:
-              path: /actuator/health/readiness
-              port: 8080
-            initialDelaySeconds: 10
-            periodSeconds: 20
-          livenessProbe:
-            httpGet:
-              path: /actuator/health/liveness
-              port: 8080
-            initialDelaySeconds: 180
-            periodSeconds: 20
           resources:
             limits:
               cpu: 500m
