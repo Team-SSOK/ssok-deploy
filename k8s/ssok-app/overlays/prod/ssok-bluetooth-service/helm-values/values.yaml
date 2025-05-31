@@ -114,5 +114,7 @@ secrets:
       url: http://ssok-account-service.ssok.svc.cluster.local
     userService:
       url: http://ssok-user-service.ssok.svc.cluster.local
+    transferService:
+      url: http://ssok-transfer-service.ssok.svc.cluster.local
   bluetooth:
     uuidTtlSeconds: "86400"
