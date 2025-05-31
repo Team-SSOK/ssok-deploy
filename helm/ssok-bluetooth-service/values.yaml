@@ -119,5 +119,7 @@ secrets:
       url: http://localhost
     userService:
       url: http://localhost
+    transferService:
+      url: http://localhost
   bluetooth:
     uuidTtlSeconds: "86400"

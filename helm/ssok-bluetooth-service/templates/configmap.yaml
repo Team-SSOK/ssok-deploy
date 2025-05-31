@@ -17,5 +17,7 @@ data:
         url: ${EXTERNAL_ACCOUNT_SERVICE_URL}
       user-service:
         url: ${EXTERNAL_USER_SERVICE_URL}
+      transfer-service:
+        url: ${EXTERNAL_TRANSFER_SERVICE_URL}
     bluetooth:
       uuid-ttl-seconds: ${BLUETOOTH_UUID_TTL_SECONDS}

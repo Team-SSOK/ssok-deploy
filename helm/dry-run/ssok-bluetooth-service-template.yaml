@@ -26,6 +26,7 @@ stringData:
   SPRING_DATA_REDIS_PORT: "6379"
   EXTERNAL_ACCOUNT_SERVICE_URL: "http://localhost"
   EXTERNAL_USER_SERVICE_URL: "http://localhost"
+  EXTERNAL_TRANSFER_SERVICE_URL: "http://localhost"
   BLUETOOTH_UUID_TTL_SECONDS: "86400"
 ---
 # Source: ssok-bluetooth-service/templates/configmap.yaml
@@ -103,6 +104,8 @@ data:
         url: ${EXTERNAL_ACCOUNT_SERVICE_URL}
       user-service:
         url: ${EXTERNAL_USER_SERVICE_URL}
+      transfer-service:
+        url: ${EXTERNAL_TRANSFER_SERVICE_URL}
     bluetooth:
       uuid-ttl-seconds: ${BLUETOOTH_UUID_TTL_SECONDS}
 ---
