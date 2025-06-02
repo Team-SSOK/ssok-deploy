@@ -1,0 +1,35 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: ssok-bank-ingress
+  namespace: bank
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+
+spec:
+  rules:
+    - host: bank.kudong.kr
+      http:
+        paths:
+          - path: /api/bank/transfer
+            pathType: Prefix
+            backend:
+              service:
+                name: ssok-bank-proxy
+                port:
+                  number: 8080
+          - path: /api/bank
+            pathType: Prefix
+            backend:
+              service:
+                name: ssok-bank
+                port:
+                  number: 8080
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: ssok-bank
+                port:
+                  number: 8080

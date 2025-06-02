@@ -8,7 +8,7 @@ spec:
   source:
     repoURL: https://github.com/Team-SSOK/ssok-deploy.git
     targetRevision: main
-    path: k8s/ingress/ssok-app/base
+    path: k8s/ingress/ssok-app/base/prod
   destination:
     server: https://kubernetes.default.svc
     namespace: ssok

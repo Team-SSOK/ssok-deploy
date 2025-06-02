@@ -1,0 +1,31 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: ssok-logging-ingress
+  namespace: logging
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+
+spec:
+  rules:
+    - host: os.kudong.kr
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: opensearch-cluster-master
+                port:
+                  number: 9200
+    - host: log.kudong.kr
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: opensearch-dashboards
+                port:
+                  number: 5601
