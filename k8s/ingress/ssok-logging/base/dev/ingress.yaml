@@ -8,6 +8,11 @@ metadata:
     nginx.ingress.kubernetes.io/ssl-redirect: "true"
 
 spec:
+  tls:
+    - hosts:
+      - os.kudong.kr
+      - log.kudong.kr
+      secretName: kudong-logging-tls-secret
   rules:
     - host: os.kudong.kr
       http:
