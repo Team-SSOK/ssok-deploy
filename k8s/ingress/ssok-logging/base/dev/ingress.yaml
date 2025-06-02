@@ -3,8 +3,6 @@ kind: Ingress
 metadata:
   name: ssok-logging-ingress
   namespace: logging
-  annotations:
-    nginx.ingress.kubernetes.io/ssl-redirect: "true"
 spec:
   ingressClassName: nginx
   tls:

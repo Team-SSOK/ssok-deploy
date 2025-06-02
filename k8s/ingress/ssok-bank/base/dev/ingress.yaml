@@ -7,10 +7,10 @@ spec:
   ingressClassName: nginx
   tls:
     - hosts:
-      - kudong.kr
+      - bank.kudong.kr
       secretName: kudong-bank-tls-secret
   rules:
-    - host: kudong.kr
+    - host: bank.kudong.kr
       http:
         paths:
           - path: /api/bank/transfer
