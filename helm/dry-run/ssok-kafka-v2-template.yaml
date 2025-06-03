@@ -91,6 +91,8 @@ spec:
         size: 10Gi
         deleteClaim: false
         kraftMetadata: shared  
+
+  # 리소스 설정      
   # resources:
   #   requests:
   #     memory: 1Gi
@@ -98,3 +100,15 @@ spec:
   #   limits:
   #     memory: 2Gi
   #     cpu: 1000m
+
+  # Pod Anti-Affinity 설정
+  # template:
+  #   pod:
+  #     affinity:
+  #       podAntiAffinity:
+  #         requiredDuringSchedulingIgnoredDuringExecution:
+  #           - labelSelector:
+  #               matchLabels:
+  #                 strimzi.io/cluster: ssok-cluster
+  #                 strimzi.io/kind: Kafka
+  #             topologyKey: kubernetes.io/hostname
