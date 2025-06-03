@@ -1,6 +1,7 @@
 @Echo off
 
 helm package ./ssok-kafka
+helm package ./ssok-kafka-v2
 helm package ./ssok-bank
 helm package ./ssok-bank-proxy
 helm package ./ssok-account-service

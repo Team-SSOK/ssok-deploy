@@ -3,9 +3,9 @@ entries:
   ssok-account-service:
   - apiVersion: v2
     appVersion: 1.0.0
-    created: "2025-05-31T10:51:17.7327781+09:00"
+    created: "2025-06-03T11:35:53.8704248+09:00"
     description: A Helm chart for ssok-account-service
-    digest: df6c9f3cd36a78c9adab994e57a02d3e16c5442f02df2cbc8705860c6764f5d1
+    digest: ad5175014da38c43abe2b998dffd459a604a16f7d46ae5fb82d53d2753ab91ba
     name: ssok-account-service
     type: application
     urls:
@@ -14,9 +14,9 @@ entries:
   ssok-bank:
   - apiVersion: v2
     appVersion: 0.1.0
-    created: "2025-05-31T10:51:17.7333829+09:00"
+    created: "2025-06-03T11:35:53.8709495+09:00"
     description: A SSOK-BANK Helm chart for Kubernetes
-    digest: c0e8d1cd96410046ee1f4996bfee3d82ab930ec1faa99cce51644143ad5430bb
+    digest: 163f1e2b06a6b8a9dc18fef8c3bcee02466807a4634468a23160833022daab06
     name: ssok-bank
     type: application
     urls:
@@ -25,9 +25,9 @@ entries:
   ssok-bank-proxy:
   - apiVersion: v2
     appVersion: 0.1.0
-    created: "2025-05-31T10:51:17.7340163+09:00"
+    created: "2025-06-03T11:35:53.8714704+09:00"
     description: A SSOK-BANK-PROXY Helm chart for Kubernetes
-    digest: 8f6489154e8ae0d1774bb765dd9a00910aa9c3ce036c602614f69bfa57f4ad62
+    digest: 88d5f976ccfa014b86d9f8f1d3ec576480ed05311cee2d4948760e4e859a9c5b
     name: ssok-bank-proxy
     type: application
     urls:
@@ -36,9 +36,9 @@ entries:
   ssok-bluetooth-service:
   - apiVersion: v2
     appVersion: 1.0.0
-    created: "2025-05-31T10:51:17.7346461+09:00"
+    created: "2025-06-03T11:35:53.8719935+09:00"
     description: A Helm chart for ssok-bluetooth-service
-    digest: a1e8a379e9e10493cac847f2ace156139b3a13c79ef4b005e5e7f22f47cf40de
+    digest: ad00b557c236cafe22c34d80916e3990d99535dcb2413c2c669656e50b4731b9
     name: ssok-bluetooth-service
     type: application
     urls:
@@ -47,9 +47,9 @@ entries:
   ssok-gateway-service:
   - apiVersion: v2
     appVersion: 1.0.0
-    created: "2025-05-31T10:51:17.7352263+09:00"
+    created: "2025-06-03T11:35:53.8719935+09:00"
     description: A Helm chart for ssok-gateway-service
-    digest: e5a901444d6d683e542770ce521f5c8b0de5d7966cb3e2f7bc822863fff1c09c
+    digest: 300e2aeb0a753a1dd0c69eccf80d364bd89b9e41fb7a3bbcd51dbf57bdcf613b
     name: ssok-gateway-service
     type: application
     urls:
@@ -58,20 +58,31 @@ entries:
   ssok-kafka:
   - apiVersion: v2
     appVersion: 0.1.0
-    created: "2025-05-31T10:51:17.7358004+09:00"
+    created: "2025-06-03T11:35:53.8725116+09:00"
     description: A SSOK-KAFKA Helm chart for Kubernetes
-    digest: eb95c00f2e99dee2f907e359d0b56d3f93e906ade3b2d79611b1dea00c6d03d0
+    digest: 3d1754e599e7b8c7e6339df12d3ad7c792ccb9f263c08512c5f1e0aecc0acee6
     name: ssok-kafka
     type: application
     urls:
     - ssok-kafka-0.1.0.tgz
     version: 0.1.0
+  ssok-kafka-v2:
+  - apiVersion: v2
+    appVersion: 0.1.0
+    created: "2025-06-03T11:35:53.8730345+09:00"
+    description: A SSOK-KAFKA-V2 Helm chart for Kubernetes
+    digest: 40760345e45eeaab184fde3a653871c08dd15a5d48bcb69c4f17a31fc3898177
+    name: ssok-kafka-v2
+    type: application
+    urls:
+    - ssok-kafka-v2-0.1.0.tgz
+    version: 0.1.0
   ssok-notification-service:
   - apiVersion: v2
     appVersion: 1.0.0
-    created: "2025-05-31T10:51:17.736365+09:00"
+    created: "2025-06-03T11:35:53.8735522+09:00"
     description: A Helm chart for ssok-notification-service
-    digest: ce254f8421aec9641d3e6cd5be44088241c4614ef1eea5024dc445f21a93b234
+    digest: 07b7d9b4b7e232aaa6210ddf62a6774e098c3efec9a9544fd8c0c6d764cf0069
     name: ssok-notification-service
     type: application
     urls:
@@ -80,9 +91,9 @@ entries:
   ssok-openbanking:
   - apiVersion: v2
     appVersion: 0.1.0
-    created: "2025-05-31T10:51:17.7369119+09:00"
+    created: "2025-06-03T11:35:53.8735522+09:00"
     description: A SSOK-OPENBANKING Helm chart for Kubernetes
-    digest: 473fb9a8279a72f01633e3e25c18ace2747374b3d970fbdc3fea0b05e7aa771e
+    digest: 5431e8ab9a03ac66ca54a2552af3bcfb18d575dd5ee0e89725de6a946084519c
     name: ssok-openbanking
     type: application
     urls:
@@ -91,9 +102,9 @@ entries:
   ssok-transfer-service:
   - apiVersion: v2
     appVersion: 1.0.0
-    created: "2025-05-31T10:51:17.7386256+09:00"
+    created: "2025-06-03T11:35:53.8741548+09:00"
     description: A Helm chart for ssok-transfer-service
-    digest: 86816807c3c03e57047009d4c656669e1e9836ec5f8f933af6622d34c493c0e7
+    digest: 628abfcc36155821633da17ec410d49cd32abbb3eccc8f607c59a046014aa100
     name: ssok-transfer-service
     type: application
     urls:
@@ -102,12 +113,12 @@ entries:
   ssok-user-service:
   - apiVersion: v2
     appVersion: 1.0.0
-    created: "2025-05-31T10:51:17.7401364+09:00"
+    created: "2025-06-03T11:35:53.8746751+09:00"
     description: A Helm chart for ssok-user-service
-    digest: 4d58100d6fdbc788ed6fba38c19192e1a1a7b6cdaecf3ce902d07fab1f4a2b17
+    digest: 4389222fc43d869e7d86a0a0148a725721f9703678176fe0ad2bb92d06c12d94
     name: ssok-user-service
     type: application
     urls:
     - ssok-user-service-0.1.0.tgz
     version: 0.1.0
-generated: "2025-05-31T10:51:17.7308732+09:00"
+generated: "2025-06-03T11:35:53.8699062+09:00"
