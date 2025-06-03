@@ -17,8 +17,21 @@ spec:
         type: persistent-claim
         size: 2Gi
         deleteClaim: false
-        kraftMetadata: shared  
-        class: kafka-storage
+        kraftMetadata: dedicated # 각 컨트롤러 노드마다 별도의 PersistentVolume
+        storageClass: kafka-storage
+
+  # Pod Anti-Affinity 설정
+  template:
+    pod:
+      affinity:
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            - labelSelector:
+                matchLabels:
+                  strimzi.io/cluster: ssok-cluster
+                  strimzi.io/kind: Kafka
+              topologyKey: kubernetes.io/hostname
+
   # 리소스 설정      
   # resources:
   #   requests:
@@ -27,15 +40,3 @@ spec:
   #   limits:
   #     memory: 2Gi
   #     cpu: 1000m
-
-  # Pod Anti-Affinity 설정
-  # template:
-  #   pod:
-  #     affinity:
-  #       podAntiAffinity:
-  #         requiredDuringSchedulingIgnoredDuringExecution:
-  #           - labelSelector:
-  #               matchLabels:
-  #                 strimzi.io/cluster: ssok-cluster
-  #                 strimzi.io/kind: Kafka
-  #             topologyKey: kubernetes.io/hostname

@@ -10,7 +10,7 @@ metadata:
     strimzi.io/pod-index: "0"
 spec:
   capacity:
-    storage: 2Gi
+    storage: 10Gi
   accessModes:
     - ReadWriteOnce
   persistentVolumeReclaimPolicy: Retain
@@ -18,12 +18,12 @@ spec:
   hostPath:
     path: /mnt/kafka/ssok-cluster/kafka-node-0
     type: DirectoryOrCreate
-  # nodeAffinity:
-  #   required:
-  #     nodeSelectorTerms:
-  #     - matchExpressions:
-  #       - key: kubernetes.io/hostname
-  #         operator: Exists
+  nodeAffinity:
+    required:
+      nodeSelectorTerms:
+      - matchExpressions:
+        - key: kubernetes.io/hostname
+          operator: Exists
 ---
 apiVersion: v1
 kind: PersistentVolume
@@ -36,7 +36,7 @@ metadata:
     strimzi.io/pod-index: "1"
 spec:
   capacity:
-    storage: 2Gi
+    storage: 10Gi
   accessModes:
     - ReadWriteOnce
   persistentVolumeReclaimPolicy: Retain
@@ -44,12 +44,12 @@ spec:
   hostPath:
     path: /mnt/kafka/ssok-cluster/kafka-node-1
     type: DirectoryOrCreate
-  # nodeAffinity:
-  #   required:
-  #     nodeSelectorTerms:
-  #     - matchExpressions:
-  #       - key: kubernetes.io/hostname
-  #         operator: Exists
+  nodeAffinity:
+    required:
+      nodeSelectorTerms:
+      - matchExpressions:
+        - key: kubernetes.io/hostname
+          operator: Exists
 ---
 apiVersion: v1
 kind: PersistentVolume
@@ -62,7 +62,7 @@ metadata:
     strimzi.io/pod-index: "2"
 spec:
   capacity:
-    storage: 2Gi
+    storage: 10Gi
   accessModes:
     - ReadWriteOnce
   persistentVolumeReclaimPolicy: Retain
@@ -70,12 +70,12 @@ spec:
   hostPath:
     path: /mnt/kafka/ssok-cluster/kafka-node-2
     type: DirectoryOrCreate
-  # nodeAffinity:
-  #   required:
-  #     nodeSelectorTerms:
-  #     - matchExpressions:
-  #       - key: kubernetes.io/hostname
-  #         operator: Exists
+  nodeAffinity:
+    required:
+      nodeSelectorTerms:
+      - matchExpressions:
+        - key: kubernetes.io/hostname
+          operator: Exists
 ---
 # StorageClass 정의 (manual provisioning용)
 apiVersion: storage.k8s.io/v1

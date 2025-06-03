@@ -21,7 +21,7 @@ metadata:
     strimzi.io/pod-index: "0"
 spec:
   capacity:
-    storage: 2Gi
+    storage: 10Gi
   accessModes:
     - ReadWriteOnce
   persistentVolumeReclaimPolicy: Retain
@@ -29,12 +29,12 @@ spec:
   hostPath:
     path: /mnt/kafka/ssok-cluster/kafka-node-0
     type: DirectoryOrCreate
-  # nodeAffinity:
-  #   required:
-  #     nodeSelectorTerms:
-  #     - matchExpressions:
-  #       - key: kubernetes.io/hostname
-  #         operator: Exists
+  nodeAffinity:
+    required:
+      nodeSelectorTerms:
+      - matchExpressions:
+        - key: kubernetes.io/hostname
+          operator: Exists
 ---
 # Source: ssok-kafka-v2/templates/pv.yaml
 apiVersion: v1
@@ -48,7 +48,7 @@ metadata:
     strimzi.io/pod-index: "1"
 spec:
   capacity:
-    storage: 2Gi
+    storage: 10Gi
   accessModes:
     - ReadWriteOnce
   persistentVolumeReclaimPolicy: Retain
@@ -56,12 +56,12 @@ spec:
   hostPath:
     path: /mnt/kafka/ssok-cluster/kafka-node-1
     type: DirectoryOrCreate
-  # nodeAffinity:
-  #   required:
-  #     nodeSelectorTerms:
-  #     - matchExpressions:
-  #       - key: kubernetes.io/hostname
-  #         operator: Exists
+  nodeAffinity:
+    required:
+      nodeSelectorTerms:
+      - matchExpressions:
+        - key: kubernetes.io/hostname
+          operator: Exists
 ---
 # Source: ssok-kafka-v2/templates/pv.yaml
 apiVersion: v1
@@ -75,7 +75,7 @@ metadata:
     strimzi.io/pod-index: "2"
 spec:
   capacity:
-    storage: 2Gi
+    storage: 10Gi
   accessModes:
     - ReadWriteOnce
   persistentVolumeReclaimPolicy: Retain
@@ -83,12 +83,12 @@ spec:
   hostPath:
     path: /mnt/kafka/ssok-cluster/kafka-node-2
     type: DirectoryOrCreate
-  # nodeAffinity:
-  #   required:
-  #     nodeSelectorTerms:
-  #     - matchExpressions:
-  #       - key: kubernetes.io/hostname
-  #         operator: Exists
+  nodeAffinity:
+    required:
+      nodeSelectorTerms:
+      - matchExpressions:
+        - key: kubernetes.io/hostname
+          operator: Exists
 ---
 # Source: ssok-kafka-v2/templates/kafka.yaml
 # Strimzi Operator 설치 
@@ -181,8 +181,21 @@ spec:
         type: persistent-claim
         size: 2Gi
         deleteClaim: false
-        kraftMetadata: shared  
-        class: kafka-storage
+        kraftMetadata: dedicated # 각 컨트롤러 노드마다 별도의 PersistentVolume
+        storageClass: kafka-storage
+
+  # Pod Anti-Affinity 설정
+  template:
+    pod:
+      affinity:
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            - labelSelector:
+                matchLabels:
+                  strimzi.io/cluster: ssok-cluster
+                  strimzi.io/kind: Kafka
+              topologyKey: kubernetes.io/hostname
+
   # 리소스 설정      
   # resources:
   #   requests:
@@ -191,15 +204,3 @@ spec:
   #   limits:
   #     memory: 2Gi
   #     cpu: 1000m
-
-  # Pod Anti-Affinity 설정
-  # template:
-  #   pod:
-  #     affinity:
-  #       podAntiAffinity:
-  #         requiredDuringSchedulingIgnoredDuringExecution:
-  #           - labelSelector:
-  #               matchLabels:
-  #                 strimzi.io/cluster: ssok-cluster
-  #                 strimzi.io/kind: Kafka
-  #             topologyKey: kubernetes.io/hostname
