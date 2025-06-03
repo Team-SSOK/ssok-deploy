@@ -2,10 +2,7 @@
 
 replicaCount: 1
 
-# clusterId: "U8XUvcvkSkW_J-MbbcDByw"
-
-
-
+clusterId: "RybJc3zoR5irN6YJaST9dQ"
 
 # Pod Anti-Affinity 설정
 template:
