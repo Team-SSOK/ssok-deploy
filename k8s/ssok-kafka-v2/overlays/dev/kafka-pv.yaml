@@ -16,7 +16,7 @@ spec:
   persistentVolumeReclaimPolicy: Retain
   storageClassName: kafka-storage
   hostPath:
-    path: /mnt/kafka/ssok-cluster/kafka-node-0
+    path: /home/lgcns/kafka/ssok-cluster/kafka-node-0
     type: DirectoryOrCreate
   nodeAffinity:
     required:
@@ -42,7 +42,7 @@ spec:
   persistentVolumeReclaimPolicy: Retain
   storageClassName: kafka-storage
   hostPath:
-    path: /mnt/kafka/ssok-cluster/kafka-node-1
+    path: /home/lgcns/kafka/ssok-cluster/kafka-node-1
     type: DirectoryOrCreate
   nodeAffinity:
     required:
@@ -68,7 +68,7 @@ spec:
   persistentVolumeReclaimPolicy: Retain
   storageClassName: kafka-storage
   hostPath:
-    path: /mnt/kafka/ssok-cluster/kafka-node-2
+    path: /home/lgcns/kafka/ssok-cluster/kafka-node-2
     type: DirectoryOrCreate
   nodeAffinity:
     required:
