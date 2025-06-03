@@ -17,4 +17,11 @@ spec:
         type: persistent-claim
         size: 10Gi
         deleteClaim: false
-        kraftMetadata: shared
+        kraftMetadata: shared  
+  # resources:
+  #   requests:
+  #     memory: 1Gi
+  #     cpu: 500m
+  #   limits:
+  #     memory: 2Gi
+  #     cpu: 1000m

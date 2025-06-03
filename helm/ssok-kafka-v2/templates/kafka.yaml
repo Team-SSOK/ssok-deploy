@@ -5,12 +5,18 @@
 # 자동으로 생성되는 서비스들
 # ssok-cluster-kafka-bootstrap          ClusterIP    # 내부 bootstrap
 # ssok-cluster-kafka-brokers            ClusterIP    # headless 서비스  
-# ssok-cluster-kafka-external-0         NodePort     # 브로커 0 외부 접근
-# ssok-cluster-kafka-external-1         NodePort     # 브로커 1 외부 접근
+# ssok-cluster-kafka-node-0         NodePort     # 브로커 0 외부 접근
+# ssok-cluster-kafka-node-1         NodePort     # 브로커 1 외부 접근
+# ssok-cluster-kafka-node-2         NodePort     # 브로커 1 외부 접근
 
 # 접근법 (둘중 하나 선택)
 # ssok-cluster-kafka-bootstrap.kafka.svc.cluster.local:9092 # Bootstrap 서비스 
 # ssok-cluster-kafka-brokers.kafka.svc.cluster.local:9092 # Brokers 서비스 - headless
+
+# 개별 접근 (Headless)
+# ssok-cluster-kafka-node-0.ssok-cluster-kafka-brokers:9092
+# ssok-cluster-kafka-node-1.ssok-cluster-kafka-brokers:9092
+# ssok-cluster-kafka-node-2.ssok-cluster-kafka-brokers:9092
 
 # https://github.com/strimzi/strimzi-kafka-operator/tree/main/examples/kafka 참고
 # https://strimzi.io/quickstarts/
@@ -56,15 +62,6 @@ spec:
       transaction.state.log.min.isr: 2
       default.replication.factor: 3
       min.insync.replicas: 2
-      
-    # # 리소스 제한
-    # resources:
-    #   requests:
-    #     memory: 1Gi
-    #     cpu: 500m
-    #   limits:
-    #     memory: 2Gi
-    #     cpu: 1000m
 
   entityOperator:
     topicOperator: {}
