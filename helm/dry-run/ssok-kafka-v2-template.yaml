@@ -23,6 +23,9 @@
 # https://github.com/strimzi/strimzi-kafka-operator/tree/main/examples/kafka 참고
 # https://strimzi.io/quickstarts/
 ---
+# Source: ssok-kafka-v2/templates/pool.yaml
+# PV hostpath의 권한 주의!!
+---
 # Source: ssok-kafka-v2/templates/kafka.yaml
 # Kafka 클러스터 정의
 apiVersion: kafka.strimzi.io/v1beta2
@@ -96,10 +99,6 @@ spec:
   # Pod Anti-Affinity 설정
   template:
     pod:
-      securityContext:
-        runAsUser: 1001
-        runAsGroup: 1001
-        fsGroup: 1001
       affinity:
         podAntiAffinity:
           requiredDuringSchedulingIgnoredDuringExecution:
