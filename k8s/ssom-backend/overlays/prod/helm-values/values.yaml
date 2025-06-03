@@ -10,13 +10,13 @@ notification:
   # 실제 Discord webhook URL로 변경 필요
   webhook-url: "https://discord.com/api/webhooks/1377886188312068146/eFtja7Ax7h84bD9z5CZhm7jligL1wDIRRLvQgr-UnxnACEUSkyI4Gm9NsenVFwnwKnLK"
 
-resources:
-  requests:
-    cpu: "500m"      # 최소 0.5 CPU 코어
-    memory: "512Mi"  # 512MB
-  limits:
-    cpu: "1000m"     # 최대 1 CPU 코어
-    memory: "1Gi"    # 1GB 
+#resources:
+#  requests:
+#    cpu: "500m"      # 최소 0.5 CPU 코어
+#    memory: "512Mi"  # 512MB
+#  limits:
+#    cpu: "1000m"     # 최대 1 CPU 코어
+#    memory: "1Gi"    # 1GB
 
 # HPA 비활성화 (Deployment 먼저 생성)
 hpa:

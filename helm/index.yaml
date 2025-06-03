@@ -3,133 +3,133 @@ entries:
   ssok-account-service:
   - apiVersion: v2
     appVersion: 1.0.0
-    created: "2025-06-03T19:27:59.470996+09:00"
+    created: "2025-06-03T20:29:11.50391+09:00"
     description: A Helm chart for ssok-account-service
     digest: 4348d3207001fb951e5a8f2e996536818452984ef3a75327146d01de6002379f
     name: ssok-account-service
     type: application
     urls:
-    - https://raw.githubusercontent.com/Team-SSOK/ssok-deploy/main/helm/ssok-account-service-0.1.0.tgz
+    - ssok-account-service-0.1.0.tgz
     version: 0.1.0
   ssok-bank:
   - apiVersion: v2
     appVersion: 0.1.0
-    created: "2025-06-03T19:27:59.472532+09:00"
+    created: "2025-06-03T20:29:11.50497+09:00"
     description: A SSOK-BANK Helm chart for Kubernetes
     digest: 1870ae2b08d7e48c3d679b59d1a3dc92ea9dea5fba48ce7a55f40f1cd584f392
     name: ssok-bank
     type: application
     urls:
-    - https://raw.githubusercontent.com/Team-SSOK/ssok-deploy/main/helm/ssok-bank-0.1.0.tgz
+    - ssok-bank-0.1.0.tgz
     version: 0.1.0
   ssok-bank-proxy:
   - apiVersion: v2
     appVersion: 0.1.0
-    created: "2025-06-03T19:27:59.473739+09:00"
+    created: "2025-06-03T20:29:11.50858+09:00"
     description: A SSOK-BANK-PROXY Helm chart for Kubernetes
     digest: 3d277dd03b48cbe706df1c6b619285c93facb051435938871b8ad5d70c5a3398
     name: ssok-bank-proxy
     type: application
     urls:
-    - https://raw.githubusercontent.com/Team-SSOK/ssok-deploy/main/helm/ssok-bank-proxy-0.1.0.tgz
+    - ssok-bank-proxy-0.1.0.tgz
     version: 0.1.0
   ssok-bluetooth-service:
   - apiVersion: v2
     appVersion: 1.0.0
-    created: "2025-06-03T19:27:59.474851+09:00"
+    created: "2025-06-03T20:29:11.509395+09:00"
     description: A Helm chart for ssok-bluetooth-service
     digest: 3991db3ffe3b62b72e42c2dc596ecd4e9016f610b98afbc8f52bc5ba6ae0b149
     name: ssok-bluetooth-service
     type: application
     urls:
-    - https://raw.githubusercontent.com/Team-SSOK/ssok-deploy/main/helm/ssok-bluetooth-service-0.1.0.tgz
+    - ssok-bluetooth-service-0.1.0.tgz
     version: 0.1.0
   ssok-gateway-service:
   - apiVersion: v2
     appVersion: 1.0.0
-    created: "2025-06-03T19:27:59.476966+09:00"
+    created: "2025-06-03T20:29:11.51019+09:00"
     description: A Helm chart for ssok-gateway-service
     digest: ec76e7251ccab88876695c6ffa1348a132eb1c6010e15f1d19329c5326d65df2
     name: ssok-gateway-service
     type: application
     urls:
-    - https://raw.githubusercontent.com/Team-SSOK/ssok-deploy/main/helm/ssok-gateway-service-0.1.0.tgz
+    - ssok-gateway-service-0.1.0.tgz
     version: 0.1.0
   ssok-kafka:
   - apiVersion: v2
     appVersion: 0.1.0
-    created: "2025-06-03T19:27:59.477971+09:00"
+    created: "2025-06-03T20:29:11.511127+09:00"
     description: A SSOK-KAFKA Helm chart for Kubernetes
     digest: 16f763440561ad0121ecb5ee72ddfd0e8c877b82fdb24fc9c0c088afcfce31ce
     name: ssok-kafka
     type: application
     urls:
-    - https://raw.githubusercontent.com/Team-SSOK/ssok-deploy/main/helm/ssok-kafka-0.1.0.tgz
+    - ssok-kafka-0.1.0.tgz
     version: 0.1.0
   ssok-kafka-v2:
   - apiVersion: v2
     appVersion: 0.1.0
-    created: "2025-06-03T19:27:59.478627+09:00"
+    created: "2025-06-03T20:29:11.511766+09:00"
     description: A SSOK-KAFKA-V2 Helm chart for Kubernetes
     digest: 715d7117267232990eb62363589dcfeaca03d5d90b50497204ad43a420b3c1f1
     name: ssok-kafka-v2
     type: application
     urls:
-    - https://raw.githubusercontent.com/Team-SSOK/ssok-deploy/main/helm/ssok-kafka-v2-0.1.0.tgz
+    - ssok-kafka-v2-0.1.0.tgz
     version: 0.1.0
   ssok-notification-service:
   - apiVersion: v2
     appVersion: 1.0.0
-    created: "2025-06-03T19:27:59.479658+09:00"
+    created: "2025-06-03T20:29:11.512791+09:00"
     description: A Helm chart for ssok-notification-service
     digest: 6bcf8bcd3fcec22878f3c5ae975faedba4dc54c43e0cd03a1e9e4164d613a7e6
     name: ssok-notification-service
     type: application
     urls:
-    - https://raw.githubusercontent.com/Team-SSOK/ssok-deploy/main/helm/ssok-notification-service-0.1.0.tgz
+    - ssok-notification-service-0.1.0.tgz
     version: 0.1.0
   ssok-openbanking:
   - apiVersion: v2
     appVersion: 0.1.0
-    created: "2025-06-03T19:27:59.480388+09:00"
+    created: "2025-06-03T20:29:11.513409+09:00"
     description: A SSOK-OPENBANKING Helm chart for Kubernetes
     digest: c6538c3583b10f5a116e1e910212045bef48151fb579037bb6cb815ab61071b8
     name: ssok-openbanking
     type: application
     urls:
-    - https://raw.githubusercontent.com/Team-SSOK/ssok-deploy/main/helm/ssok-openbanking-0.1.0.tgz
+    - ssok-openbanking-0.1.0.tgz
     version: 0.1.0
   ssok-transfer-service:
   - apiVersion: v2
     appVersion: 1.0.0
-    created: "2025-06-03T19:27:59.481571+09:00"
+    created: "2025-06-03T20:29:11.514742+09:00"
     description: A Helm chart for ssok-transfer-service
     digest: 6776a677c7a1261ddbff8f686bc267fafd41e9c5d1e2e433118c2603e0076066
     name: ssok-transfer-service
     type: application
     urls:
-    - https://raw.githubusercontent.com/Team-SSOK/ssok-deploy/main/helm/ssok-transfer-service-0.1.0.tgz
+    - ssok-transfer-service-0.1.0.tgz
     version: 0.1.0
   ssok-user-service:
   - apiVersion: v2
     appVersion: 1.0.0
-    created: "2025-06-03T19:27:59.482984+09:00"
+    created: "2025-06-03T20:29:11.516689+09:00"
     description: A Helm chart for ssok-user-service
     digest: 75086c3a93c4af3f734462e3b234ca05a479c48ba2315a3665cc6c5c62cdf209
     name: ssok-user-service
     type: application
     urls:
-    - https://raw.githubusercontent.com/Team-SSOK/ssok-deploy/main/helm/ssok-user-service-0.1.0.tgz
+    - ssok-user-service-0.1.0.tgz
     version: 0.1.0
   ssom-backend:
   - apiVersion: v2
     appVersion: 0.1.0
-    created: "2025-06-03T19:27:59.483795+09:00"
+    created: "2025-06-03T20:29:11.51823+09:00"
     description: A SSOM-BACKEND Helm chart for Kubernetes
-    digest: 240d06e333d6f8066860039d76185578d61f731aa998a6dded9fddae5898770e
+    digest: 6c55d829dbff8fb3a53e948f7a473bc8c25ea556273ef8e9cc9eccdd3ad9fc44
     name: ssom-backend
     type: application
     urls:
-    - https://raw.githubusercontent.com/Team-SSOK/ssok-deploy/main/helm/ssom-backend-0.1.0.tgz
+    - ssom-backend-0.1.0.tgz
     version: 0.1.0
-generated: "2025-06-03T19:27:59.468495+09:00"
+generated: "2025-06-03T20:29:11.502082+09:00"
