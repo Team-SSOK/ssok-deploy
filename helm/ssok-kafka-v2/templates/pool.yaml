@@ -1,7 +1,7 @@
 apiVersion: kafka.strimzi.io/v1beta2
 kind: KafkaNodePool
 metadata:
-  name: dual-role
+  name: kafka-node
   namespace: kafka
   labels:
     strimzi.io/cluster: ssok-cluster
