@@ -5,6 +5,10 @@ replicaCount: 1
 # Pod Anti-Affinity 설정
 template:
   pod:
+    securityContext:
+      runAsUser: 1001
+      runAsGroup: 1001
+      fsGroup: 1001
     affinity:
       podAntiAffinity:
         requiredDuringSchedulingIgnoredDuringExecution:
