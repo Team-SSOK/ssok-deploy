@@ -181,7 +181,7 @@ spec:
         type: persistent-claim
         size: 2Gi
         deleteClaim: false
-        kraftMetadata: dedicated # 각 컨트롤러 노드마다 별도의 PersistentVolume
+        kraftMetadata: shared
         storageClass: kafka-storage
 
   # Pod Anti-Affinity 설정
