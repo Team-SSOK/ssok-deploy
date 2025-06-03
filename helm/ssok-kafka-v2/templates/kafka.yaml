@@ -30,6 +30,9 @@ metadata:
   annotations:
     strimzi.io/node-pools: enabled
     strimzi.io/kraft: enabled
+    {{- if .Values.clusterId }}
+    strimzi.io/cluster-id: {{ .Values.clusterId }}
+    {{- end }}
 spec:
   # KRaft 모드 설정
   kafka:
