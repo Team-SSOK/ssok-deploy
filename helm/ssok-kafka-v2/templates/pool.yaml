@@ -15,10 +15,10 @@ spec:
     volumes:
       - id: 0
         type: persistent-claim
-        size: 10Gi
+        size: 2Gi
         deleteClaim: false
         kraftMetadata: shared  
-
+        class: kafka-storage
   # 리소스 설정      
   # resources:
   #   requests:
