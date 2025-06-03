@@ -77,7 +77,7 @@ kind: KafkaNodePool
 metadata:
   name: dual-role
   labels:
-    strimzi.io/cluster: my-cluster
+    strimzi.io/cluster: ssok-cluster
 spec:
   replicas: 3
   roles:
