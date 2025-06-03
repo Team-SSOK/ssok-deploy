@@ -29,6 +29,7 @@ resources:
     memory: "1Gi"    # 1GB 
 
 hpa:
+  enabled: true  # HPA 활성화/비활성화 제어
   minReplicas: 1
   maxReplicas: 3
   metrics:
@@ -55,6 +56,10 @@ hpa:
         value: 2            # 또는 2개씩 증가
         periodSeconds: 15   # 15초마다
       selectPolicy: Max # 정책 2개중 가장 큰것을 선택
+
+# Fluent Bit 로깅 비활성화
+logging:
+  enabled: false
 
 ssom:
   config:
@@ -151,38 +156,3 @@ ssom:
     
     # OpenSearch API URL (민감할 수 있음)
     OPENSEARCH_API_URL: ""
-
-log:
-  fluentbit:
-    conf: |
-      [SERVICE]
-          Flush         1
-          Daemon        Off
-          Log_Level     info
-          Parsers_File  parsers.conf
-
-      [INPUT]
-          Name              tail
-          Path              /var/log/ssom-backend.log
-          Parser            json
-          Tag               app.log 
-          Refresh_Interval  5
-          Mem_Buf_Limit     10MB
-          Skip_Long_Lines   On
-
-      [OUTPUT]
-          Name              stdout
-          Match             app.*
-
-      [OUTPUT]
-          Name              forward
-          Match             app.*
-          Host              fluentd-aggregator.logging.svc.cluster.local
-          Port              24224
-  parsers:
-    conf: |
-      [PARSER]
-          Name              json
-          Format            json
-          Time_Key          time
-          Time_Format       %Y-%m-%dT%H:%M:%S.%L

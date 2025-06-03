@@ -6,11 +6,11 @@ metadata:
   namespace: {{ .Release.Namespace }}
   labels:
     {{- include "ssom-backend.labels" . | nindent 4 }}
-  annotations:
-    argocd.argoproj.io/sync-wave: "1"
 spec:
   revisionHistoryLimit: 1
-  # replicas: {{ .Values.replicaCount }} # HPA로 대체
+  {{- if not .Values.hpa.enabled }}
+  replicas: 1
+  {{- end }}
   selector:
     matchLabels:
       {{- include "ssom-backend.selectorLabels" . | nindent 6 }}
@@ -30,9 +30,6 @@ spec:
               name: ssom-backend-cm
           - secretRef:
               name: ssom-backend-secrets
-        volumeMounts:
-          - name: varlog
-            mountPath: /var/log
         readinessProbe:
           httpGet:
             path: /actuator/health/readiness
@@ -49,23 +46,3 @@ spec:
           {{- with .Values.resources }}
           {{- toYaml . | nindent 10 }}
           {{- end }}
-
-      - name: fluent-bit
-        image: cr.fluentbit.io/fluent/fluent-bit:4.0.2
-        imagePullPolicy: IfNotPresent
-        volumeMounts:
-          - name: varlog
-            mountPath: /var/log
-          - name: fluent-bit-config
-            mountPath: /fluent-bit/etc
-        resources:
-          limits:
-            memory: 100Mi
-            cpu: 100m
-
-      volumes:
-        - name: varlog
-          emptyDir: {}
-        - name: fluent-bit-config
-          configMap:
-            name: ssom-backend-fluent-bit-config

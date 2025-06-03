@@ -1,3 +1,4 @@
+{{- if .Values.logging.enabled }}
 ---
 apiVersion: v1
 kind: ConfigMap
@@ -11,3 +12,4 @@ data:
 {{ .Values.log.fluentbit.conf | indent 4 }}
   parsers.conf: |
 {{ .Values.log.parsers.conf | indent 4 }}
+{{- end }}
