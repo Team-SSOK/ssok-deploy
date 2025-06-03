@@ -8,37 +8,21 @@ metadata:
   labels:
     strimzi.io/cluster: ssok-cluster
 spec:
-  replicas: 3
-  roles:
+  replicas: {{ .Values.replicaCount }}
+  roles: # dual-role 구성 (Kraft 권장)
     - controller
     - broker
   storage:
-    type: jbod
-    volumes:
-      - id: 0
-        type: persistent-claim
-        size: 10Gi
-        deleteClaim: false
-        kraftMetadata: shared
-        class: kafka-storage
+    {{- with .Values.storage }}
+    {{- toYaml . | nindent 4 }}
+    {{- end }}
 
-  # Pod Anti-Affinity 설정
+  {{- if .Values.template }}
   template:
-    pod:
-      affinity:
-        podAntiAffinity:
-          requiredDuringSchedulingIgnoredDuringExecution:
-            - labelSelector:
-                matchLabels:
-                  strimzi.io/cluster: ssok-cluster
-                  strimzi.io/kind: Kafka
-              topologyKey: kubernetes.io/hostname
+    {{- toYaml .Values.template | nindent 4 }}
+  {{- end }}
 
-  # 리소스 설정      
-  # resources:
-  #   requests:
-  #     memory: 1Gi
-  #     cpu: 500m
-  #   limits:
-  #     memory: 2Gi
-  #     cpu: 1000m
+  {{- if .Values.resources }}
+  resources:
+    {{- toYaml .Values.resources | nindent 4 }}
+  {{- end }}
