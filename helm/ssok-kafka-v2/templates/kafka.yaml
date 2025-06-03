@@ -18,6 +18,8 @@ kind: Kafka
 metadata:
   name: ssok-cluster
   namespace: kafka
+  annotations:
+    strimzi.io/kraft: enabled
 spec:
   # KRaft 모드 설정
   kafka:
