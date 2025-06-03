@@ -9,7 +9,7 @@ metadata:
 spec:
   type: NodePort
   selector:
-    {{- include "ssok-bank.selectorLabels" . | nindent 4 }}
+    {{- include "ssom-backend.selectorLabels" . | nindent 4 }}
   sessionAffinity: None
   ports:
     - name: web       # ← 반드시 포트 이름 지정
