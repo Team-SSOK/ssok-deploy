@@ -13,6 +13,7 @@
 # ssok-cluster-kafka-brokers.kafka.svc.cluster.local:9092 # Brokers 서비스 - headless
 
 # https://github.com/strimzi/strimzi-kafka-operator/tree/main/examples/kafka 참고
+# https://strimzi.io/quickstarts/
 ---
 # Kafka 클러스터 정의
 apiVersion: kafka.strimzi.io/v1beta2
