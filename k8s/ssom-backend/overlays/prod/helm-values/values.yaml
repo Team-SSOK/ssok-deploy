@@ -54,24 +54,23 @@ ssom:
     SPRING_JPA_SHOW_SQL: "false"
     
   secrets:
+    # 실제 DEV 환경과 동일한 DB 설정으로 임시 변경 (배포 테스트용)
+    SPRING_DATASOURCE_URL: amRiYzpteXNxbDovL2t1ZG9uZy5rcjo1NTAyMy9zc29tZGI/dXNlU1NMPWZhbHNlJmFsbG93UHVibGljS2V5UmV0cmlldmFsPXRydWUmc2VydmVyVGltZXpvbmU9QXNpYS9TZW91bCZjaGFyYWN0ZXJFbmNvZGluZz1VVEYtOA==
+    SPRING_DATASOURCE_USERNAME: c3NvbXVzZXI=
+    SPRING_DATASOURCE_PASSWORD: c3NvbXB3
     
-    # Database 설정 (실제 운영 DB 정보로 변경 필요)
-    SPRING_DATASOURCE_URL: amRiYzpteXNxbDovL3Byb2QtZGItaG9zdDozMzA2L3Nzb21fcHJvZD91c2VTU0w9dHJ1ZSZzZXJ2ZXJUaW1lem9uZT1Bc2lhL1Nlb3VsJmNoYXJhY3RlckVuY29kaW5nPVVURi04
-    SPRING_DATASOURCE_USERNAME: c3NvbV9wcm9kX3VzZXI=
-    SPRING_DATASOURCE_PASSWORD: c3NvbV9wcm9kX3NlY3VyZV9wYXNzd29yZA==
-    
-    # Redis 설정 (실제 운영 Redis 정보로 변경 필요)
-    SPRING_DATA_REDIS_HOST: cHJvZC1yZWRpcy1ob3N0
-    SPRING_DATA_REDIS_PORT: NjM3OQ==
+    # Redis 설정 (DEV와 동일)
+    SPRING_DATA_REDIS_HOST: a3Vkb25nLmty
+    SPRING_DATA_REDIS_PORT: NTUwMzI=
     
     # JWT Secret (운영용 강력한 시크릿으로 변경 필요)
     JWT_SECRET: bXlTZWNyZXRLZXkxMjM0NTY3ODkwMTIzNDU2Nzg5MDEyMzQ1Njc4OTAxMjM0NTY3ODkw
     
     # GitHub API 설정 (운영용 토큰으로 변경 필요)
     GITHUB_TOKEN: Z2hwX0tKb3g4ZTByc3pJYjlXVWo4SkZpdEF5M000QmJ1dTFuczlCNg==
-    GITHUB_WEBHOOK_SECRET: c3NvbV9wcm9kX3dlYmhvb2tfc2VjcmV0XzIwMjVfc2VjdXJlX2tleV94eXo3ODk=
+    GITHUB_WEBHOOK_SECRET: c3NvbV9kZXZfd2ViaG9va19zZWNyZXRfMjAyNV9zZWN1cmVfa2V5X2FiYzEyM3h5eg==
     
-    # LLM API URL (운영 환경 URL로 변경 필요)
+    # LLM API URL
     LLM_API_URL: aHR0cDovL2t1ZG9uZy5rcjo1NTAzNg==
     
     # OpenSearch API URL
