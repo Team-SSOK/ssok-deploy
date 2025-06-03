@@ -15,10 +15,10 @@ spec:
     volumes:
       - id: 0
         type: persistent-claim
-        size: 2Gi
+        size: 10Gi
         deleteClaim: false
         kraftMetadata: shared
-        storageClass: kafka-storage
+        class: kafka-storage
 
   # Pod Anti-Affinity 설정
   template:
