@@ -54,8 +54,6 @@ ssom:
     SPRING_JPA_SHOW_SQL: "false"
     
   secrets:
-    # ⚠️ 주의: 아래 값들은 실제 운영 환경에 맞게 변경해야 합니다!
-    # 현재는 DEV 값과 동일하게 설정되어 있습니다.
     
     # Database 설정 (실제 운영 DB 정보로 변경 필요)
     SPRING_DATASOURCE_URL: amRiYzpteXNxbDovL3Byb2QtZGItaG9zdDozMzA2L3Nzb21fcHJvZD91c2VTU0w9dHJ1ZSZzZXJ2ZXJUaW1lem9uZT1Bc2lhL1Nlb3VsJmNoYXJhY3RlckVuY29kaW5nPVVURi04
