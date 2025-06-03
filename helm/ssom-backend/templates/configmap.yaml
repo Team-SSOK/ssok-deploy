@@ -1,0 +1,12 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: ssom-backend-cm
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "ssom-backend.labels" . | nindent 4 }}
+data:
+  {{- with .Values.ssom.config }}
+  {{- toYaml . | nindent 2 }}
+  {{- end }}

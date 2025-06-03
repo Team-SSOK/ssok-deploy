@@ -1,0 +1,188 @@
+# SSOM-BACKEND 기본 values 입니다.
+
+minReplicas: 1
+maxReplicas: 3
+
+image:
+  repository: kudong/ssom-backend
+  pullPolicy: IfNotPresent
+  tag: "latest" # chart appVersion의 이미지 태그를 덮어쓰기
+
+nameOverride: ""
+fullnameOverride: ""
+
+serviceAccount:
+  create: true
+  annotations: {}
+  name: ""
+
+notification:
+  profile: "[DEV]"
+  webhook-url: "" # 오버라이드에서 설정
+
+resources:
+  requests:
+    cpu: "200m"      # 최소 0.2 CPU 코어
+    memory: "512Mi"  # 512MB
+  limits:
+    cpu: "500m"     # 최대 0.5 CPU 코어
+    memory: "1Gi"    # 1GB 
+
+hpa:
+  minReplicas: 1
+  maxReplicas: 3
+  metrics:
+  - type: Resource
+    resource:
+      name: cpu
+      target:
+        type: Utilization
+        averageUtilization: 90 # CPU 이용률 90% 이상시
+  behavior:
+    scaleDown:
+      stabilizationWindowSeconds: 300 # 5분 대기, 30초 주기, 점진적 감소
+      policies:
+      - type: Percent
+        value: 50
+        periodSeconds: 30
+    scaleUp:
+      stabilizationWindowSeconds: 0 # 0초 대기, 15초 주기, 최대 증가
+      policies:
+      - type: Percent
+        value: 100          # 현재 Pod 수의 100% 증가
+        periodSeconds: 15   # 15초마다
+      - type: Pods          
+        value: 2            # 또는 2개씩 증가
+        periodSeconds: 15   # 15초마다
+      selectPolicy: Max # 정책 2개중 가장 큰것을 선택
+
+ssom:
+  config:
+    # Spring Boot 기본 설정
+    SPRING_APPLICATION_NAME: "ssom-backend"
+    SPRING_PROFILES_ACTIVE: "dev"
+    
+    # 서버 설정
+    SERVER_PORT: "8080"
+    
+    # Database 설정 (비민감 정보)
+    SPRING_DATASOURCE_DRIVER_CLASS_NAME: "com.mysql.cj.jdbc.Driver"
+    SPRING_DATASOURCE_HIKARI_MAXIMUM_POOL_SIZE: "20"
+    SPRING_DATASOURCE_HIKARI_MINIMUM_IDLE: "5"
+    SPRING_DATASOURCE_HIKARI_IDLE_TIMEOUT: "300000"
+    SPRING_DATASOURCE_HIKARI_MAX_LIFETIME: "1200000"
+    SPRING_DATASOURCE_HIKARI_CONNECTION_TIMEOUT: "20000"
+    SPRING_DATASOURCE_HIKARI_VALIDATION_TIMEOUT: "3000"
+    SPRING_DATASOURCE_HIKARI_LEAK_DETECTION_THRESHOLD: "60000"
+    SPRING_DATASOURCE_HIKARI_CONNECTION_TEST_QUERY: "SELECT 1"
+    
+    # JPA 설정
+    SPRING_JPA_HIBERNATE_DDL_AUTO: "update"
+    SPRING_JPA_PROPERTIES_HIBERNATE_DIALECT: "org.hibernate.dialect.MySQL8Dialect"
+    SPRING_JPA_PROPERTIES_HIBERNATE_FORMAT_SQL: "true"
+    SPRING_JPA_PROPERTIES_HIBERNATE_SHOW_SQL: "true"
+    SPRING_JPA_PROPERTIES_HIBERNATE_USE_SQL_COMMENTS: "true"
+    SPRING_JPA_PROPERTIES_HIBERNATE_JDBC_BATCH_SIZE: "20"
+    SPRING_JPA_PROPERTIES_HIBERNATE_JDBC_TIME_ZONE: "Asia/Seoul"
+    SPRING_JPA_PROPERTIES_HIBERNATE_ORDER_INSERTS: "true"
+    SPRING_JPA_PROPERTIES_HIBERNATE_ORDER_UPDATES: "true"
+    SPRING_JPA_PROPERTIES_HIBERNATE_BATCH_VERSIONED_DATA: "true"
+    SPRING_JPA_SHOW_SQL: "true"
+    
+    # Redis 설정 (비민감 정보)
+    SPRING_DATA_REDIS_TIMEOUT: "2000ms"
+    SPRING_DATA_REDIS_LETTUCE_POOL_MAX_ACTIVE: "8"
+    SPRING_DATA_REDIS_LETTUCE_POOL_MAX_IDLE: "8"
+    SPRING_DATA_REDIS_LETTUCE_POOL_MIN_IDLE: "0"
+    SPRING_DATA_REDIS_LETTUCE_POOL_MAX_WAIT: "-1ms"
+    SPRING_DATA_REDIS_LETTUCE_POOL_TIME_BETWEEN_EVICTION_RUNS: "60s"
+    
+    # JWT 설정 (비민감 정보)
+    JWT_ACCESS_TOKEN_VALIDITY_IN_SECONDS: "1800"
+    JWT_REFRESH_TOKEN_VALIDITY_IN_SECONDS: "604800"
+    
+    # Security Whitelist
+    SECURITY_WHITELIST_0: "/api/users/login"
+    SECURITY_WHITELIST_1: "/api/users/refresh"
+    SECURITY_WHITELIST_2: "/api/users/signup"
+    SECURITY_WHITELIST_3: "/api/users/phone"
+    SECURITY_WHITELIST_4: "/api/users/phone/verify"
+    SECURITY_WHITELIST_5: "/api/issues/webhook/github"
+    SECURITY_WHITELIST_6: "/actuator/prometheus"
+    SECURITY_WHITELIST_7: "/swagger-ui/**"
+    SECURITY_WHITELIST_8: "/v3/api-docs/**"
+    SECURITY_WHITELIST_9: "/error"
+    
+    # GitHub API 설정 (비민감 정보)
+    GITHUB_API_OWNER: "Team-SSOK"
+    GITHUB_API_REPOSITORY: "ssom-backend"
+    
+    # Management/Actuator 설정
+    MANAGEMENT_ENDPOINTS_WEB_EXPOSURE_INCLUDE: "health,info,prometheus"
+    MANAGEMENT_PROMETHEUS_METRICS_EXPORT_ENABLED: "true"
+    
+    # 생체인증 설정
+    BIOMETRIC_MAX_FAILURE_ATTEMPTS: "3"
+    BIOMETRIC_FAILURE_RESET_TIME_MINUTES: "30"
+    BIOMETRIC_DEVICE_BLOCK_TIME_MINUTES: "30"
+    BIOMETRIC_TIMESTAMP_TOLERANCE_MS: "300000"
+    BIOMETRIC_MAX_BIOMETRIC_HASH_LENGTH: "500"
+    BIOMETRIC_MAX_DEVICE_INFO_LENGTH: "1000"
+    
+  secrets:
+    # 민감한 DB 정보는 base64 인코딩 후 overlays에서 설정
+    SPRING_DATASOURCE_URL: ""
+    SPRING_DATASOURCE_USERNAME: ""
+    SPRING_DATASOURCE_PASSWORD: ""
+    
+    # Redis 민감 정보
+    SPRING_DATA_REDIS_HOST: ""
+    SPRING_DATA_REDIS_PORT: ""
+    
+    # JWT Secret
+    JWT_SECRET: ""
+    
+    # GitHub API Token (민감)
+    GITHUB_TOKEN: ""
+    GITHUB_WEBHOOK_SECRET: ""
+    
+    # LLM API URL (민감할 수 있음)
+    LLM_API_URL: ""
+    
+    # OpenSearch API URL (민감할 수 있음)
+    OPENSEARCH_API_URL: ""
+
+log:
+  fluentbit:
+    conf: |
+      [SERVICE]
+          Flush         1
+          Daemon        Off
+          Log_Level     info
+          Parsers_File  parsers.conf
+
+      [INPUT]
+          Name              tail
+          Path              /var/log/ssom-backend.log
+          Parser            json
+          Tag               app.log 
+          Refresh_Interval  5
+          Mem_Buf_Limit     10MB
+          Skip_Long_Lines   On
+
+      [OUTPUT]
+          Name              stdout
+          Match             app.*
+
+      [OUTPUT]
+          Name              forward
+          Match             app.*
+          Host              fluentd-aggregator.logging.svc.cluster.local
+          Port              24224
+  parsers:
+    conf: |
+      [PARSER]
+          Name              json
+          Format            json
+          Time_Key          time
+          Time_Format       %Y-%m-%dT%H:%M:%S.%L

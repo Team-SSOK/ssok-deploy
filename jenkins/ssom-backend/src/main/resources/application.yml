@@ -1,0 +1,103 @@
+spring:
+  application:
+    name: ssom-backend
+
+  profiles:
+    active: dev
+
+  datasource:
+    url: ${SPRING_DATASOURCE_URL}
+    username: ${SPRING_DATASOURCE_USERNAME}
+    password: ${SPRING_DATASOURCE_PASSWORD}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    hikari:
+      maximum-pool-size: 20
+      minimum-idle: 5
+      idle-timeout: 300000
+      max-lifetime: 1200000
+      connection-timeout: 20000
+      validation-timeout: 3000
+      leak-detection-threshold: 60000
+      connection-test-query: SELECT 1
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL8Dialect
+        format_sql: true
+        show_sql: true
+        use_sql_comments: true
+        jdbc:
+          batch_size: 20
+          time_zone: Asia/Seoul
+        order_inserts: true
+        order_updates: true
+        batch_versioned_data: true
+    show-sql: true
+
+  data:
+    redis:
+      host: ${SPRING_DATA_REDIS_HOST}
+      port: ${SPRING_DATA_REDIS_PORT}
+      timeout: 2000ms
+      lettuce:
+        pool:
+          max-active: 8
+          max-idle: 8
+          min-idle: 0
+          max-wait: -1ms
+          time-between-eviction-runs: 60s
+
+jwt:
+  secret: ${JWT_SECRET}
+  access-token-validity-in-seconds: 1800
+  refresh-token-validity-in-seconds: 604800
+
+security:
+  whitelist:
+    - "/api/users/login"
+    - "/api/users/refresh"
+    - "/api/users/signup"
+    - "/api/users/phone"
+    - "/api/users/phone/verify"
+    - "/api/issues/webhook/github"
+    - "/actuator/prometheus"
+    - "/swagger-ui/**"
+    - "/v3/api-docs/**"
+    - "/error"
+
+llm:
+  api:
+    url: ${LLM_API_URL}
+
+github:
+  api:
+    token: ${GITHUB_TOKEN}
+    owner: Team-SSOK
+    repository: ssom-backend
+  webhook:
+    secret: ${GITHUB_WEBHOOK_SECRET}
+
+opensearch:
+  api:
+    url: ${OPENSEARCH_API_URL}
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,prometheus
+  prometheus:
+    metrics:
+      export:
+        enabled: true
+
+biometric:
+  max-failure-attempts: 3
+  failure-reset-time-minutes: 30
+  device-block-time-minutes: 30
+  timestamp-tolerance-ms: 300000
+  max-biometric-hash-length: 500
+  max-device-info-length: 1000

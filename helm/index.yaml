@@ -121,4 +121,15 @@ entries:
     urls:
     - ssok-user-service-0.1.0.tgz
     version: 0.1.0
-generated: "2025-06-03T14:17:54.4747481+09:00"
+  ssom-backend:
+  - apiVersion: v2
+    appVersion: 0.1.0
+    created: "2025-06-03T15:00:00.0000000+09:00"
+    description: A SSOM-BACKEND Helm chart for Kubernetes
+    digest: abc123def456ghi789jkl012mno345pqr678stu901vwx234yzab567cdef890abc
+    name: ssom-backend
+    type: application
+    urls:
+    - ssom-backend-0.1.0.tgz
+    version: 0.1.0
+generated: "2025-06-03T15:00:00.0000000+09:00"

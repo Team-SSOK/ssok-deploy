@@ -1,0 +1,114 @@
+# SSOM-BACKEND PROD 환경 설정
+
+image:
+  repository: kudong/ssom-backend
+  pullPolicy: IfNotPresent
+  tag: "1.1"
+
+notification:
+  profile: "[PROD]"
+  # 실제 Discord webhook URL로 변경 필요
+  webhook-url: "https://discord.com/api/webhooks/1377886188312068146/eFtja7Ax7h84bD9z5CZhm7jligL1wDIRRLvQgr-UnxnACEUSkyI4Gm9NsenVFwnwKnLK"
+
+resources:
+  requests:
+    cpu: "500m"      # 최소 0.5 CPU 코어
+    memory: "512Mi"  # 512MB
+  limits:
+    cpu: "1000m"     # 최대 1 CPU 코어
+    memory: "1Gi"    # 1GB 
+
+hpa:
+  minReplicas: 1
+  maxReplicas: 3
+  metrics:
+  - type: Resource
+    resource:
+      name: cpu
+      target:
+        type: Utilization
+        averageUtilization: 80 # CPU 이용률 80% 이상시
+  behavior:
+    scaleDown:
+      stabilizationWindowSeconds: 300 # 5분 대기, 30초 주기, 점진적 감소
+      policies:
+      - type: Percent
+        value: 50
+        periodSeconds: 30
+    scaleUp:
+      stabilizationWindowSeconds: 0 # 0초 대기, 15초 주기, 최대 증가
+      policies:
+      - type: Percent
+        value: 100          # 현재 Pod 수의 100% 증가
+        periodSeconds: 15   # 15초마다
+      - type: Pods          
+        value: 2            # 또는 2개씩 증가
+        periodSeconds: 15   # 15초마다
+      selectPolicy: Max # 정책 2개중 가장 큰것을 선택
+
+ssom:
+  config:
+    # Prod 환경 특화 설정
+    SPRING_PROFILES_ACTIVE: "prod"
+    SPRING_JPA_PROPERTIES_HIBERNATE_SHOW_SQL: "false"  # Prod에서는 SQL 로깅 비활성화
+    SPRING_JPA_SHOW_SQL: "false"
+    
+  secrets:
+    # ⚠️ 주의: 아래 값들은 실제 운영 환경에 맞게 변경해야 합니다!
+    # 현재는 DEV 값과 동일하게 설정되어 있습니다.
+    
+    # Database 설정 (실제 운영 DB 정보로 변경 필요)
+    SPRING_DATASOURCE_URL: amRiYzpteXNxbDovL3Byb2QtZGItaG9zdDozMzA2L3Nzb21fcHJvZD91c2VTU0w9dHJ1ZSZzZXJ2ZXJUaW1lem9uZT1Bc2lhL1Nlb3VsJmNoYXJhY3RlckVuY29kaW5nPVVURi04
+    SPRING_DATASOURCE_USERNAME: c3NvbV9wcm9kX3VzZXI=
+    SPRING_DATASOURCE_PASSWORD: c3NvbV9wcm9kX3NlY3VyZV9wYXNzd29yZA==
+    
+    # Redis 설정 (실제 운영 Redis 정보로 변경 필요)
+    SPRING_DATA_REDIS_HOST: cHJvZC1yZWRpcy1ob3N0
+    SPRING_DATA_REDIS_PORT: NjM3OQ==
+    
+    # JWT Secret (운영용 강력한 시크릿으로 변경 필요)
+    JWT_SECRET: bXlTZWNyZXRLZXkxMjM0NTY3ODkwMTIzNDU2Nzg5MDEyMzQ1Njc4OTAxMjM0NTY3ODkw
+    
+    # GitHub API 설정 (운영용 토큰으로 변경 필요)
+    GITHUB_TOKEN: Z2hwX0tKb3g4ZTByc3pJYjlXVWo4SkZpdEF5M000QmJ1dTFuczlCNg==
+    GITHUB_WEBHOOK_SECRET: c3NvbV9wcm9kX3dlYmhvb2tfc2VjcmV0XzIwMjVfc2VjdXJlX2tleV94eXo3ODk=
+    
+    # LLM API URL (운영 환경 URL로 변경 필요)
+    LLM_API_URL: aHR0cDovL2t1ZG9uZy5rcjo1NTAzNg==
+    
+    # OpenSearch API URL
+    OPENSEARCH_API_URL: aHR0cHM6Ly9vcy5zc29rLmty
+
+log:
+  fluentbit:
+    conf: |
+      [SERVICE]
+          Flush         1
+          Daemon        Off
+          Log_Level     info
+          Parsers_File  parsers.conf
+          HTTP_Server   On
+          HTTP_Listen   0.0.0.0
+          HTTP_Port     2020
+
+      [INPUT]
+          Name              tail
+          Path              /var/log/ssom-backend.log
+          Parser            json
+          Tag               app.log
+          Refresh_Interval  5
+          Mem_Buf_Limit     10MB
+          Skip_Long_Lines   On
+
+      [OUTPUT]
+          Name              forward
+          Match             app.*
+          Host              fluentd-aggregator.logging.svc.cluster.local
+          Port              24224
+  parsers:
+    conf: |
+      [PARSER]
+          Name              json
+          Format            json
+          Time_Key          time
+          Time_Format       %Y-%m-%dT%H:%M:%S.%L%z
