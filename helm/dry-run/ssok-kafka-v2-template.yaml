@@ -62,16 +62,15 @@ spec:
     storage:
       type: persistent-claim
       size: 10Gi
-      class: standard  # 사용할 StorageClass
     
     # 리소스 제한
-    # resources:
-    #   requests:
-    #     memory: 1Gi
-    #     cpu: 500m
-    #   limits:
-    #     memory: 2Gi
-    #     cpu: 1000m
+    resources:
+      requests:
+        memory: 1Gi
+        cpu: 500m
+      limits:
+        memory: 2Gi
+        cpu: 1000m
 
   entityOperator:
     topicOperator: {}
