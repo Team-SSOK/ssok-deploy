@@ -34,13 +34,13 @@ ssom:
     SPRING_JPA_SHOW_SQL: "true"
     
   secrets:
-    # application.yml에서 추출한 실제 DEV 환경 민감정보들 (base64 인코딩)
-    SPRING_DATASOURCE_URL: amRiYzpteXNxbDovL2t1ZG9uZy5rcjo1NTAyMy9zc29tZGI/dXNlU1NMPWZhbHNlJmFsbG93UHVibGljS2V5UmV0cmlldmFsPXRydWUmc2VydmVyVGltZXpvbmU9QXNpYS9TZW91bCZjaGFyYWN0ZXJFbmNvZGluZz1VVEYtOA==
+    # IP 주소로 변경된 DB 설정 (kudong.kr → 172.21.1.22)
+    SPRING_DATASOURCE_URL: amRiYzpteXNxbDovLzE3Mi4yMS4xLjIyOjU1MDIzL3Nzb21kYj91c2VTU0w9ZmFsc2UmYWxsb3dQdWJsaWNLZXlSZXRyaWV2YWw9dHJ1ZSZzZXJ2ZXJUaW1lem9uZT1Bc2lhL1Nlb3VsJmNoYXJhY3RlckVuY29kaW5nPVVURi04
     SPRING_DATASOURCE_USERNAME: c3NvbXVzZXI=
     SPRING_DATASOURCE_PASSWORD: c3NvbXB3
     
-    # Redis 설정
-    SPRING_DATA_REDIS_HOST: a3Vkb25nLmty
+    # Redis 설정도 IP 주소로 변경
+    SPRING_DATA_REDIS_HOST: MTcyLjIxLjEuMjI=
     SPRING_DATA_REDIS_PORT: NTUwMzI=
     
     # JWT Secret

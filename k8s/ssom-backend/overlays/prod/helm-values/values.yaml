@@ -10,13 +10,14 @@ notification:
   # 실제 Discord webhook URL로 변경 필요
   webhook-url: "https://discord.com/api/webhooks/1377886188312068146/eFtja7Ax7h84bD9z5CZhm7jligL1wDIRRLvQgr-UnxnACEUSkyI4Gm9NsenVFwnwKnLK"
 
-#resources:
-#  requests:
-#    cpu: "500m"      # 최소 0.5 CPU 코어
-#    memory: "512Mi"  # 512MB
-#  limits:
-#    cpu: "1000m"     # 최대 1 CPU 코어
-#    memory: "1Gi"    # 1GB
+# 리소스 요청량 대폭 감소 (클러스터 리소스 부족으로 인해)
+resources:
+  requests:
+    cpu: "100m"      # 0.1 CPU 코어
+    memory: "256Mi"  # 256MB
+  limits:
+    cpu: "500m"      # 0.5 CPU 코어  
+    memory: "512Mi"  # 512MB
 
 # HPA 비활성화 (Deployment 먼저 생성)
 hpa:
@@ -33,14 +34,19 @@ ssom:
     SPRING_JPA_PROPERTIES_HIBERNATE_SHOW_SQL: "false"  # Prod에서는 SQL 로깅 비활성화
     SPRING_JPA_SHOW_SQL: "false"
     
+    # DB 연결 타임아웃 증가 (연결 문제 해결 시도)
+    SPRING_DATASOURCE_HIKARI_CONNECTION_TIMEOUT: "60000"  # 20초 → 60초
+    SPRING_DATASOURCE_HIKARI_VALIDATION_TIMEOUT: "10000"  # 3초 → 10초
+    SPRING_DATASOURCE_HIKARI_LEAK_DETECTION_THRESHOLD: "120000"  # 60초 → 120초
+    
   secrets:
-    # 실제 DEV 환경과 동일한 DB 설정으로 임시 변경 (배포 테스트용)
-    SPRING_DATASOURCE_URL: amRiYzpteXNxbDovL2t1ZG9uZy5rcjo1NTAyMy9zc29tZGI/dXNlU1NMPWZhbHNlJmFsbG93UHVibGljS2V5UmV0cmlldmFsPXRydWUmc2VydmVyVGltZXpvbmU9QXNpYS9TZW91bCZjaGFyYWN0ZXJFbmNvZGluZz1VVEYtOA==
+    # IP 주소로 변경된 DB 설정 (kudong.kr → 172.21.1.22)
+    SPRING_DATASOURCE_URL: amRiYzpteXNxbDovLzE3Mi4yMS4xLjIyOjU1MDIzL3Nzb21kYj91c2VTU0w9ZmFsc2UmYWxsb3dQdWJsaWNLZXlSZXRyaWV2YWw9dHJ1ZSZzZXJ2ZXJUaW1lem9uZT1Bc2lhL1Nlb3VsJmNoYXJhY3RlckVuY29kaW5nPVVURi04
     SPRING_DATASOURCE_USERNAME: c3NvbXVzZXI=
     SPRING_DATASOURCE_PASSWORD: c3NvbXB3
     
-    # Redis 설정 (DEV와 동일)
-    SPRING_DATA_REDIS_HOST: a3Vkb25nLmty
+    # Redis 설정도 IP 주소로 변경
+    SPRING_DATA_REDIS_HOST: MTcyLjIxLjEuMjI=
     SPRING_DATA_REDIS_PORT: NTUwMzI=
     
     # JWT Secret (운영용 강력한 시크릿으로 변경 필요)
