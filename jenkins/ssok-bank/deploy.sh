@@ -92,8 +92,10 @@ echo $separationPhrase
 
 K8S_DIR=$currentDir/$DEPLOY_NAME/k8s/$BACKEND_IMAGE_NAME/overlays/prod/helm-values
 
-# DEPLOYMENT_FILE="values.yaml"
-# sed -i "s|image: ${DOCKER_NICKNAME}/${BACKEND_IMAGE_NAME}:.*|image: ${DOCKER_NICKNAME}/${BACKEND_IMAGE_NAME}:${TAG}|g" ${K8S_DIR}/${DEPLOYMENT_FILE}
+YAML_FILE="values.yaml"
+sed -i 's/\(  tag: \).*$/\1"'"$TAG"'"/' ${K8S_DIR}/${YAML_FILE}
+
+K8S_DIR=$currentDir/$DEPLOY_NAME/k8s/$BACKEND_IMAGE_NAME/overlays/dev/helm-values
 
 YAML_FILE="values.yaml"
 sed -i 's/\(  tag: \).*$/\1"'"$TAG"'"/' ${K8S_DIR}/${YAML_FILE}
