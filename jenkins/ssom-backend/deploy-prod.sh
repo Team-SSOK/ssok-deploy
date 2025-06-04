@@ -8,7 +8,7 @@ mountDir=$currentDir/mount;
 separationPhrase="=====================================";
 
 DOCKER_NICKNAME="kudong"
-BACKEND_IMAGE_NAME="ssom-backend"
+BACKEND_IMAGE_NAME="ssom-backend-prod"
 DEPLOY_NAME="ssok-deploy"
 TAG="1.$BUILD_NUMBER"
 BUILD="jenkins"
