@@ -64,6 +64,6 @@ ssom:
     LLM_API_URL: aHR0cDovL2t1ZG9uZy5rcjo1NTAzNg==
     
     # OpenSearch API URL (K8s 서비스명 - base64 인코딩)
-    OPENSEARCH_HOST: b3BlbnNlYXJjaC1jbHVzdGVyLW1hc3Rlci5sb2dnaW5nLnN2Yy5jbHVzdGVyLmxvY2Fs
-    OPENSEARCH_PORT: OTIwMA==
+    OPENSEARCH_HOST: MTcyLjIxLjEuMTk=
+    OPENSEARCH_PORT: ODAwMA==
     OPENSEARCH_API_URL: b3BlbnNlYXJjaC1jbHVzdGVyLW1hc3Rlci5sb2dnaW5nLnN2Yy5jbHVzdGVyLmxvY2FsOjkyMDA=
