@@ -44,7 +44,7 @@ persistence:
   accessModes:
     - ReadWriteOnce
   size: 20Gi
-  storageClass: "gp3"
+  storageClass: "gp2"
 
 service:
   type: ClusterIP
