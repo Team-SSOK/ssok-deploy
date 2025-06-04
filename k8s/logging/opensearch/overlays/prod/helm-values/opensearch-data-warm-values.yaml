@@ -1,0 +1,71 @@
+clusterName: "opensearch-cluster"
+nodeGroup: "data-warm"
+singleNode: false
+
+# Warm Data 역할만 (오래된 데이터 보존)
+roles:
+  - data_warm
+  - remote_cluster_client
+
+# Replica 2개
+replicas: 2
+
+resources:
+  # Warm 노드는 색인/검색 부하가 적으므로, 더 작은 요청량
+  requests:
+    cpu: "250m"
+    memory: "512Mi"
+  limits:
+    cpu: "500m"
+    memory: "1Gi"
+
+opensearchJavaOpts: "-Xmx512m -Xms512m"
+
+securityConfig:
+  enabled: false
+
+extraEnvs:
+  - name: DISABLE_INSTALL_DEMO_CONFIG
+    value: "true"
+  - name: DISABLE_SECURITY_PLUGIN
+    value: "true"
+  - name: DISABLE_SECURITY_DASHBOARDS_PLUGIN
+    value: "true"
+  - name: OPENSEARCH_NODE_ATTR_ZONE
+    valueFrom:
+      fieldRef:
+        fieldPath: metadata.labels['topology.kubernetes.io/zone']
+
+# Persistence: Warm 데이터는 용량 위주로, gp3 100Gi
+persistence:
+  enabled: true
+  accessModes:
+    - ReadWriteOnce
+  size: 70Gi
+  storageClass: "gp3"
+
+service:
+  type: ClusterIP
+
+config:
+  opensearch.yml: |
+    cluster.name: opensearch-cluster
+    network.host: 0.0.0.0
+
+    plugins.security.disabled: true
+
+    # zone 속성
+    node.attr.zone: ${OPENSEARCH_NODE_ATTR_ZONE}
+
+    # Cluster Manager 후보
+    discovery.seed_hosts:
+      - "opensearch-cluster-manager-0.opensearch-cluster-manager.logging.svc.cluster.local:9300"
+      - "opensearch-cluster-manager-1.opensearch-cluster-manager.logging.svc.cluster.local:9300"
+      - "opensearch-cluster-manager-2.opensearch-cluster-manager.logging.svc.cluster.local:9300"
+    cluster.initial_master_nodes:
+      - "opensearch-cluster-manager-0"
+      - "opensearch-cluster-manager-1"
+      - "opensearch-cluster-manager-2"
+
+    # Shard Allocation Awareness
+    cluster.routing.allocation.awareness.attributes: "zone"

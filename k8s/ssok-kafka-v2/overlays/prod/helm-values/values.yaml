@@ -17,6 +17,16 @@ template:
       runAsUser: 1001
       runAsGroup: 1001
       fsGroup: 1001
+    affinity:
+      podAntiAffinity:
+        preferredDuringSchedulingIgnoredDuringExecution:
+          - weight: 100
+            podAffinityTerm:
+              labelSelector:
+                matchLabels:
+                  strimzi.io/cluster: ssok-cluster
+                  strimzi.io/kind: Kafka
+              topologyKey: kubernetes.io/hostname
 
 # PVC 설정
 storage:
