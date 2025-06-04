@@ -103,3 +103,10 @@ biometric:
   timestamp-tolerance-ms: 300000
   max-biometric-hash-length: 500
   max-device-info-length: 1000
+
+# FCM
+firebase:
+  configPath: "classpath:firebase/firebase-adminsdk.json"
+  enabled: "true"
+fcm:
+  tokenTtlSeconds: "2592000"

@@ -53,7 +53,6 @@ ssom:
     JWT_SECRET: bXlTZWNyZXRLZXkxMjM0NTY3ODkwMTIzNDU2Nzg5MDEyMzQ1Njc4OTAxMjM0NTY3ODkw
 
     # GitHub API 설정 (운영용 토큰으로 변경 필요)
-    GITHUB_TOKEN: Z2hwX25hVkR3QzRmblBCVmFqcjJYTkR5cWdtZkRRRzIyMjAzdXhxQw==
     GITHUB_WEBHOOK_SECRET: c3NvbV9kZXZfd2ViaG9va19zZWNyZXRfMjAyNV9zZWN1cmVfa2V5X2FiYzEyM3h5eg==
     
     # LLM API URL
@@ -61,10 +60,3 @@ ssom:
     
     # OpenSearch API URL
     OPENSEARCH_API_URL: a3Vkb25nLmtyOjU1MDMz
-
-    # FCM
-    firebase:
-      configPath: "classpath:firebase/firebase-adminsdk.json"
-      enabled: "true"
-    fcm:
-      tokenTtlSeconds: "2592000"

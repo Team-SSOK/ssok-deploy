@@ -37,6 +37,16 @@ mkdir -p $currentDir/images;
 #프로젝트 별 설정파일 복사
 cp -r -f ./$DEPLOY_NAME/$BUILD/$BACKEND_IMAGE_NAME/* $currentDir
 
+# GitHub Token을 application.yml에 직접 주입 (파일 복사 후 실행)
+echo "GitHub Token을 application.yml에 주입 중..."
+echo "GITHUB_TOKEN = ${GITHUB_TOKEN}"
+
+# application.yml 파일에서 ${GITHUB_TOKEN}을 실제 값으로 치환
+sed -i "s/\${GITHUB_TOKEN}/${GITHUB_TOKEN}/g" $currentDir/src/main/resources/application.yml
+
+echo "GitHub Token 주입 완료"
+
+
 echo
 echo "BACKEND BUILD Start...."
 echo 
