@@ -12,17 +12,17 @@ metadata:
     app.kubernetes.io/version: "0.1.0"
     app.kubernetes.io/managed-by: Helm
 type: Opaque
-data:
+stringData:
   GITHUB_TOKEN: ""
   GITHUB_WEBHOOK_SECRET: ""
   JWT_SECRET: ""
   LLM_API_URL: ""
   OPENSEARCH_API_URL: ""
-  SPRING_DATA_REDIS_HOST: ""
-  SPRING_DATA_REDIS_PORT: ""
   SPRING_DATASOURCE_PASSWORD: ""
   SPRING_DATASOURCE_URL: ""
   SPRING_DATASOURCE_USERNAME: ""
+  SPRING_DATA_REDIS_HOST: ""
+  SPRING_DATA_REDIS_PORT: ""
 ---
 # Source: ssom-backend/templates/configmap.yaml
 apiVersion: v1
@@ -164,12 +164,6 @@ spec:
           initialDelaySeconds: 180
           periodSeconds: 20
         resources:
-          limits:
-            cpu: 500m
-            memory: 1Gi
-          requests:
-            cpu: 200m
-            memory: 512Mi
 ---
 # Source: ssom-backend/templates/hpa.yaml
 apiVersion: autoscaling/v2
