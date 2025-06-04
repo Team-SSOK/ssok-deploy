@@ -1,3 +1,5 @@
+# PV hostpath의 권한 주의!!
+---
 apiVersion: kafka.strimzi.io/v1beta2
 kind: KafkaNodePool
 metadata:
@@ -6,22 +8,21 @@ metadata:
   labels:
     strimzi.io/cluster: ssok-cluster
 spec:
-  replicas: 3
-  roles:
+  replicas: {{ .Values.replicaCount }}
+  roles: # dual-role 구성 (Kraft 권장)
     - controller
     - broker
   storage:
-    type: jbod
-    volumes:
-      - id: 0
-        type: persistent-claim
-        size: 10Gi
-        deleteClaim: false
-        kraftMetadata: shared  
-  # resources:
-  #   requests:
-  #     memory: 1Gi
-  #     cpu: 500m
-  #   limits:
-  #     memory: 2Gi
-  #     cpu: 1000m
+    {{- with .Values.storage }}
+    {{- toYaml . | nindent 4 }}
+    {{- end }}
+
+  {{- if .Values.template }}
+  template:
+    {{- toYaml .Values.template | nindent 4 }}
+  {{- end }}
+
+  {{- if .Values.resources }}
+  resources:
+    {{- toYaml .Values.resources | nindent 4 }}
+  {{- end }}
