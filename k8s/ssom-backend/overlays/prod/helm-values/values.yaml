@@ -11,13 +11,13 @@ notification:
   webhook-url: "https://discord.com/api/webhooks/1377886188312068146/eFtja7Ax7h84bD9z5CZhm7jligL1wDIRRLvQgr-UnxnACEUSkyI4Gm9NsenVFwnwKnLK"
 
 # 리소스 요청량 대폭 감소 (클러스터 리소스 부족으로 인해)
-resources:
-  requests:
-    cpu: "100m"      # 0.1 CPU 코어
-    memory: "256Mi"  # 256MB
-  limits:
-    cpu: "500m"      # 0.5 CPU 코어  
-    memory: "512Mi"  # 512MB
+#resources:
+#  requests:
+#    cpu: "100m"      # 0.1 CPU 코어
+#    memory: "256Mi"  # 256MB
+#  limits:
+#    cpu: "500m"      # 0.5 CPU 코어
+#    memory: "512Mi"  # 512MB
 
 # HPA 비활성화 (Deployment 먼저 생성)
 hpa:
@@ -40,14 +40,14 @@ ssom:
     SPRING_DATASOURCE_HIKARI_LEAK_DETECTION_THRESHOLD: "120000"  # 60초 → 120초
     
   secrets:
-    # IP 주소로 변경된 DB 설정 (kudong.kr → 172.21.1.22)
+    # 올바른 base64 인코딩된 값들 (패딩 문제 해결)
     SPRING_DATASOURCE_URL: amRiYzpteXNxbDovLzE3Mi4yMS4xLjIyOjU1MDIzL3Nzb21kYg==
-    SPRING_DATASOURCE_USERNAME: c3NvbXVzZXI==
+    SPRING_DATASOURCE_USERNAME: c3NvbXVzZXI=
     SPRING_DATASOURCE_PASSWORD: c3NvbXB3
     
-    # Redis 설정도 IP 주소로 변경
-    SPRING_DATA_REDIS_HOST: MTcyLjIxLjEuMjI==
-    SPRING_DATA_REDIS_PORT: NTUwMzI==
+    # Redis 설정도 올바른 base64로
+    SPRING_DATA_REDIS_HOST: MTcyLjIxLjEuMjI=
+    SPRING_DATA_REDIS_PORT: NTUwMzI=
     
     # JWT Secret (운영용 강력한 시크릿으로 변경 필요)
     JWT_SECRET: bXlTZWNyZXRLZXkxMjM0NTY3ODkwMTIzNDU2Nzg5MDEyMzQ1Njc4OTAxMjM0NTY3ODkw

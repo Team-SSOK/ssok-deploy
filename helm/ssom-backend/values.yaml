@@ -20,13 +20,13 @@ notification:
   profile: "[DEV]"
   webhook-url: "" # 오버라이드에서 설정
 
-resources:
-  requests:
-    cpu: "200m"      # 최소 0.2 CPU 코어
-    memory: "512Mi"  # 512MB
-  limits:
-    cpu: "500m"     # 최대 0.5 CPU 코어
-    memory: "1Gi"    # 1GB 
+#resources:
+#  requests:
+#    cpu: "200m"      # 최소 0.2 CPU 코어
+#    memory: "512Mi"  # 512MB
+#  limits:
+#    cpu: "500m"     # 최대 0.5 CPU 코어
+#    memory: "1Gi"    # 1GB
 
 hpa:
   enabled: true  # HPA 활성화/비활성화 제어
