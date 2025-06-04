@@ -66,6 +66,8 @@ security:
     - "/swagger-ui/**"
     - "/v3/api-docs/**"
     - "/error"
+    - "/actuator/health/liveness"
+    - "/actuator/health/readiness"
 
 llm:
   api:
