@@ -1,5 +1,5 @@
 image:
-  repository: kudong/ssok-bank-prod
+  repository: kudong/ssok-bank
   pullPolicy: IfNotPresent
   tag: "1.87"
 
