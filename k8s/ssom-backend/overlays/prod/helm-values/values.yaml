@@ -40,12 +40,12 @@ ssom:
     SPRING_DATASOURCE_HIKARI_LEAK_DETECTION_THRESHOLD: "120000"  # 60초 → 120초
     
   secrets:
-    # 올바른 base64 인코딩된 값들 (패딩 문제 해결)
+    # 정확한 base64 인코딩된 값들
     SPRING_DATASOURCE_URL: amRiYzpteXNxbDovLzE3Mi4yMS4xLjIyOjU1MDIzL3Nzb21kYg==
     SPRING_DATASOURCE_USERNAME: c3NvbXVzZXI=
     SPRING_DATASOURCE_PASSWORD: c3NvbXB3
     
-    # Redis 설정도 올바른 base64로
+    # Redis 설정
     SPRING_DATA_REDIS_HOST: MTcyLjIxLjEuMjI=
     SPRING_DATA_REDIS_PORT: NTUwMzI=
     
