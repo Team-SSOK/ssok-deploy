@@ -5,6 +5,6 @@ helmCharts:
 - name: ssom-backend
   repo: https://raw.githubusercontent.com/Team-SSOK/ssok-deploy/main/helm
   version: 0.1.0
-  releaseName: ssom-backend
+  releaseName: ssom-backend-prod
   namespace: ssom
   valuesFile: helm-values/values.yaml

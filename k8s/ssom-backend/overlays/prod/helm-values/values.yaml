@@ -1,7 +1,7 @@
 # SSOM-BACKEND PROD 환경 설정
 
 image:
-  repository: kudong/ssom-backend
+  repository: kudong/ssom-backend-prod
   pullPolicy: IfNotPresent
   tag: "1.2"
 
