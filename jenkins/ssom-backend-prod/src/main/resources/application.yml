@@ -68,6 +68,7 @@ security:
     - "/error"
     - "/actuator/health/liveness"
     - "/actuator/health/readiness"
+    - "/"
 
 llm:
   api:
