@@ -30,6 +30,14 @@ echo "TAG = $TAG"
 echo
 echo $separationPhrase
 
+# GitHub Token을 application.yml에 직접 주입
+echo "GitHub Token을 application.yml에 주입 중..."
+echo "GITHUB_TOKEN = ${GITHUB_TOKEN}"
+
+# application.yml 파일에서 ${GITHUB_TOKEN}을 실제 값으로 치환
+sed -i "s/\${GITHUB_TOKEN}/${GITHUB_TOKEN}/g" $currentDir/src/main/resources/application.yml
+
+echo "GitHub Token 주입 완료"
 
 #프론트 도커 파일 이미지 경로 생성
 mkdir -p $currentDir/images;
@@ -93,6 +101,7 @@ echo $separationPhrase
 K8S_DIR=$currentDir/$DEPLOY_NAME/k8s/$BACKEND_IMAGE_NAME/overlays/prod/helm-values
 
 YAML_FILE="values.yaml"
+# 이미지 태그 업데이트
 sed -i 's/\(  tag: \).*$/\1"'"$TAG"'"/' ${K8S_DIR}/${YAML_FILE}
 
 cd $K8S_DIR
