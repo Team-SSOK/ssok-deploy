@@ -15,7 +15,7 @@ BUILD="jenkins"
 
 echo $separationPhrase
 echo
-echo "SSOM BACKEND DEPLOY Process Start......"
+echo "SSOM BACKEND PROD VER DEPLOY Process Start......"
 echo
 echo $separationPhrase
 echo
