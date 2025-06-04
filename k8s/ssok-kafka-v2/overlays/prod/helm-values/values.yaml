@@ -27,7 +27,7 @@ storage:
       size: 10Gi
       deleteClaim: false
       kraftMetadata: shared
-      class: gp3          
+      class: gp2    
 
 # 카프카 기본 설정
 kafka:
