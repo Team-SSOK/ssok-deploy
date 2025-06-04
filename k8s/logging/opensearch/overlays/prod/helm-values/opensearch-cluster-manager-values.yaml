@@ -2,6 +2,8 @@ clusterName: "opensearch-cluster"
 nodeGroup: "cluster-manager"
 singleNode: false
 
+masterService: "opensearch-cluster-manager-master"
+
 # Cluster Manager 노드는 메타데이터 관리 전용
 roles:
   - cluster_manager
@@ -65,9 +67,9 @@ config:
     # ──────────────────────────────────────────────────────
     # 2) 초기 마스터 후보 노드(Cluster Manager) 지정
     discovery.seed_hosts:
-      - "opensearch-cluster-manager-0.opensearch-cluster-manager.logging.svc.cluster.local:9300"
-      - "opensearch-cluster-manager-1.opensearch-cluster-manager.logging.svc.cluster.local:9300"
-      - "opensearch-cluster-manager-2.opensearch-cluster-manager.logging.svc.cluster.local:9300"
+      - "opensearch-cluster-manager-0.opensearch-cluster-manager-master-headless.logging.svc.cluster.local:9300"
+      - "opensearch-cluster-manager-1.opensearch-cluster-manager-master-headless.logging.svc.cluster.local:9300"
+      - "opensearch-cluster-manager-2.opensearch-cluster-manager-master-headless.logging.svc.cluster.local:9300"
 
     cluster.initial_master_nodes:
       - "opensearch-cluster-manager-0"

@@ -2,6 +2,8 @@ clusterName: "opensearch-cluster"
 nodeGroup: "data-hot"
 singleNode: false
 
+masterService: "opensearch-cluster-manager-master"
+
 # Hot Data + Ingest 역할 부여 (데이터 색인/검색 최우선)
 roles:
   - data_hot
@@ -61,9 +63,10 @@ config:
 
     # Cluster Manager 후보
     discovery.seed_hosts:
-      - "opensearch-cluster-manager-0.opensearch-cluster-manager.logging.svc.cluster.local:9300"
-      - "opensearch-cluster-manager-1.opensearch-cluster-manager.logging.svc.cluster.local:9300"
-      - "opensearch-cluster-manager-2.opensearch-cluster-manager.logging.svc.cluster.local:9300"
+      - "opensearch-cluster-manager-0.opensearch-cluster-manager-master-headless.logging.svc.cluster.local:9300"
+      - "opensearch-cluster-manager-1.opensearch-cluster-manager-master-headless.logging.svc.cluster.local:9300"
+      - "opensearch-cluster-manager-2.opensearch-cluster-manager-master-headless.logging.svc.cluster.local:9300"
+
     cluster.initial_master_nodes:
       - "opensearch-cluster-manager-0"
       - "opensearch-cluster-manager-1"

@@ -2,6 +2,8 @@ clusterName: "opensearch-cluster"
 nodeGroup: "coord"
 singleNode: false
 
+masterService: "opensearch-cluster-manager-master"
+
 # ingest 역할만 주어 색인 전처리/쿼리 분산
 roles:
   - ingest
@@ -54,9 +56,10 @@ config:
 
     # Cluster Manager 후보
     discovery.seed_hosts:
-      - "opensearch-cluster-manager-0.opensearch-cluster-manager.logging.svc.cluster.local:9300"
-      - "opensearch-cluster-manager-1.opensearch-cluster-manager.logging.svc.cluster.local:9300"
-      - "opensearch-cluster-manager-2.opensearch-cluster-manager.logging.svc.cluster.local:9300"
+      - "opensearch-cluster-manager-0.opensearch-cluster-manager-master-headless.logging.svc.cluster.local:9300"
+      - "opensearch-cluster-manager-1.opensearch-cluster-manager-master-headless.logging.svc.cluster.local:9300"
+      - "opensearch-cluster-manager-2.opensearch-cluster-manager-master-headless.logging.svc.cluster.local:9300"
+
     cluster.initial_master_nodes:
       - "opensearch-cluster-manager-0"
       - "opensearch-cluster-manager-1"
