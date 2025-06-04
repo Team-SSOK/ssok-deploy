@@ -2,11 +2,54 @@ apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 
 helmCharts:
+  # 1) Cluster Manager (Replica: 3)
   - name: opensearch
     repo: https://opensearch-project.github.io/helm-charts/
     version: 3.0.0
-    releaseName: opensearch
+    releaseName: opensearch-cluster-manager
     namespace: logging
-    valuesFile: helm-values/opensearch-values.yaml
+    valuesFile: helm-values/opensearch-cluster-manager-values.yaml
 
-resources: []
+  # 2) Hot Data + Ingest (Replica: 2)
+  - name: opensearch
+    repo: https://opensearch-project.github.io/helm-charts/
+    version: 3.0.0
+    releaseName: opensearch-data-hot
+    namespace: logging
+    valuesFile: helm-values/opensearch-data-hot-values.yaml
+
+  # 3) Warm Data (Replica: 2)
+  - name: opensearch
+    repo: https://opensearch-project.github.io/helm-charts/
+    version: 3.0.0
+    releaseName: opensearch-data-warm
+    namespace: logging
+    valuesFile: helm-values/opensearch-data-warm-values.yaml
+
+  # 4) Coordination / Query-only (Replica: 1)
+  - name: opensearch
+    repo: https://opensearch-project.github.io/helm-charts/
+    version: 3.0.0
+    releaseName: opensearch-coord
+    namespace: logging
+    valuesFile: helm-values/opensearch-coord-values.yaml
+
+
+
+
+##################################################
+## -------------------------------------------- ##
+##################################################
+
+# apiVersion: kustomize.config.k8s.io/v1beta1
+# kind: Kustomization
+
+# helmCharts:
+#   - name: opensearch
+#     repo: https://opensearch-project.github.io/helm-charts/
+#     version: 3.0.0
+#     releaseName: opensearch
+#     namespace: logging
+#     valuesFile: helm-values/opensearch-values.yaml
+
+# resources: []

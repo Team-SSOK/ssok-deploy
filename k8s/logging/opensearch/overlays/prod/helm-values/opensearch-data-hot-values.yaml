@@ -1,0 +1,73 @@
+clusterName: "opensearch-cluster"
+nodeGroup: "data-hot"
+singleNode: false
+
+# Hot Data + Ingest 역할 부여 (데이터 색인/검색 최우선)
+roles:
+  - data_hot
+  - ingest
+  - remote_cluster_client
+
+# Replica 2개 → 부하/가용성 고려
+replicas: 2
+
+resources:
+  # 워커 노드당 CPU 여유가 1개 정도이므로, 500m 요청
+  requests:
+    cpu: "500m"
+    memory: "1Gi"
+  limits:
+    cpu: "1000m"
+    memory: "2Gi"
+
+opensearchJavaOpts: "-Xmx1g -Xms1g"
+
+# 보안 슬롯 해제
+securityConfig:
+  enabled: false
+
+extraEnvs:
+  - name: DISABLE_INSTALL_DEMO_CONFIG
+    value: "true"
+  - name: DISABLE_SECURITY_PLUGIN
+    value: "true"
+  - name: DISABLE_SECURITY_DASHBOARDS_PLUGIN
+    value: "true"
+  - name: OPENSEARCH_NODE_ATTR_ZONE
+    valueFrom:
+      fieldRef:
+        fieldPath: metadata.labels['topology.kubernetes.io/zone']
+
+# Persistence: Hot Data는 빠른 EBS gp3 사용 (예: IO 모드 높임)
+persistence:
+  enabled: true
+  accessModes:
+    - ReadWriteOnce
+  size: 40Gi
+  storageClass: "gp3"
+
+service:
+  type: ClusterIP
+
+config:
+  opensearch.yml: |
+    cluster.name: opensearch-cluster
+    network.host: 0.0.0.0
+
+    plugins.security.disabled: true
+
+    # zone 속성
+    node.attr.zone: ${OPENSEARCH_NODE_ATTR_ZONE}
+
+    # Cluster Manager 후보
+    discovery.seed_hosts:
+      - "opensearch-cluster-manager-0.opensearch-cluster-manager.logging.svc.cluster.local:9300"
+      - "opensearch-cluster-manager-1.opensearch-cluster-manager.logging.svc.cluster.local:9300"
+      - "opensearch-cluster-manager-2.opensearch-cluster-manager.logging.svc.cluster.local:9300"
+    cluster.initial_master_nodes:
+      - "opensearch-cluster-manager-0"
+      - "opensearch-cluster-manager-1"
+      - "opensearch-cluster-manager-2"
+
+    # Shard Allocation Awareness
+    cluster.routing.allocation.awareness.attributes: "zone"
