@@ -47,7 +47,7 @@ ssom:
 
     # Redis 설정
     SPRING_DATA_REDIS_HOST: MTcyLjIxLjEuMjI=
-    SPRING_DATA_REDIS_PORT: NjM4MA==
+    SPRING_DATA_REDIS_PORT: NjM3OQ==
 
     # JWT Secret (운영용 강력한 시크릿으로 변경 필요)
     JWT_SECRET: bXlTZWNyZXRLZXkxMjM0NTY3ODkwMTIzNDU2Nzg5MDEyMzQ1Njc4OTAxMjM0NTY3ODkw
