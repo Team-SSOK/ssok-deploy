@@ -147,7 +147,6 @@ ssom:
     JWT_SECRET: ""
     
     # GitHub API Token (민감)
-    GITHUB_TOKEN: ""
     GITHUB_WEBHOOK_SECRET: ""
     
     # LLM API URL (민감할 수 있음)
