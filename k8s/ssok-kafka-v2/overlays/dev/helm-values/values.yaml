@@ -2,8 +2,6 @@
 
 replicaCount: 1
 
-clusterId: "RybJc3zoR5irN6YJaST9dQ"
-
 template:
   pod:
     securityContext:
@@ -18,7 +16,7 @@ storage:
     - id: 0
       type: persistent-claim
       size: 10Gi
-      deleteClaim: true
+      deleteClaim: false
       kraftMetadata: shared
       class: kafka-storage            
 
