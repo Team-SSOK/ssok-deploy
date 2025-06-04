@@ -6,7 +6,7 @@ image:
   tag: "1.6"
 
 notification:
-  profile: "[PROD]"
+  profile: "[DEV]"
   # 실제 Discord webhook URL로 변경 필요
   webhook-url: "https://discord.com/api/webhooks/1377886188312068146/eFtja7Ax7h84bD9z5CZhm7jligL1wDIRRLvQgr-UnxnACEUSkyI4Gm9NsenVFwnwKnLK"
 
@@ -30,7 +30,7 @@ logging:
 ssom:
   config:
     # Prod 환경 특화 설정
-    SPRING_PROFILES_ACTIVE: "prod"
+    SPRING_PROFILES_ACTIVE: "dev"
     SPRING_JPA_PROPERTIES_HIBERNATE_SHOW_SQL: "false"  # Prod에서는 SQL 로깅 비활성화
     SPRING_JPA_SHOW_SQL: "false"
 

@@ -16,14 +16,14 @@ BUILD="jenkins"
 echo $separationPhrase
 echo
 echo "SSOM BACKEND DEPLOY Process Start......"
-echo 
+echo
 echo $separationPhrase
 echo
-echo "currentDir = $currentDir" 
-echo "mountDir = $mountDir" 
-echo "remoteID = $remoteID" 
-echo "remoteIP = $remoteIP" 
-echo "DOCKER_NICKNAME = $DOCKER_NICKNAME" 
+echo "currentDir = $currentDir"
+echo "mountDir = $mountDir"
+echo "remoteID = $remoteID"
+echo "remoteIP = $remoteIP"
+echo "DOCKER_NICKNAME = $DOCKER_NICKNAME"
 echo "BACKEND_IMAGE_NAME = $BACKEND_IMAGE_NAME"
 echo "DEPLOY_NAME = $DEPLOY_NAME"
 echo "TAG = $TAG"
@@ -39,7 +39,7 @@ cp -r -f ./$DEPLOY_NAME/$BUILD/$BACKEND_IMAGE_NAME/* $currentDir
 
 echo
 echo "BACKEND BUILD Start...."
-echo 
+echo
 echo $separationPhrase
 
 #백엔드 도커 이미지 빌드
@@ -55,7 +55,7 @@ docker save -o $currentDir/images/$BACKEND_IMAGE_NAME.tar $BACKEND_IMAGE_NAME:$T
 echo $separationPhrase
 echo
 echo "Upload Image to DockerHub......"
-echo 
+echo
 echo $separationPhrase
 
 #도커 허브 로그인
@@ -87,10 +87,10 @@ docker image prune -f
 echo $separationPhrase
 echo
 echo "Update Github K8s Manifest file...."
-echo 
+echo
 echo $separationPhrase
 
-K8S_DIR=$currentDir/$DEPLOY_NAME/k8s/$BACKEND_IMAGE_NAME/overlays/dev/helm-values
+K8S_DIR=$currentDir/$DEPLOY_NAME/k8s/$BACKEND_IMAGE_NAME/overlays/prod/helm-values
 
 YAML_FILE="values.yaml"
 sed -i 's/\(  tag: \).*$/\1"'"$TAG"'"/' ${K8S_DIR}/${YAML_FILE}
