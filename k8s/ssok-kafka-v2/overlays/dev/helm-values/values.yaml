@@ -2,8 +2,6 @@
 
 replicaCount: 1
 
-# clusterId: "RybJc3zoR5irN6YJaST9dQ"
-
 template:
   pod:
     securityContext:
