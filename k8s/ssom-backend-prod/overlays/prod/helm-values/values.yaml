@@ -38,6 +38,11 @@ ssom:
     SPRING_DATASOURCE_HIKARI_CONNECTION_TIMEOUT: "60000"  # 20초 → 60초
     SPRING_DATASOURCE_HIKARI_VALIDATION_TIMEOUT: "10000"  # 3초 → 10초
     SPRING_DATASOURCE_HIKARI_LEAK_DETECTION_THRESHOLD: "120000"  # 60초 → 120초
+
+    # OpenSearch 설정 (외부 서버 사용)
+    OPENSEARCH_SCHEME: "http"
+    OPENSEARCH_CONNECT_TIMEOUT: "10"
+    OPENSEARCH_RESPONSE_TIMEOUT: "30"
     
   secrets:
     # 정확한 base64 인코딩된 값들 (aws db)
@@ -58,5 +63,7 @@ ssom:
     # LLM API URL
     LLM_API_URL: aHR0cDovL2t1ZG9uZy5rcjo1NTAzNg==
     
-    # OpenSearch API URL
+    # OpenSearch 설정 (외부 서버 - base64 인코딩)
+    OPENSEARCH_HOST: a3Vkb25nLmty
+    OPENSEARCH_PORT: NTUwMzQ=
     OPENSEARCH_API_URL: a3Vkb25nLmtyOjU1MDM0

@@ -116,6 +116,7 @@ ssom:
     SECURITY_WHITELIST_7: "/swagger-ui/**"
     SECURITY_WHITELIST_8: "/v3/api-docs/**"
     SECURITY_WHITELIST_9: "/error"
+    SECURITY_WHITELIST_10: "/"
     
     # GitHub API 설정 (비민감 정보)
     GITHUB_API_OWNER: "Team-SSOK"
@@ -132,6 +133,11 @@ ssom:
     BIOMETRIC_TIMESTAMP_TOLERANCE_MS: "300000"
     BIOMETRIC_MAX_BIOMETRIC_HASH_LENGTH: "500"
     BIOMETRIC_MAX_DEVICE_INFO_LENGTH: "1000"
+    
+    # OpenSearch 설정 (비민감 정보)
+    OPENSEARCH_SCHEME: "http"
+    OPENSEARCH_CONNECT_TIMEOUT: "10"
+    OPENSEARCH_RESPONSE_TIMEOUT: "30"
     
   secrets:
     # 민감한 DB 정보는 base64 인코딩 후 overlays에서 설정
@@ -152,5 +158,7 @@ ssom:
     # LLM API URL (민감할 수 있음)
     LLM_API_URL: ""
     
-    # OpenSearch API URL (민감할 수 있음)
+    # OpenSearch 설정 (민감할 수 있음)
+    OPENSEARCH_HOST: ""
+    OPENSEARCH_PORT: ""
     OPENSEARCH_API_URL: ""
