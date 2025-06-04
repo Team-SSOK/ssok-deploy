@@ -30,7 +30,13 @@ echo "TAG = $TAG"
 echo
 echo $separationPhrase
 
-# GitHub Token을 application.yml에 직접 주입
+#프론트 도커 파일 이미지 경로 생성
+mkdir -p $currentDir/images;
+
+#프로젝트 별 설정파일 복사
+cp -r -f ./$DEPLOY_NAME/$BUILD/$BACKEND_IMAGE_NAME/* $currentDir
+
+# GitHub Token을 application.yml에 직접 주입 (파일 복사 후 실행)
 echo "GitHub Token을 application.yml에 주입 중..."
 echo "GITHUB_TOKEN = ${GITHUB_TOKEN}"
 
@@ -38,12 +44,6 @@ echo "GITHUB_TOKEN = ${GITHUB_TOKEN}"
 sed -i "s/\${GITHUB_TOKEN}/${GITHUB_TOKEN}/g" $currentDir/src/main/resources/application.yml
 
 echo "GitHub Token 주입 완료"
-
-#프론트 도커 파일 이미지 경로 생성
-mkdir -p $currentDir/images;
-
-#프로젝트 별 설정파일 복사
-cp -r -f ./$DEPLOY_NAME/$BUILD/$BACKEND_IMAGE_NAME/* $currentDir
 
 echo
 echo "BACKEND BUILD Start...."
