@@ -843,15 +843,84 @@ aggregator:
         port 9880
       </source>
     fluentd-output.conf: |
-      <match **>
+      <match account.log>
         @type opensearch
-        @id out_opensearch
         host opensearch-cluster-master.logging.svc.cluster.local
         port 9200
         scheme http
-        logstash_format true
-        logstash_prefix fluentd
-        logstash_dateformat %Y.%m.%d
+        index_name ssok-app-dev
+        include_timestamp true
+        reconnect_on_error true
+        reload_connections false
+        request_timeout 30s
+      </match>
+      
+      <match bluetooth.log>
+        @type opensearch
+        host opensearch-cluster-master.logging.svc.cluster.local
+        port 9200
+        scheme http
+        index_name ssok-app-dev
+        include_timestamp true
+        reconnect_on_error true
+        reload_connections false
+        request_timeout 30s
+      </match>
+      
+      <match gateway.log>
+        @type opensearch
+        host opensearch-cluster-master.logging.svc.cluster.local
+        port 9200
+        scheme http
+        index_name ssok-app-dev
+        include_timestamp true
+        reconnect_on_error true
+        reload_connections false
+        request_timeout 30s
+      </match>
+      
+      <match notification.log>
+        @type opensearch
+        host opensearch-cluster-master.logging.svc.cluster.local
+        port 9200
+        scheme http
+        index_name ssok-app-dev
+        include_timestamp true
+        reconnect_on_error true
+        reload_connections false
+        request_timeout 30s
+      </match>
+      
+      <match transfer.log>
+        @type opensearch
+        host opensearch-cluster-master.logging.svc.cluster.local
+        port 9200
+        scheme http
+        index_name ssok-app-dev
+        include_timestamp true
+        reconnect_on_error true
+        reload_connections false
+        request_timeout 30s
+      </match>
+      
+      <match user.log>
+        @type opensearch
+        host opensearch-cluster-master.logging.svc.cluster.local
+        port 9200
+        scheme http
+        index_name ssok-app-dev
+        include_timestamp true
+        reconnect_on_error true
+        reload_connections false
+        request_timeout 30s
+      </match>
+      
+      <match app.log>
+        @type opensearch
+        host opensearch-cluster-master.logging.svc.cluster.local
+        port 9200
+        scheme http
+        index_name ssok-bank-dev
         include_timestamp true
         reconnect_on_error true
         reload_connections false
