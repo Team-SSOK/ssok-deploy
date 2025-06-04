@@ -31,21 +31,13 @@ echo
 echo $separationPhrase
 
 
-#프론트 도커 파일 이미지 경로 생성
-mkdir -p $currentDir/images;
-
-#프로젝트 별 설정파일 복사
-cp -r -f ./$DEPLOY_NAME/$BUILD/$BACKEND_IMAGE_NAME/* $currentDir
-
 echo
 echo "BACKEND BUILD Start...."
 echo 
 echo $separationPhrase
 
 #백엔드 도커 이미지 빌드
-cd $currentDir
-chmod +x gradlew
-./gradlew clean build -x test
+cd $currentDir/SSOM_metric_proxy
 docker buildx build -t $BACKEND_IMAGE_NAME:$TAG .
 
 #백엔드 도커 파일 tar 저장
