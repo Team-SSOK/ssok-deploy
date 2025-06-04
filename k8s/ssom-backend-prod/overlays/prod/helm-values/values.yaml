@@ -41,7 +41,7 @@ ssom:
     
   secrets:
     # 정확한 base64 인코딩된 값들 (aws db)
-    SPRING_DATASOURCE_URL: amRiYzpteXNxbDovLzE3Mi4xNi4wLjg2OjMzMDcvc3NvbWRi
+    SPRING_DATASOURCE_URL: amRiYzpteXNxbDovLzE3Mi4xNi4wLjg2OjMzMDcvcd3NvbWRi
     SPRING_DATASOURCE_USERNAME: c3NvbXVzZXI=
     SPRING_DATASOURCE_PASSWORD: c3NvbXB3
     
@@ -53,7 +53,7 @@ ssom:
     JWT_SECRET: bXlTZWNyZXRLZXkxMjM0NTY3ODkwMTIzNDU2Nzg5MDEyMzQ1Njc4OTAxMjM0NTY3ODkw
     
     # GitHub API 설정 (운영용 토큰으로 변경 필요)
-    GITHUB_TOKEN: Z2hwX0tKb3g4ZTByc3pJYjlXVWo4SkZpdEF5M000QmJ1dTFuczlCNg==
+    GITHUB_TOKEN: Z2hwX25hVkR3QzRmblBCVmFqcjJYTkR5cWdtZkRRRzIyMjAzdXhxQw==
     GITHUB_WEBHOOK_SECRET: c3NvbV9kZXZfd2ViaG9va19zZWNyZXRfMjAyNV9zZWN1cmVfa2V5X2FiYzEyM3h5eg==
     
     # LLM API URL
