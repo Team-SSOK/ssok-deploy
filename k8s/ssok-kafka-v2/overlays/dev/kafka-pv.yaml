@@ -16,12 +16,8 @@ spec:
   persistentVolumeReclaimPolicy: Retain
   storageClassName: kafka-storage
   hostPath:
-    path: /home/lgcns/kafka/ssok-cluster/kafka-node-0
+    path: /home/lgcns/kafka/kafka-node-0
     type: DirectoryOrCreate
-  mountOptions:
-    - uid=1000
-    - gid=1000
-    - umask=0022
   nodeAffinity:
     required:
       nodeSelectorTerms:
@@ -46,12 +42,8 @@ spec:
 #   persistentVolumeReclaimPolicy: Retain
 #   storageClassName: kafka-storage
 #   hostPath:
-#     path: /home/lgcns/kafka/ssok-cluster/kafka-node-1
+#     path: /home/lgcns/kafka/kafka-node-1
 #     type: DirectoryOrCreate
-#   mountOptions:
-#     - uid=1000
-#     - gid=1000
-#     - umask=0022
 #   nodeAffinity:
 #     required:
 #       nodeSelectorTerms:
@@ -76,12 +68,8 @@ spec:
 #   persistentVolumeReclaimPolicy: Retain
 #   storageClassName: kafka-storage
 #   hostPath:
-#     path: /home/lgcns/kafka/ssok-cluster/kafka-node-2
+#     path: /home/lgcns/kafka/kafka-node-2
 #     type: DirectoryOrCreate
-#   mountOptions:
-#     - uid=1000
-#     - gid=1000
-#     - umask=0022
 #   nodeAffinity:
 #     required:
 #       nodeSelectorTerms:
