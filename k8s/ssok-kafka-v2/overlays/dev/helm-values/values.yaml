@@ -2,8 +2,6 @@
 
 replicaCount: 1
 
-clusterId: "RybJc3zoR5irN6YJaST9dQ"
-
 # Pod Anti-Affinity 설정
 template:
   pod:
@@ -49,6 +47,7 @@ kafka:
           - broker: 0
             nodePort: 31201
   config:
+    cluster.id: "RybJc3zoR5irN6YJaST9dQ"
     offsets.topic.replication.factor: 1
     transaction.state.log.replication.factor: 1
     transaction.state.log.min.isr: 1
