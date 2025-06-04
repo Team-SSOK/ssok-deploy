@@ -2,8 +2,6 @@
 
 replicaCount: 3
 
-# clusterId: "U8XUvcvkSkW_J-MbbcDByw"
-
 # 리소스 설정      
 # resources:
 #   requests:
