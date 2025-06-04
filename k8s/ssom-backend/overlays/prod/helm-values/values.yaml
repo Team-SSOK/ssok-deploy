@@ -3,7 +3,7 @@
 image:
   repository: kudong/ssom-backend
   pullPolicy: IfNotPresent
-  tag: "1.10"
+  tag: "1.2"
 
 notification:
   profile: "[PROD]"
@@ -40,14 +40,14 @@ ssom:
     SPRING_DATASOURCE_HIKARI_LEAK_DETECTION_THRESHOLD: "120000"  # 60초 → 120초
     
   secrets:
-    # 정확한 base64 인코딩된 값들
-    SPRING_DATASOURCE_URL: amRiYzpteXNxbDovLzE3Mi4yMS4xLjIyOjMzMDYvc3NvbWRi
+    # 정확한 base64 인코딩된 값들 (aws db)
+    SPRING_DATASOURCE_URL: amRiYzpteXNxbDovLzE3Mi4xNi4wLjg2OjMzMDcvc3NvbWRi
     SPRING_DATASOURCE_USERNAME: c3NvbXVzZXI=
     SPRING_DATASOURCE_PASSWORD: c3NvbXB3
     
     # Redis 설정
-    SPRING_DATA_REDIS_HOST: MTcyLjIxLjEuMjI=
-    SPRING_DATA_REDIS_PORT: NTUwMzI=
+    SPRING_DATA_REDIS_HOST: MTcyLjE2LjAuODY=
+    SPRING_DATA_REDIS_PORT: NjM4MA==
     
     # JWT Secret (운영용 강력한 시크릿으로 변경 필요)
     JWT_SECRET: bXlTZWNyZXRLZXkxMjM0NTY3ODkwMTIzNDU2Nzg5MDEyMzQ1Njc4OTAxMjM0NTY3ODkw

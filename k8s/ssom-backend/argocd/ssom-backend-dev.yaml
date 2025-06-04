@@ -1,0 +1,20 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: ssom-backend
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/Team-SSOK/ssok-deploy.git
+    targetRevision: main
+    path: k8s/ssom-backend/overlays/dev
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: ssom
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
