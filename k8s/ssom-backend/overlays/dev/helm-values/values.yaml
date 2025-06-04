@@ -61,3 +61,10 @@ ssom:
     
     # OpenSearch API URL
     OPENSEARCH_API_URL: a3Vkb25nLmtyOjU1MDMz
+
+    # FCM
+    firebase:
+      configPath: "classpath:firebase/firebase-adminsdk.json"
+      enabled: "true"
+    fcm:
+      tokenTtlSeconds: "2592000"
