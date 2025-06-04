@@ -15,13 +15,6 @@ notification:
   profile: "[DEV]"
   webhook-url: "https://discord.com/api/webhooks/1377886188312068146/eFtja7Ax7h84bD9z5CZhm7jligL1wDIRRLvQgr-UnxnACEUSkyI4Gm9NsenVFwnwKnLK"
 
-resources:
-  requests:
-    cpu: "100m"      # 최소 0.2 CPU 코어
-    memory: "512Mi"  # 512MB
-  limits:
-    cpu: "250m"     # 최대 0.5 CPU 코어
-    memory: "1Gi"    # 1GB 
 
 applicationConfig:
   server:

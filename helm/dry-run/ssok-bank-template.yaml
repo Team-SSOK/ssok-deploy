@@ -143,7 +143,6 @@ metadata:
     argocd.argoproj.io/sync-wave: "1"
 spec:
   revisionHistoryLimit: 1
-  # replicas:  # HPA로 대체
   selector:
     matchLabels:
       app.kubernetes.io/name: ssok-bank
@@ -180,7 +179,6 @@ spec:
             port: 8080
           initialDelaySeconds: 180
           periodSeconds: 20
-        resources:
 
       - name: fluent-bit
         image: cr.fluentbit.io/fluent/fluent-bit:4.0.2

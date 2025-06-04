@@ -9,6 +9,9 @@ metadata:
     argocd.argoproj.io/sync-wave: "1"
 spec:
   revisionHistoryLimit: 1
+  {{- if not .Values.hpa.enabled }}
+  replicas: 1
+  {{- end }}
   selector:
     matchLabels:
       app.kubernetes.io/name: {{ include "ssok-notification-service.name" . }}
@@ -49,10 +52,10 @@ spec:
               port: 8080
             initialDelaySeconds: 180
             periodSeconds: 20
+          {{- if .Values.resources }}
           resources:
-            {{- with .Values.resources }}
-            {{- toYaml . | nindent 12 }}
-            {{- end }}
+            {{- toYaml .Values.resources | nindent 12 }}
+          {{- end }}
 
         - name: fluent-bit
           image: cr.fluentbit.io/fluent/fluent-bit:4.0.2

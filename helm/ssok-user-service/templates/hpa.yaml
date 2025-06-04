@@ -1,3 +1,4 @@
+{{- if .Values.hpa.enabled }}
 apiVersion: autoscaling/v2
 kind: HorizontalPodAutoscaler
 metadata:
@@ -35,3 +36,4 @@ spec:
       app.kubernetes.io/name: {{ include "ssok-user-service.name" . }}
       app.kubernetes.io/instance: {{ .Release.Name }}
 ---
+{{- end }}

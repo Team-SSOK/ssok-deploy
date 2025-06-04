@@ -224,13 +224,6 @@ spec:
               port: 8080
             initialDelaySeconds: 180
             periodSeconds: 20
-          resources:
-            limits:
-              cpu: 500m
-              memory: 1Gi
-            requests:
-              cpu: 200m
-              memory: 512Mi
 
         - name: fluent-bit
           image: cr.fluentbit.io/fluent/fluent-bit:4.0.2
