@@ -1,7 +1,7 @@
 image:
   repository: kudong/ssok-bank
   pullPolicy: IfNotPresent
-  tag: "1.84"
+  tag: "1.86"
 
 notification:
   profile: "[PROD]"
