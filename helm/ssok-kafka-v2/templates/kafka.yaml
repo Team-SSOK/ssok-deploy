@@ -35,6 +35,11 @@ spec:
   kafka:
     version: 4.0.0
     metadataVersion: 4.0-IV3
+
+    {{- if .Values.clusterId }}
+    clusterId: {{ .Values.clusterId }}
+    {{- end }}
+
     listeners:
       {{- with .Values.kafka.listeners }}
       {{- toYaml . | nindent 6 }}
