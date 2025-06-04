@@ -3,7 +3,7 @@
 image:
   repository: kudong/ssom-backend
   pullPolicy: IfNotPresent
-  tag: "1.31"
+  tag: "1.28"
 
 notification:
   profile: "[DEV]"
@@ -61,9 +61,9 @@ ssom:
     GITHUB_WEBHOOK_SECRET: c3NvbV9kZXZfd2ViaG9va19zZWNyZXRfMjAyNV9zZWN1cmVfa2V5X2FiYzEyM3h5eg==
     
     # LLM API URL
-    LLM_API_URL: aHR0cDovL2t1ZG9uZy5rcjo1NTAzNg==
+    LLM_API_URL: MTcyLjIxLjEuMTk6ODAwMA==
     
     # OpenSearch API URL (K8s 서비스명 - base64 인코딩)
-    OPENSEARCH_HOST: MTcyLjIxLjEuMTk=
-    OPENSEARCH_PORT: ODAwMA==
+    OPENSEARCH_HOST: b3BlbnNlYXJjaC1jbHVzdGVyLW1hc3Rlci5sb2dnaW5nLnN2Yy5jbHVzdGVyLmxvY2Fs
+    OPENSEARCH_PORT: OTIwMA==
     OPENSEARCH_API_URL: b3BlbnNlYXJjaC1jbHVzdGVyLW1hc3Rlci5sb2dnaW5nLnN2Yy5jbHVzdGVyLmxvY2FsOjkyMDA=
