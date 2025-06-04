@@ -142,7 +142,7 @@ secrets:
     host: "172.16.0.86"
     port: "6379"
   kafka:
-    bootstrapServers: "broker.kafka.svc.cluster.local:9092"
+    bootstrapServers: "ssok-cluster-kafka-bootstrap.kafka.svc.cluster.local:9092"
     notificationTopic: "ssok.notification.topic"
     groupId: "notification-group"
   firebase:

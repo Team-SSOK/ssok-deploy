@@ -144,7 +144,7 @@ secrets:
     username: "ssokuser"
     password: "ssokpw"
   kafka:
-    bootstrapServers: "broker.kafka.svc.cluster.local:9092"
+    bootstrapServers: "ssok-cluster-kafka-bootstrap.kafka.svc.cluster.local:9092"
     notificationTopic: "ssok.notification.topic"
   external:
     accountService:
