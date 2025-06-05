@@ -117,11 +117,14 @@ if curl --connect-timeout 3 --fail -X POST \
     \"level\": \"INFO\",
     \"app\": \"jenkins_${BACKEND_IMAGE_NAME}\",
     \"timestamp\": \"$DEPLOY_TIME\",
-    \"message\": \"Jenkins ${BACKEND_IMAGE_NAME} 배포 완료 - 버전 ${TAG}로 업데이트\"
+    \"message\": \"Jenkins ${BACKEND_IMAGE_NAME} 빌드 완료 - 버전 ${TAG}로 업데이트\"
   }" \
   "$WEBHOOK_URL"; then
   echo
   echo "[DEV] KUDONG.KR 알림 전송 성공"
+else
+  echo
+  echo "[DEV] KUDONG.KR 알림 전송 불가"
 fi
 
 WEBHOOK_URL="https://ssom.ssok.kr/api/alert/devops"
@@ -132,11 +135,14 @@ if curl --connect-timeout 3 --fail -X POST \
     \"level\": \"INFO\",
     \"app\": \"jenkins_${BACKEND_IMAGE_NAME}\",
     \"timestamp\": \"$DEPLOY_TIME\",
-    \"message\": \"Jenkins ${BACKEND_IMAGE_NAME} 배포 완료 - 버전 ${TAG}로 업데이트\"
+    \"message\": \"Jenkins ${BACKEND_IMAGE_NAME} 빌드 완료 - 버전 ${TAG}로 업데이트\"
   }" \
   "$WEBHOOK_URL"; then
   echo
   echo "[PROD] SSOK.KR 알림 전송 성공"
+else
+  echo
+  echo "[PROD] SSOK.KR 알림 전송 불가"
 fi
 
 echo
