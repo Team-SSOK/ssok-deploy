@@ -119,7 +119,7 @@ if curl --connect-timeout 3 -X POST \
     \"timestamp\": \"$DEPLOY_TIME\",
     \"message\": \"Jenkins ${BACKEND_IMAGE_NAME} 배포 완료 - 버전 ${TAG}로 업데이트\"
   }" \
-  "$WEBHOOK_URL"
+  "$WEBHOOK_URL"; then
   echo "[DEV] KUDONG.KR 알림 전송 성공"
 fi
 
@@ -133,7 +133,7 @@ if curl --connect-timeout 3 -X POST \
     \"timestamp\": \"$DEPLOY_TIME\",
     \"message\": \"Jenkins ${BACKEND_IMAGE_NAME} 배포 완료 - 버전 ${TAG}로 업데이트\"
   }" \
-  "$WEBHOOK_URL"
+  "$WEBHOOK_URL"; then
   echo "[PROD] SSOK.KR 알림 전송 성공"
 fi
 
