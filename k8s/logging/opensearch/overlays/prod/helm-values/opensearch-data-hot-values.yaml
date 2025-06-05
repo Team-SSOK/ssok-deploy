@@ -6,6 +6,7 @@ masterService: opensearch-cluster-cluster-manager
 
 # Hot Data + Ingest 역할 부여 (데이터 색인/검색 최우선)
 roles:
+  - data
   - data_hot
   - ingest
   - remote_cluster_client
