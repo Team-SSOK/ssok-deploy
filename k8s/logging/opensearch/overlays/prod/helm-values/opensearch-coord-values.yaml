@@ -2,7 +2,7 @@ clusterName: "opensearch-cluster"
 nodeGroup: "coord"
 singleNode: false
 
-masterService: opensearch-cluster-cluster-manager-headless
+masterService: opensearch-cluster-cluster-manager
 
 # ingest 역할만 주어 색인 전처리/쿼리 분산
 roles:

@@ -2,7 +2,7 @@ clusterName: "opensearch-cluster"
 nodeGroup: "data-hot"
 singleNode: false
 
-masterService: opensearch-cluster-cluster-manager-headless
+masterService: opensearch-cluster-cluster-manager
 
 # Hot Data + Ingest 역할 부여 (데이터 색인/검색 최우선)
 roles:

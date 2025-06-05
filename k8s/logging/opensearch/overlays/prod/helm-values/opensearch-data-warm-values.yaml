@@ -2,7 +2,7 @@ clusterName: "opensearch-cluster"
 nodeGroup: "data-warm"
 singleNode: false
 
-masterService: opensearch-cluster-cluster-manager-headless
+masterService: opensearch-cluster-cluster-manager
 
 # Warm Data 역할만 (오래된 데이터 보존)
 roles:
