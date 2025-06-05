@@ -28,7 +28,7 @@ spec:
         - sh
         - -c
         - |
-          DEPLOY_TIME=$(date "+%Y-%m-%d %H:%M:%S")
+          DEPLOY_TIME=$(date "+%Y-%m-%dT%H:%M:%S")
           curl --connect-timeout 2 --fail -H "Content-Type: application/json" \
                -X POST \
                -d "{
@@ -64,7 +64,7 @@ spec:
               -d "{
                 \"level\": \"INFO\",
                 \"app\": \"argocd_ssok-bank\",
-                \"timestamp\": \"$(date "+%Y-%m-%dT%H:%M:%S")\",
+                \"timestamp\": \"$DEPLOY_TIME\",
                 \"message\": \"ArgoCD ssok-bank 배포 성공 - 모든 컴포넌트가 정상적으로 배포되었습니다.\"
               }" \
               "$SSOM_URL"
@@ -101,7 +101,7 @@ spec:
         - sh
         - -c
         - |
-          DEPLOY_TIME=$(date "+%Y-%m-%d %H:%M:%S")
+          DEPLOY_TIME=$(date "+%Y-%m-%dT%H:%M:%S")
           curl --connect-timeout 2 --fail -H "Content-Type: application/json" \
                -X POST \
                -d "{
@@ -134,7 +134,7 @@ spec:
               -d "{
                 \"level\": \"INFO\",
                 \"app\": \"argocd_ssok-bank\",
-                \"timestamp\": \"$(date "+%Y-%m-%dT%H:%M:%S")\",
+                \"timestamp\": \"$DEPLOY_TIME\",
                 \"message\": \"ArgoCD ssok-bank 배포 실패 - 배포 중 오류가 발생했습니다.\"
               }" \
               "$SSOM_URL"
