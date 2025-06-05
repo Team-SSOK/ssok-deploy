@@ -37,19 +37,25 @@ metadata:
     app.kubernetes.io/managed-by: Helm
 type: Opaque
 stringData:
-  SPRING_DATA_REDIS_HOST:      "localhost"
-  SPRING_DATA_REDIS_PORT:      "6379"
-  KAFKA_BOOTSTRAP_SERVERS:     "broker.localhost:9092"
-  KAFKA_NOTIFICATION_TOPIC:    "ssok.notification.topic"
-  KAFKA_GROUP_ID:              "notification-group"
-  FIREBASE_CONFIG_PATH:        "classpath:firebase/firebase-adminsdk.json"
-  FIREBASE_ENABLED:            "true"
-  FCM_TOKEN_TTL_SECONDS:       "2592000"
-  FCM_IMAGE_URL:               "https://example.com/images/ssok-logo.png"
-  ALIGO_SMS_API_URL:           "https://apis.aligo.in/send/"
-  ALIGO_API_KEY:               ""
-  ALIGO_USER_ID:               ""
-  ALIGO_SENDER:                ""
+  SPRING_DATA_REDIS_HOST:            "localhost"
+  SPRING_DATA_REDIS_PORT:            "6379"
+  KAFKA_BOOTSTRAP_SERVERS:           "broker.localhost:9092"
+  KAFKA_NOTIFICATION_TOPIC:          "ssok.notification.topic"
+  KAFKA_NOTIFICATION_RECOVER_TOPIC:  "ssok.notification-recovery.topic"
+  KAFKA_GROUP_ID:                    "notification-group"
+  KAFKA_RECOVERY_GROUP_ID:           "notification-recovery-group"
+  KAFKA_RETRY_MAX_ATTEMPTS:          "3"
+  KAFKA_RETRY_BACKOFF_MS:            "1000"
+  KAFKA_TOPIC_REPLICA:               "1"
+  KAFKA_REPLICATION_FACTOR:          "2"
+  FIREBASE_CONFIG_PATH:              "classpath:firebase/firebase-adminsdk.json"
+  FIREBASE_ENABLED:                  "true"
+  FCM_TOKEN_TTL_SECONDS:             "2592000"
+  FCM_IMAGE_URL:                     "https://example.com/images/ssok-logo.png"
+  ALIGO_SMS_API_URL:                 "https://apis.aligo.in/send/"
+  ALIGO_API_KEY:                     ""
+  ALIGO_USER_ID:                     ""
+  ALIGO_SENDER:                      ""
 ---
 # Source: ssok-notification-service/templates/configmap.yaml
 apiVersion: v1
@@ -127,7 +133,14 @@ data:
     kafka:
       bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS}
       notification-topic: ${KAFKA_NOTIFICATION_TOPIC}
+      notification-recover-topic: ${KAFKA_NOTIFICATION_RECOVER_TOPIC}
       group-id: ${KAFKA_GROUP_ID}
+      recovery-group-id: ${KAFKA_RECOVERY_GROUP_ID}
+      retry:
+        max-attempts: ${KAFKA_RETRY_MAX_ATTEMPTS}
+        backoff-ms: ${KAFKA_RETRY_BACKOFF_MS}
+        topic-replica: ${KAFKA_TOPIC_REPLICA}
+        replication-factor: ${KAFKA_REPLICATION_FACTOR}
     firebase:
       config-path: ${FIREBASE_CONFIG_PATH}
       enabled: ${FIREBASE_ENABLED}
