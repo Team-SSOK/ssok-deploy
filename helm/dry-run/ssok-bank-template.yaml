@@ -272,7 +272,7 @@ spec:
         - sh
         - -c
         - |
-          DEPLOY_TIME=$(date "+%Y-%m-%d %H:%M:%S")
+          DEPLOY_TIME=$(date +"%Y-%m-%dT%H:%M:%S.%N%:z")
           curl --connect-timeout 2 --fail -H "Content-Type: application/json" \
                -X POST \
                -d "{
@@ -346,7 +346,7 @@ spec:
         - sh
         - -c
         - |
-          DEPLOY_TIME=$(date "+%Y-%m-%d %H:%M:%S")
+          DEPLOY_TIME=$(date +"%Y-%m-%dT%H:%M:%S.%N%:z")
           curl --connect-timeout 2 --fail -H "Content-Type: application/json" \
                -X POST \
                -d "{
