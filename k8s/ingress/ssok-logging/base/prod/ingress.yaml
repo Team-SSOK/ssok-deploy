@@ -22,7 +22,7 @@ spec:
             pathType: Prefix
             backend:
               service:
-                name: opensearch-coord
+                name: opensearch-cluster-coord
                 port:
                   number: 9200
     - host: log.ssok.kr
