@@ -73,4 +73,5 @@ config:
       - "opensearch-cluster-cluster-manager-2"
 
     # Shard Allocation Awareness
-    cluster.routing.allocation.awareness.attributes: "zone"
+    # zone이 나눠지지 않기에 주석 처리 -> 추후 확장 시 활성화
+    # cluster.routing.allocation.awareness.attributes: "zone"

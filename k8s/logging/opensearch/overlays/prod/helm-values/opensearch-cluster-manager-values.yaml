@@ -79,7 +79,8 @@ config:
 
     # ──────────────────────────────────────────────────────
     # 3) Shard Allocation Awareness (zone 기반)
-    cluster.routing.allocation.awareness.attributes: "zone"
+    # zone이 나눠지지 않기에 주석 처리 -> 추후 확장 시 활성화
+    # cluster.routing.allocation.awareness.attributes: "zone"
     # ──────────────────────────────────────────────────────
 
     # CORS 설정
