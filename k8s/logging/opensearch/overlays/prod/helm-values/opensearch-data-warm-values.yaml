@@ -33,10 +33,10 @@ extraEnvs:
     value: "true"
   - name: DISABLE_SECURITY_DASHBOARDS_PLUGIN
     value: "true"
-  - name: OPENSEARCH_NODE_ATTR_ZONE
-    valueFrom:
-      fieldRef:
-        fieldPath: metadata.labels['topology.kubernetes.io/zone']
+  # - name: OPENSEARCH_NODE_ATTR_ZONE
+  #   valueFrom:
+  #     fieldRef:
+  #       fieldPath: metadata.labels['topology.kubernetes.io/zone']
 
 # Persistence: Warm 데이터는 용량 위주로, gp3 100Gi
 persistence:
@@ -57,7 +57,7 @@ config:
     plugins.security.disabled: true
 
     # zone 속성
-    node.attr.zone: ${OPENSEARCH_NODE_ATTR_ZONE}
+    # node.attr.zone: ${OPENSEARCH_NODE_ATTR_ZONE}
 
     # Cluster Manager 후보
     discovery.seed_hosts:

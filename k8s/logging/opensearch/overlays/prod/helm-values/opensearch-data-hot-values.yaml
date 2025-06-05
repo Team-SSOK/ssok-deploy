@@ -35,10 +35,10 @@ extraEnvs:
     value: "true"
   - name: DISABLE_SECURITY_DASHBOARDS_PLUGIN
     value: "true"
-  - name: OPENSEARCH_NODE_ATTR_ZONE
-    valueFrom:
-      fieldRef:
-        fieldPath: metadata.labels['topology.kubernetes.io/zone']
+  # - name: OPENSEARCH_NODE_ATTR_ZONE
+  #   valueFrom:
+  #     fieldRef:
+  #       fieldPath: metadata.labels['topology.kubernetes.io/zone']
 
 # Persistence: Hot Data는 빠른 EBS gp3 사용 (예: IO 모드 높임)
 persistence:
@@ -59,7 +59,7 @@ config:
     plugins.security.disabled: true
 
     # zone 속성
-    node.attr.zone: ${OPENSEARCH_NODE_ATTR_ZONE}
+    # node.attr.zone: ${OPENSEARCH_NODE_ATTR_ZONE}
 
     # Cluster Manager 후보
     discovery.seed_hosts:

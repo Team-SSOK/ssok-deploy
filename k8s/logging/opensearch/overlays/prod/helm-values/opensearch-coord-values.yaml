@@ -32,10 +32,10 @@ extraEnvs:
     value: "true"
   - name: DISABLE_SECURITY_DASHBOARDS_PLUGIN
     value: "true"
-  - name: OPENSEARCH_NODE_ATTR_ZONE
-    valueFrom:
-      fieldRef:
-        fieldPath: metadata.labels['topology.kubernetes.io/zone']
+  # - name: OPENSEARCH_NODE_ATTR_ZONE
+  #   valueFrom:
+  #     fieldRef:
+  #       fieldPath: metadata.labels['topology.kubernetes.io/zone']
 
 # Coordination 노드는 데이터 저장 불필요 → persistence 비활성화
 persistence:
@@ -52,7 +52,7 @@ config:
     plugins.security.disabled: true
 
     # zone 속성
-    node.attr.zone: ${OPENSEARCH_NODE_ATTR_ZONE}
+    # node.attr.zone: ${OPENSEARCH_NODE_ATTR_ZONE}
 
     # Cluster Manager 후보
     discovery.seed_hosts:

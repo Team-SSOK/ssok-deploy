@@ -35,10 +35,10 @@ extraEnvs:
   - name: DISABLE_SECURITY_DASHBOARDS_PLUGIN
     value: "true"
   # Zone 정보를 AWS EKS 노드 라벨에서 가져옴
-  - name: OPENSEARCH_NODE_ATTR_ZONE
-    valueFrom:
-      fieldRef:
-        fieldPath: metadata.labels['topology.kubernetes.io/zone']
+  # - name: OPENSEARCH_NODE_ATTR_ZONE
+  #   valueFrom:
+  #     fieldRef:
+  #       fieldPath: metadata.labels['topology.kubernetes.io/zone']
 
 # Persistence: AWS EBS gp3 동적 프로비저닝
 persistence:
@@ -61,7 +61,7 @@ config:
 
     # ──────────────────────────────────────────────────────
     # 1) AZ(zone) 속성 바인딩
-    node.attr.zone: ${OPENSEARCH_NODE_ATTR_ZONE}
+    # node.attr.zone: ${OPENSEARCH_NODE_ATTR_ZONE}
     # ──────────────────────────────────────────────────────
 
     # ──────────────────────────────────────────────────────
