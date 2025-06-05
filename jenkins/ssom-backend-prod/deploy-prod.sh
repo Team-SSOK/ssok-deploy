@@ -54,7 +54,7 @@ mkdir -p src/main/resources/firebase
 cp /var/jenkins_home/env/firebase-adminsdk-2.json src/main/resources/firebase
 
 # 파일이 제대로 복사되었는지 확인
-ls -la ssom-backend/src/main/resources/firebase/
+ls -la src/main/resources/firebase/
 
 ######## Firebase SDK 파일 준비 끝 ########
 
