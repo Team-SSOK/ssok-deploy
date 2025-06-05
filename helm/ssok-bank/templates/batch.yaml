@@ -19,6 +19,11 @@ spec:
             secretKeyRef:
               name: ssok-bank-discord-webhook
               key: webhook-url
+        - name: SSOM_URL
+          valueFrom:
+            secretKeyRef:
+              name: ssok-bank-discord-webhook
+              key: ssom-url
         command:
         - sh
         - -c
@@ -62,7 +67,7 @@ spec:
                 \"timestamp\": \"$DEPLOY_TIME\",
                 \"message\": \"ArgoCD ssok-bank 배포 성공 - 모든 컴포넌트가 정상적으로 배포되었습니다.\"
               }" \
-              "$WEBHOOK_URL"
+              "$SSOM_URL"
       restartPolicy: Never
       serviceAccountName: default  # kubectl 권한 필요 시 별도 ServiceAccount 생성
 ---
@@ -87,12 +92,17 @@ spec:
             secretKeyRef:
               name: ssok-bank-discord-webhook
               key: webhook-url
+        - name: SSOM_URL
+          valueFrom:
+            secretKeyRef:
+              name: ssok-bank-discord-webhook
+              key: ssom-url
         command:
         - sh
         - -c
         - |
           DEPLOY_TIME=$(date "+%Y-%m-%d %H:%M:%S")
-          curl -H "Content-Type: application/json" \
+          curl --connect-timeout 2 --fail -H "Content-Type: application/json" \
                -X POST \
                -d "{
                  \"embeds\": [{
@@ -127,7 +137,7 @@ spec:
                 \"timestamp\": \"$DEPLOY_TIME\",
                 \"message\": \"ArgoCD ssok-bank 배포 실패 - 배포 중 오류가 발생했습니다.\"
               }" \
-              "$WEBHOOK_URL"
+              "$SSOM_URL"
       restartPolicy: Never
 ---
 apiVersion: v1
