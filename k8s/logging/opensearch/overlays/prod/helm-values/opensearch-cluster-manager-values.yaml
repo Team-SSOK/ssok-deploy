@@ -2,6 +2,8 @@ clusterName: "opensearch-cluster"
 nodeGroup: "cluster-manager"
 singleNode: false
 
+masterService: opensearch-cluster-cluster-manager-headless
+
 # Cluster Manager 노드는 메타데이터 관리 전용
 roles:
   - cluster_manager
