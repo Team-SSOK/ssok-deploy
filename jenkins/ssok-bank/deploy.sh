@@ -100,7 +100,8 @@ K8S_DIR=$currentDir/$DEPLOY_NAME/k8s/$BACKEND_IMAGE_NAME/overlays/dev/helm-value
 YAML_FILE="values.yaml"
 sed -i 's/\(  tag: \).*$/\1"'"$TAG"'"/' ${K8S_DIR}/${YAML_FILE}
 
-cd $K8S_DIR
+cd $currentDir/$DEPLOY_NAME/k8s/$BACKEND_IMAGE_NAME/overlays
+
 git add .
 git status
 git commit -m "build: ${BACKEND_IMAGE_NAME} 이미지 태그를 ${TAG}로 업데이트"
