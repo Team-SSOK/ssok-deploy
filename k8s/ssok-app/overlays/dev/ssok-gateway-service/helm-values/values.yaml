@@ -72,6 +72,9 @@ applicationConfig:
     health:
       kubernetes:
         enabled: false
+    metrics:
+      tags:
+        application: ssok-gateway-service
 
 fluentbit:
   fluentBitConf: |-

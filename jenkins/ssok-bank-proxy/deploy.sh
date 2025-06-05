@@ -107,5 +107,18 @@ git commit -m "build: ${BACKEND_IMAGE_NAME} 이미지 태그를 ${TAG}로 업데
 echo
 git push https://${GIT_PASS}@github.com/Team-SSOK/ssok-deploy.git main
 
+DEPLOY_TIME=$(date "+%Y-%m-%d %H:%M:%S")
+WEBHOOK_URL=http://kudong.kr:55037/api/alert/devops
+
+curl -X POST \
+  -H "Content-Type: application/json" \
+  -d '{
+    \"level\": \"INFO\",
+    \"app\": \"jenkins_ssok-notification-service\",
+    \"timestamp\": \"$DEPLOY_TIME\",
+    \"message\": \"SSOK BANK Jenkins 배포 완료 - 버전 ${TAG}로 업데이트\"
+  }' \
+  "$WEBHOOK_URL"
+
 echo
 echo "SSOK BANK DEPLOY Finished!"
