@@ -123,7 +123,6 @@ if curl --connect-timeout 3 --fail -X POST \
   echo
   echo "[DEV] KUDONG.KR 알림 전송 성공"
 else
-  echo
   echo "[DEV] KUDONG.KR 알림 전송 불가"
 fi
 
@@ -141,7 +140,6 @@ if curl --connect-timeout 3 --fail -X POST \
   echo
   echo "[PROD] SSOK.KR 알림 전송 성공"
 else
-  echo
   echo "[PROD] SSOK.KR 알림 전송 불가"
 fi
 
