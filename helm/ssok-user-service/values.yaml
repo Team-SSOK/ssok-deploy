@@ -94,9 +94,12 @@ applicationConfig:
       metrics:
         export:
           enabled: true
-  health:
-    kubernetes:
-      enabled: false
+    health:
+      kubernetes:
+        enabled: false
+    metrics:
+      tags:
+        application: ssok-user-service
   feign:
     client:
       config:

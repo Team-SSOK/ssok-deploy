@@ -65,6 +65,9 @@ applicationConfig:
     health:
       kubernetes:
         enabled: false
+    metrics:
+      tags:
+        application: ssok-bluetooth-service
 
 fluentbit:
   fluentBitConf: |-

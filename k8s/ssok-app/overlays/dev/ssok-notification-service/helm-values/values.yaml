@@ -90,9 +90,12 @@ applicationConfig:
         show-details: always
       prometheus:
         enabled: true
-  health:
-    kubernetes:
-      enabled: false
+    health:
+      kubernetes:
+        enabled: false
+    metrics:
+      tags:
+        application: ssok-notification-service
   logging:
     level:
       kr.ssok.userservice.client: DEBUG
