@@ -108,16 +108,16 @@ echo
 git push https://${GIT_PASS}@github.com/Team-SSOK/ssok-deploy.git main
 
 DEPLOY_TIME=$(date "+%Y-%m-%d %H:%M:%S")
-WEBHOOK_URL=http://kudong.kr:55037/api/alert/devops
+WEBHOOK_URL="http://172.21.1.22:31105/api/alert/devops"
 
 curl -X POST \
   -H "Content-Type: application/json" \
-  -d '{
+  -d "{
     \"level\": \"INFO\",
-    \"app\": \"jenkins_ssok-notification-service\",
+    \"app\": \"jenkins_${BACKEND_IMAGE_NAME}\",
     \"timestamp\": \"$DEPLOY_TIME\",
-    \"message\": \"SSOK BANK Jenkins 배포 완료 - 버전 ${TAG}로 업데이트\"
-  }' \
+    \"message\": \"Jenkins ${BACKEND_IMAGE_NAME} 배포 완료 - 버전 ${TAG}로 업데이트\"
+  }" \
   "$WEBHOOK_URL"
 
 echo
