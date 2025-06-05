@@ -48,10 +48,10 @@ echo "GitHub Token 주입 완료"
 ######## Firebase SDK 파일 준비 시작 ########
 
 # Firebase 디렉토리 생성
-mkdir -p ssom-backend/src/main/resources/firebase
+mkdir -p src/main/resources/firebase
 
 # Jenkins에 저장된 Firebase SDK 파일 복사
-cp /var/jenkins_home/env/firebase-adminsdk-2.json ssom-backend/src/main/resources/firebase
+cp /var/jenkins_home/env/firebase-adminsdk-2.json src/main/resources/firebase
 
 # 파일이 제대로 복사되었는지 확인
 ls -la ssom-backend/src/main/resources/firebase/
