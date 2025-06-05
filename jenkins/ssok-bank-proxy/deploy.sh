@@ -107,18 +107,40 @@ git commit -m "build: ${BACKEND_IMAGE_NAME} 이미지 태그를 ${TAG}로 업데
 echo
 git push https://${GIT_PASS}@github.com/Team-SSOK/ssok-deploy.git main
 
-DEPLOY_TIME=$(date "+%Y-%m-%d %H:%M:%S")
+DEPLOY_TIME=$(date +"%Y-%m-%dT%H:%M:%S.%N%:z")
 WEBHOOK_URL="http://172.21.1.22:31105/api/alert/devops"
 
-curl -X POST \
+if curl --connect-timeout 3 --fail -X POST \
   -H "Content-Type: application/json" \
   -d "{
     \"level\": \"INFO\",
     \"app\": \"jenkins_${BACKEND_IMAGE_NAME}\",
     \"timestamp\": \"$DEPLOY_TIME\",
-    \"message\": \"Jenkins ${BACKEND_IMAGE_NAME} 배포 완료 - 버전 ${TAG}로 업데이트\"
+    \"message\": \"Jenkins ${BACKEND_IMAGE_NAME} 빌드 완료 - 버전 ${TAG}로 업데이트\"
   }" \
-  "$WEBHOOK_URL"
+  "$WEBHOOK_URL"; then
+  echo
+  echo "[DEV] KUDONG.KR 알림 전송 성공"
+else
+  echo "[DEV] KUDONG.KR 알림 전송 불가"
+fi
+
+WEBHOOK_URL="https://ssom.ssok.kr/api/alert/devops"
+
+if curl --connect-timeout 3 --fail -X POST \
+  -H "Content-Type: application/json" \
+  -d "{
+    \"level\": \"INFO\",
+    \"app\": \"jenkins_${BACKEND_IMAGE_NAME}\",
+    \"timestamp\": \"$DEPLOY_TIME\",
+    \"message\": \"Jenkins ${BACKEND_IMAGE_NAME} 빌드 완료 - 버전 ${TAG}로 업데이트\"
+  }" \
+  "$WEBHOOK_URL"; then
+  echo
+  echo "[PROD] SSOK.KR 알림 전송 성공"
+else
+  echo "[PROD] SSOK.KR 알림 전송 불가"
+fi
 
 echo
 echo "SSOK BANK DEPLOY Finished!"
