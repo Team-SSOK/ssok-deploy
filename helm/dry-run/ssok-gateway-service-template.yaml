@@ -41,9 +41,6 @@ metadata:
     app.kubernetes.io/managed-by: Helm
 data:
   application.yml: |
-    health:
-      kubernetes:
-        enabled: false
     management:
       endpoint:
         health:
@@ -55,6 +52,12 @@ data:
         web:
           exposure:
             include: health,info,prometheus
+      health:
+        kubernetes:
+          enabled: false
+      metrics:
+        tags:
+          application: ssok-gateway-service
       prometheus:
         metrics:
           export:

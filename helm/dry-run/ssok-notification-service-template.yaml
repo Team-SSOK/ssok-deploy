@@ -84,9 +84,6 @@ data:
               isolation:
                 thread:
                   timeoutInMilliseconds: 30000
-    health:
-      kubernetes:
-        enabled: false
     logging:
       level:
         kr.ssok.userservice.client: DEBUG
@@ -101,6 +98,12 @@ data:
         web:
           exposure:
             include: health,info,prometheus
+      health:
+        kubernetes:
+          enabled: false
+      metrics:
+        tags:
+          application: ssok-notification-service
       prometheus:
         metrics:
           export:

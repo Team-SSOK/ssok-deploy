@@ -84,9 +84,6 @@ data:
               isolation:
                 thread:
                   timeoutInMilliseconds: 30000
-    health:
-      kubernetes:
-        enabled: false
     management:
       endpoint:
         health:
@@ -98,6 +95,12 @@ data:
         web:
           exposure:
             include: health,info,prometheus
+      health:
+        kubernetes:
+          enabled: false
+      metrics:
+        tags:
+          application: ssok-user-service
       prometheus:
         metrics:
           export:
