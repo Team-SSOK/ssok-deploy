@@ -148,7 +148,14 @@ secrets:
   kafka:
     bootstrapServers: "broker.localhost:9092"
     notificationTopic: "ssok.notification.topic"
+    notificationRecoverTopic: "ssok.notification-recovery.topic"
     groupId: "notification-group"
+    recoveryGroupId: "notification-recovery-group"
+    retry:
+      maxAttempts: "3"
+      backoffMs: "1000"
+      topicReplica: "1"
+      replicationFactor: "2"
   firebase:
     configPath: "classpath:firebase/firebase-adminsdk.json"
     enabled: "true"
