@@ -379,7 +379,7 @@ spec:
           curl --connect-timeout 2 --fail -X POST \
               -H "Content-Type: application/json" \
               -d "{
-                \"level\": \"INFO\",
+                \"level\": \"ERROR\",
                 \"app\": \"argocd_ssok-bank\",
                 \"timestamp\": \"$DEPLOY_TIME\",
                 \"message\": \"ArgoCD ssok-bank 배포 실패 - 배포 중 오류가 발생했습니다.\"
