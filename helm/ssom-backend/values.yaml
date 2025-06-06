@@ -117,7 +117,8 @@ ssom:
     SECURITY_WHITELIST_8: "/v3/api-docs/**"
     SECURITY_WHITELIST_9: "/error"
     SECURITY_WHITELIST_10: "/"
-    
+    SECURITY_WHITELIST_11: "/api/issues/github"
+
     # GitHub API 설정 (비민감 정보)
     GITHUB_API_OWNER: "Team-SSOK"
     GITHUB_API_REPOSITORY: "ssom-backend"
