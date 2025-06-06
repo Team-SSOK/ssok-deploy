@@ -46,7 +46,7 @@ ssom:
     
   secrets:
     # 정확한 base64 인코딩된 값들 (aws db)
-    SPRING_DATASOURCE_URL: amRiYzpteXNxbDovLzE3Mi4xNi4wLjg2OjMzMDcvc3NvbWRi
+    SPRING_DATASOURCE_URL: amRiYzpteXNxbDovLzE3Mi4xNi4wLjg2OjMzMDcvc3NvbWRiP3NlcnZlclRpbWV6b25lPUFzaWEvU2VvdWwmdXNlTGVnYWN5RGF0ZXRpbWVDb2RlPWZhbHNl
     SPRING_DATASOURCE_USERNAME: c3NvbXVzZXI=
     SPRING_DATASOURCE_PASSWORD: c3NvbXB3
     
