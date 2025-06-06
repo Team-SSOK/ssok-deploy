@@ -121,7 +121,7 @@ ssom:
 
     # GitHub API 설정 (비민감 정보)
     GITHUB_API_OWNER: "Team-SSOK"
-    GITHUB_API_REPOSITORY: "ssom-backend"
+    GITHUB_API_REPOSITORY: "ssok-backend"
     
     # Management/Actuator 설정
     MANAGEMENT_ENDPOINTS_WEB_EXPOSURE_INCLUDE: "health,info,prometheus"
