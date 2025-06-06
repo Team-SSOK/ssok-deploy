@@ -3,7 +3,7 @@
 image:
   repository: kudong/ssom-backend
   pullPolicy: IfNotPresent
-  tag: "1.61"
+  tag: "1.62"
 
 notification:
   profile: "[DEV]"
