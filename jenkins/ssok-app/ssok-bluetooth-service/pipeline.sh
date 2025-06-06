@@ -51,6 +51,41 @@ git add .
 git commit -m "Update $SERVICE_NAME image to ${BUILD_TAG}"
 git push origin main
 
+DEPLOY_TIME=$(date +"%Y-%m-%dT%H:%M:%S.%N%:z")
+WEBHOOK_URL="http://172.21.1.22:31105/api/alert/devops"
+
+if curl --connect-timeout 2 --fail -X POST \
+  -H "Content-Type: application/json" \
+  -d "{
+    \"level\": \"INFO\",
+    \"app\": \"jenkins_${SERVICE_NAME}\",
+    \"timestamp\": \"$DEPLOY_TIME\",
+    \"message\": \"Jenkins ${SERVICE_NAME} 빌드 완료 - 버전 ${BUILD_TAG}로 업데이트\"
+  }" \
+  "$WEBHOOK_URL"; then
+  echo
+  echo "[DEV] KUDONG.KR 알림 전송 성공"
+else
+  echo "[DEV] KUDONG.KR 알림 전송 불가"
+fi
+
+WEBHOOK_URL="https://ssom.ssok.kr/api/alert/devops"
+
+if curl --connect-timeout 2 --fail -X POST \
+  -H "Content-Type: application/json" \
+  -d "{
+    \"level\": \"INFO\",
+    \"app\": \"jenkins_${SERVICE_NAME}\",
+    \"timestamp\": \"$DEPLOY_TIME\",
+    \"message\": \"Jenkins ${SERVICE_NAME} 빌드 완료 - 버전 ${BUILD_TAG}로 업데이트\"
+  }" \
+  "$WEBHOOK_URL"; then
+  echo
+  echo "[PROD] SSOK.KR 알림 전송 성공"
+else
+  echo "[PROD] SSOK.KR 알림 전송 불가"
+fi
+
 echo $separationPhrase
 echo
 echo "Deployment Manifest Updated Successfully!"

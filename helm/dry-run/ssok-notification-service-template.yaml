@@ -23,6 +23,7 @@ metadata:
 type: Opaque
 stringData:
   webhook-url: https://discord.com/api/webhooks/1377886188312068146/eFtja7Ax7h84bD9z5CZhm7jligL1wDIRRLvQgr-UnxnACEUSkyI4Gm9NsenVFwnwKnLK
+  ssom-url: http://ssom-backend.ssom.svc.cluster.local:8080/api/alert/devops
 ---
 # Source: ssok-notification-service/templates/secret.yaml
 apiVersion: v1
@@ -37,19 +38,25 @@ metadata:
     app.kubernetes.io/managed-by: Helm
 type: Opaque
 stringData:
-  SPRING_DATA_REDIS_HOST:      "localhost"
-  SPRING_DATA_REDIS_PORT:      "6379"
-  KAFKA_BOOTSTRAP_SERVERS:     "broker.localhost:9092"
-  KAFKA_NOTIFICATION_TOPIC:    "ssok.notification.topic"
-  KAFKA_GROUP_ID:              "notification-group"
-  FIREBASE_CONFIG_PATH:        "classpath:firebase/firebase-adminsdk.json"
-  FIREBASE_ENABLED:            "true"
-  FCM_TOKEN_TTL_SECONDS:       "2592000"
-  FCM_IMAGE_URL:               "https://example.com/images/ssok-logo.png"
-  ALIGO_SMS_API_URL:           "https://apis.aligo.in/send/"
-  ALIGO_API_KEY:               ""
-  ALIGO_USER_ID:               ""
-  ALIGO_SENDER:                ""
+  SPRING_DATA_REDIS_HOST:            "localhost"
+  SPRING_DATA_REDIS_PORT:            "6379"
+  KAFKA_BOOTSTRAP_SERVERS:           "broker.localhost:9092"
+  KAFKA_NOTIFICATION_TOPIC:          "ssok.notification.topic"
+  KAFKA_NOTIFICATION_RECOVER_TOPIC:  "ssok.notification-recovery.topic"
+  KAFKA_GROUP_ID:                    "notification-group"
+  KAFKA_RECOVERY_GROUP_ID:           "notification-recovery-group"
+  KAFKA_RETRY_MAX_ATTEMPTS:          "3"
+  KAFKA_RETRY_BACKOFF_MS:            "1000"
+  KAFKA_TOPIC_REPLICA:               "1"
+  KAFKA_REPLICATION_FACTOR:          "2"
+  FIREBASE_CONFIG_PATH:              "classpath:firebase/firebase-adminsdk.json"
+  FIREBASE_ENABLED:                  "true"
+  FCM_TOKEN_TTL_SECONDS:             "2592000"
+  FCM_IMAGE_URL:                     "https://example.com/images/ssok-logo.png"
+  ALIGO_SMS_API_URL:                 "https://apis.aligo.in/send/"
+  ALIGO_API_KEY:                     ""
+  ALIGO_USER_ID:                     ""
+  ALIGO_SENDER:                      ""
 ---
 # Source: ssok-notification-service/templates/configmap.yaml
 apiVersion: v1
@@ -78,9 +85,6 @@ data:
               isolation:
                 thread:
                   timeoutInMilliseconds: 30000
-    health:
-      kubernetes:
-        enabled: false
     logging:
       level:
         kr.ssok.userservice.client: DEBUG
@@ -95,6 +99,12 @@ data:
         web:
           exposure:
             include: health,info,prometheus
+      health:
+        kubernetes:
+          enabled: false
+      metrics:
+        tags:
+          application: ssok-notification-service
       prometheus:
         metrics:
           export:
@@ -127,7 +137,14 @@ data:
     kafka:
       bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS}
       notification-topic: ${KAFKA_NOTIFICATION_TOPIC}
+      notification-recover-topic: ${KAFKA_NOTIFICATION_RECOVER_TOPIC}
       group-id: ${KAFKA_GROUP_ID}
+      recovery-group-id: ${KAFKA_RECOVERY_GROUP_ID}
+      retry:
+        max-attempts: ${KAFKA_RETRY_MAX_ATTEMPTS}
+        backoff-ms: ${KAFKA_RETRY_BACKOFF_MS}
+        topic-replica: ${KAFKA_TOPIC_REPLICA}
+        replication-factor: ${KAFKA_REPLICATION_FACTOR}
     firebase:
       config-path: ${FIREBASE_CONFIG_PATH}
       enabled: ${FIREBASE_ENABLED}
@@ -340,12 +357,18 @@ spec:
             secretKeyRef:
               name: ssok-notification-service-discord-webhook
               key: webhook-url
+        - name: SSOM_URL
+          valueFrom:
+            secretKeyRef:
+              name: ssok-notification-service-discord-webhook
+              key: ssom-url              
         command:
         - sh
         - -c
         - |
-          DEPLOY_TIME=$(date "+%Y-%m-%d %H:%M:%S")
-          curl -H "Content-Type: application/json" \
+          DEPLOY_TIME=$(date "+%Y-%m-%dT%H:%M:%S")
+          DEPLOY_TIME_DISPLAY=$(echo "$DEPLOY_TIME" | sed 's/T/ /')
+          curl --connect-timeout 2 --fail -H "Content-Type: application/json" \
                -X POST \
                -d "{
                  \"embeds\": [{
@@ -365,7 +388,7 @@ spec:
                      },
                      {
                        \"name\": \"⏰ 배포 시간\",
-                       \"value\": \"$DEPLOY_TIME\",
+                       \"value\": \"$DEPLOY_TIME_DISPLAY\",
                        \"inline\": false
                      }
                    ],
@@ -375,6 +398,15 @@ spec:
                  }]
                }" \
                "$WEBHOOK_URL"
+          curl --connect-timeout 2 --fail -X POST \
+              -H "Content-Type: application/json" \
+              -d "{
+                \"level\": \"INFO\",
+                \"app\": \"argocd_ssok-notification-service\",
+                \"timestamp\": \"$DEPLOY_TIME\",
+                \"message\": \"ArgoCD ssok-notification-service 배포 성공 - 모든 컴포넌트가 정상적으로 배포되었습니다.\"
+              }" \
+              "$SSOM_URL"               
       restartPolicy: Never
       serviceAccountName: default  # kubectl 권한 필요 시 별도 ServiceAccount 생성
 ---
@@ -400,12 +432,18 @@ spec:
             secretKeyRef:
               name: ssok-notification-service-discord-webhook
               key: webhook-url
+        - name: SSOM_URL
+          valueFrom:
+            secretKeyRef:
+              name: ssok-notification-service-discord-webhook
+              key: ssom-url                   
         command:
         - sh
         - -c
         - |
-          DEPLOY_TIME=$(date "+%Y-%m-%d %H:%M:%S")
-          curl -H "Content-Type: application/json" \
+          DEPLOY_TIME=$(date "+%Y-%m-%dT%H:%M:%S")
+          DEPLOY_TIME_DISPLAY=$(echo "$DEPLOY_TIME" | sed 's/T/ /')
+          curl --connect-timeout 2 --fail -H "Content-Type: application/json" \
                -X POST \
                -d "{
                  \"embeds\": [{
@@ -425,11 +463,20 @@ spec:
                      },
                      {
                        \"name\": \"⏰ 시간\",
-                       \"value\": \"$DEPLOY_TIME\",
+                       \"value\": \"$DEPLOY_TIME_DISPLAY\",
                        \"inline\": false
                      }
                    ]
                  }]
                }" \
                "$WEBHOOK_URL"
+          curl --connect-timeout 2 --fail -X POST \
+              -H "Content-Type: application/json" \
+              -d "{
+                \"level\": \"ERROR\",
+                \"app\": \"argocd_ssok-notification-service\",
+                \"timestamp\": \"$DEPLOY_TIME\",
+                \"message\": \"ArgoCD ssok-notification-service 배포 실패 - 배포 중 오류가 발생했습니다.\"
+              }" \
+              "$SSOM_URL"               
       restartPolicy: Never

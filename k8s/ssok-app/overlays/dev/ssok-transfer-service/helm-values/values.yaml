@@ -2,7 +2,7 @@ replicaCount: 1
 
 image:
   repository: kudong/ssok-transfer-service
-  tag: "build-116"
+  tag: "build-121"
   pullPolicy: IfNotPresent
 
 service:
@@ -80,9 +80,12 @@ applicationConfig:
         show-details: always
       prometheus:
         enabled: true
-  health:
-    kubernetes:
-      enabled: false
+    health:
+      kubernetes:
+        enabled: false
+    metrics:
+      tags:
+        application: ssok-transfer-service
   feign:
     client:
       config:

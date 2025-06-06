@@ -23,6 +23,7 @@ metadata:
 type: Opaque
 stringData:
   webhook-url: https://discord.com/api/webhooks/1377886188312068146/eFtja7Ax7h84bD9z5CZhm7jligL1wDIRRLvQgr-UnxnACEUSkyI4Gm9NsenVFwnwKnLK
+  ssom-url: http://ssom-backend.ssom.svc.cluster.local:8080/api/alert/devops
 ---
 # Source: ssok-bank-proxy/templates/configmap.yaml
 apiVersion: v1
@@ -241,12 +242,18 @@ spec:
             secretKeyRef:
               name: ssok-bank-proxy-discord-webhook
               key: webhook-url
+        - name: SSOM_URL
+          valueFrom:
+            secretKeyRef:
+              name: ssok-bank-proxy-discord-webhook
+              key: ssom-url
         command:
         - sh
         - -c
         - |
-          DEPLOY_TIME=$(date "+%Y-%m-%d %H:%M:%S")
-          curl -H "Content-Type: application/json" \
+          DEPLOY_TIME=$(date "+%Y-%m-%dT%H:%M:%S")
+          DEPLOY_TIME_DISPLAY=$(echo "$DEPLOY_TIME" | sed 's/T/ /')
+          curl --connect-timeout 2 --fail -H "Content-Type: application/json" \
                -X POST \
                -d "{
                  \"embeds\": [{
@@ -266,7 +273,7 @@ spec:
                      },
                      {
                        \"name\": \"⏰ 배포 시간\",
-                       \"value\": \"$DEPLOY_TIME\",
+                       \"value\": \"$DEPLOY_TIME_DISPLAY\",
                        \"inline\": false
                      }
                    ],
@@ -276,6 +283,15 @@ spec:
                  }]
                }" \
                "$WEBHOOK_URL"
+          curl --connect-timeout 2 --fail -X POST \
+              -H "Content-Type: application/json" \
+              -d "{
+                \"level\": \"INFO\",
+                \"app\": \"argocd_ssok-bank-proxy\",
+                \"timestamp\": \"$DEPLOY_TIME\",
+                \"message\": \"ArgoCD ssok-bank-proxy 배포 성공 - 모든 컴포넌트가 정상적으로 배포되었습니다.\"
+              }" \
+              "$SSOM_URL"               
       restartPolicy: Never
       serviceAccountName: default  # kubectl 권한 필요 시 별도 ServiceAccount 생성
 ---
@@ -301,12 +317,18 @@ spec:
             secretKeyRef:
               name: ssok-bank-proxy-discord-webhook
               key: webhook-url
+        - name: SSOM_URL
+          valueFrom:
+            secretKeyRef:
+              name: ssok-bank-proxy-discord-webhook
+              key: ssom-url    
         command:
         - sh
         - -c
         - |
-          DEPLOY_TIME=$(date "+%Y-%m-%d %H:%M:%S")
-          curl -H "Content-Type: application/json" \
+          DEPLOY_TIME=$(date "+%Y-%m-%dT%H:%M:%S")
+          DEPLOY_TIME_DISPLAY=$(echo "$DEPLOY_TIME" | sed 's/T/ /')
+          curl --connect-timeout 2 --fail -H "Content-Type: application/json" \
                -X POST \
                -d "{
                  \"embeds\": [{
@@ -326,11 +348,20 @@ spec:
                      },
                      {
                        \"name\": \"⏰ 시간\",
-                       \"value\": \"$DEPLOY_TIME\",
+                       \"value\": \"$DEPLOY_TIME_DISPLAY\",
                        \"inline\": false
                      }
                    ]
                  }]
                }" \
                "$WEBHOOK_URL"
+          curl --connect-timeout 2 --fail -X POST \
+              -H "Content-Type: application/json" \
+              -d "{
+                \"level\": \"ERROR\",
+                \"app\": \"argocd_ssok-bank-proxy\",
+                \"timestamp\": \"$DEPLOY_TIME\",
+                \"message\": \"ArgoCD ssok-bank-proxy 배포 실패 - 배포 중 오류가 발생했습니다.\"
+              }" \
+              "$SSOM_URL"               
       restartPolicy: Never

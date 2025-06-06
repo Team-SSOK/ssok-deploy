@@ -2,7 +2,7 @@ replicaCount: 1
 
 image:
   repository: kudong/ssok-notification-service
-  tag: "build-116"
+  tag: "build-121"
   pullPolicy: IfNotPresent
 
 service:
@@ -90,9 +90,12 @@ applicationConfig:
         show-details: always
       prometheus:
         enabled: true
-  health:
-    kubernetes:
-      enabled: false
+    health:
+      kubernetes:
+        enabled: false
+    metrics:
+      tags:
+        application: ssok-notification-service
   logging:
     level:
       kr.ssok.userservice.client: DEBUG
@@ -137,7 +140,14 @@ secrets:
   kafka:
     bootstrapServers: "ssok-cluster-kafka-bootstrap.kafka.svc.cluster.local:9092"
     notificationTopic: "ssok.notification.topic"
+    notificationRecoverTopic: "ssok.notification-recovery.topic"
     groupId: "notification-group"
+    recoveryGroupId: "notification-recovery-group"
+    retry:
+      maxAttempts: "3"
+      backoffMs: "1000"
+      topicReplica: "1"
+      replicationFactor: "2"
   firebase:
     configPath: "classpath:firebase/firebase-adminsdk.json"
     enabled: "true"

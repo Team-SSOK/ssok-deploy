@@ -14,6 +14,7 @@ service:
 notification:
   profile: "[DEV]"
   webhook-url: "https://discord.com/api/webhooks/1377886188312068146/eFtja7Ax7h84bD9z5CZhm7jligL1wDIRRLvQgr-UnxnACEUSkyI4Gm9NsenVFwnwKnLK"
+  ssom-url: "http://ssom-backend.ssom.svc.cluster.local:8080/api/alert/devops"
 
 # resources:
 #   requests:
@@ -82,9 +83,12 @@ applicationConfig:
       metrics:
         export:
           enabled: true
-  health:
-    kubernetes:
-      enabled: false
+    health:
+      kubernetes:
+        enabled: false
+    metrics:
+      tags:
+        application: ssok-gateway-service
 
 fluentbit:
   fluentBitConf: |-

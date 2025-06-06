@@ -112,7 +112,7 @@ biometric:
 
 # FCM
 firebase:
-  configPath: "classpath:firebase/firebase-adminsdk.json"
+  configPath: "classpath:firebase/firebase-adminsdk-2.json"
   enabled: "true"
 fcm:
   tokenTtlSeconds: "2592000"

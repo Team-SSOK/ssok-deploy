@@ -1,4 +1,4 @@
-opensearchHosts: "http://opensearch-cluster-manager.logging.svc.cluster.local:9200"
+opensearchHosts: "http://opensearch-cluster-coord.logging.svc.cluster.local:9200"
 
 # Replica 1개 (경량)
 replicas: 1
@@ -12,7 +12,7 @@ config:
   opensearch_dashboards.yml: |
     server:
       host: "0.0.0.0"
-    opensearch.hosts: ["http://opensearch-cluster-manager.logging.svc.cluster.local:9200"]
+    opensearch.hosts: ["http://opensearch-cluster-coord.logging.svc.cluster.local:9200"]
     opensearch.ssl.verificationMode: none
     
     # Security plugin이 비활성화된 상태에서는 username/password 설정 제거

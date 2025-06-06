@@ -2,7 +2,7 @@ replicaCount: 1
 
 image:
   repository: kudong/ssok-account-service
-  tag: "build-114"
+  tag: "build-121"
   pullPolicy: IfNotPresent
 
 service:

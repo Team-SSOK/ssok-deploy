@@ -2,7 +2,7 @@ replicaCount: 1
 
 image:
   repository: kudong/ssok-account-service
-  tag: "build-114"
+  tag: "build-121"
   pullPolicy: IfNotPresent
 
 service:
@@ -76,9 +76,12 @@ applicationConfig:
         show-details: always
       prometheus:
         enabled: true
-  health:
-    kubernetes:
-      enabled: false
+    health:
+      kubernetes:
+        enabled: false
+    metrics:
+      tags:
+        application: ssok-account-service
   feign:
     client:
       config:
