@@ -78,7 +78,7 @@ github:
   api:
     token: ${GITHUB_TOKEN}
     owner: Team-SSOK
-    repository: ssom-backend
+    repository: ssok-backend
   webhook:
     secret: ${GITHUB_WEBHOOK_SECRET}
 
