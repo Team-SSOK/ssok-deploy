@@ -91,8 +91,8 @@ echo "ArgoCD Application 생성"
 echo 
 echo $separationPhrase
 
-create_argocd_application "ssok-kafka"
-health_check "ssok-kafka" # Health 상태가 될 때까지 대기
+create_argocd_application "ssok-kafka-v2"
+health_check "ssok-kafka-v2" # Health 상태가 될 때까지 대기
 
 create_logging_application "opensearch"
 health_check "opensearch"
