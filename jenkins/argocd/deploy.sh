@@ -106,6 +106,8 @@ create_argocd_application "ssok-app" "*-service.yaml"
 create_argocd_application "ssok-bank"
 create_argocd_application "ssok-bank-proxy"
 
+create_argocd_application "ssom-backend"
+
 if [ "$DEPLOY_PROFILE" = "prod" ]; then
 
     echo $separationPhrase
