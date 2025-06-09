@@ -69,6 +69,7 @@ security:
     - "/actuator/health/liveness"
     - "/actuator/health/readiness"
     - "/"
+    - "/api/issues/github"
 
 llm:
   api:

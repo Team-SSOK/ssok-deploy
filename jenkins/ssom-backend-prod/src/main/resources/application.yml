@@ -83,9 +83,15 @@ github:
   webhook:
     secret: ${GITHUB_WEBHOOK_SECRET}
 
+# OpenSearch 설정
 opensearch:
+  scheme: ${OPENSEARCH_SCHEME:http}
+  host: ${OPENSEARCH_HOST:kudong.kr}
+  port: ${OPENSEARCH_PORT:55034}
+  connect-timeout: ${OPENSEARCH_CONNECT_TIMEOUT:10}
+  response-timeout: ${OPENSEARCH_RESPONSE_TIMEOUT:30}
   api:
-    url: ${OPENSEARCH_API_URL}
+    url: https://os.ssok.kr
 
 management:
   endpoints:
