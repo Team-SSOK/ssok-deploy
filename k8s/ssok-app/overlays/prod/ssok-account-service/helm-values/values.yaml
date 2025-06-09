@@ -76,11 +76,6 @@ applicationConfig:
         loadbalancer:
           mode: service
   management:
-    endpoint:
-      chaosmonkey:
-        enabled: true
-      chaosmonkeyjmx:
-        enabled: true
     endpoints:
       web:
         exposure:
@@ -89,6 +84,10 @@ applicationConfig:
       health:
         show-details: always
       prometheus:
+        enabled: true
+      chaosmonkey:
+        enabled: true
+      chaosmonkeyjmx:
         enabled: true
   health:
     kubernetes:
