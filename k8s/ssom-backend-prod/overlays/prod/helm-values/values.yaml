@@ -3,7 +3,7 @@
 image:
   repository: kudong/ssom-backend-prod
   pullPolicy: IfNotPresent
-  tag: "1.35"
+  tag: "1.37"
 
 notification:
   profile: "[PROD]"
