@@ -81,7 +81,7 @@ if [ "$DEPLOY_PROFILE" = "prod" ]; then
     kubectl config use-context arn:aws:eks:ap-northeast-2:635091448057:cluster/ssok-cluster
 else
     echo "Connecting to DEVELOPMENT ArgoCD..."
-    argocd login 172.21.1.19:30080 --username admin --password 2t6mVPdg88jih0Lv --insecure
+    argocd login 172.21.1.19:30080 --username admin --password ssok0414! --insecure
     kubectl config use-context kubernetes-admin@kubernetes
 fi
 
@@ -91,8 +91,8 @@ echo "ArgoCD Application 생성"
 echo 
 echo $separationPhrase
 
-create_argocd_application "ssok-kafka"
-health_check "ssok-kafka" # Health 상태가 될 때까지 대기
+create_argocd_application "ssok-kafka-v2"
+health_check "ssok-kafka-v2" # Health 상태가 될 때까지 대기
 
 create_logging_application "opensearch"
 health_check "opensearch"
@@ -105,6 +105,8 @@ create_logging_application "opensearch-dashboard"
 create_argocd_application "ssok-app" "*-service.yaml"
 create_argocd_application "ssok-bank"
 create_argocd_application "ssok-bank-proxy"
+
+create_argocd_application "ssom-backend"
 
 if [ "$DEPLOY_PROFILE" = "prod" ]; then
 

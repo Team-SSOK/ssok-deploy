@@ -62,7 +62,7 @@ graceful_stateful_app_shutdown() {
 
     local app_namespace=$(argocd app get $app -o json | jq -r '.spec.destination.namespace // "default"')
 
-    # Deployment들 graceful 종료
+    # Statefulset들 graceful 종료
     echo "$app의 Replicas 스케일 값을 0으로 변경하였습니다."
     kubectl get statefulsets -n $app_namespace -l app.kubernetes.io/instance=$app -o name | \
     while read statefulset; do
@@ -73,6 +73,38 @@ graceful_stateful_app_shutdown() {
     # Pod 종료 대기
     echo "Pod가 graceful하게 종료되기 까지 기다리는중..."
     kubectl wait --for=delete pod -l app.kubernetes.io/instance=$app -n $app_namespace --timeout=120s
+
+    # 3단계: ArgoCD Application 삭제
+    echo "ArgoCD application - $app 삭제중..."
+    argocd app delete $app --cascade --yes
+
+    echo "$app gracefully shutdown completed"
+    echo
+    echo $separationPhrase
+}
+
+graceful_kafka_shutdown() {
+    local app=$1
+    local namespace=${2:-"argocd"}
+
+    echo
+    echo "$app의 Graceful shutdown을 수행합니다..."
+
+    # 동기화 정책 비활성화
+    echo "Sync policy 비활성화..."
+    argocd app set $app --sync-policy none
+
+    # StrimziPodSet들 graceful 종료
+    echo "$app의 Replicas 스케일 값을 0으로 변경하였습니다."
+    kubectl get strimzipodset -n kafka -l strimzi.io/cluster=ssok-cluster -o name | \
+    while read strimzipodset; do
+        echo "Scaling down $strimzipodset..."
+        kubectl scale $strimzipodset --replicas=0 -n kafka
+    done
+
+    # Pod 종료 대기
+    echo "Pod가 graceful하게 종료되기 까지 기다리는중..."
+    kubectl wait --for=delete pod -l strimzi.io/cluster=ssok-cluster -n kafka --timeout=120s
 
     # 3단계: ArgoCD Application 삭제
     echo "ArgoCD application - $app 삭제중..."
@@ -99,7 +131,7 @@ if [ "$DEPLOY_PROFILE" = "prod" ]; then
     kubectl config use-context arn:aws:eks:ap-northeast-2:635091448057:cluster/ssok-cluster
 else
     echo "Connecting to DEVELOPMENT ArgoCD..."
-    argocd login 172.21.1.19:30080 --username admin --password 2t6mVPdg88jih0Lv --insecure
+    argocd login 172.21.1.19:30080 --username admin --password ssok0414! --insecure
     kubectl config use-context kubernetes-admin@kubernetes
 fi
 
@@ -108,7 +140,7 @@ ARGOCD_APPS=$(kubectl get applications -n $NAMESPACE --no-headers -o custom-colu
 INGRESS_APPS=$(echo "$ARGOCD_APPS" | grep "\-ingress$")
 SERVICE_APPS=$(echo "$ARGOCD_APPS" | grep "\-service$")
 BANK_APPS=$(echo "$ARGOCD_APPS" | grep -E "^(ssok-bank|ssok-bank-proxy)$")
-MESSAGE_QUEUE_APPS=$(echo "$ARGOCD_APPS" | grep -E "^(ssok-kafka)$")
+MESSAGE_QUEUE_APPS=$(echo "$ARGOCD_APPS" | grep -E "^(ssok-kafka-v2)$")
 LOGGING_APPS=$(echo "$ARGOCD_APPS" | grep -E "^(fluentd|opensearch|opensearch-dashboards)$")
 MONITORING_APPS=$(echo "$ARGOCD_APPS" | grep -E "^(ssok-grafana|ssok-prometheus)$")
 
@@ -163,7 +195,7 @@ echo $separationPhrase
 echo
 
 for app in $MESSAGE_QUEUE_APPS; do
-    graceful_app_shutdown $app
+    graceful_kafka_shutdown $app
 done
 
 echo
