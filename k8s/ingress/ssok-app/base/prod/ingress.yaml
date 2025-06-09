@@ -12,6 +12,9 @@ metadata:
     alb.ingress.kubernetes.io/listen-ports: '[{"HTTPS":443}]'
     alb.ingress.kubernetes.io/certificate-arn: arn:aws:acm:ap-northeast-2:635091448057:certificate/eae8096f-587b-4bd8-9427-48735783d857
     alb.ingress.kubernetes.io/ssl-redirect: '443'
+    alb.ingress.kubernetes.io/healthcheck-path: /actuator/health
+    alb.ingress.kubernetes.io/healthcheck-port: "traffic-port"
+
 
 spec:
   rules:
