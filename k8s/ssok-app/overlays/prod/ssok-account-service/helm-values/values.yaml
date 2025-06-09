@@ -59,8 +59,6 @@ applicationConfig:
   spring:
     application:
       name: ssok-account-service
-    config:
-      import: "kubernetes:"
     cloud:
       kubernetes:
         config:
