@@ -2,7 +2,7 @@ replicaCount: 1
 
 image:
   repository: kudong/ssok-bluetooth-service
-  tag: "build-125"
+  tag: "build-126"
   pullPolicy: IfNotPresent
 
 service:
