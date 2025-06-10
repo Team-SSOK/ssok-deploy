@@ -44,7 +44,7 @@ persistence:
   enabled: true
   accessModes:
     - ReadWriteOnce
-  size: 70Gi
+  size: 30Gi
   storageClass: "gp2"
 
 service:
