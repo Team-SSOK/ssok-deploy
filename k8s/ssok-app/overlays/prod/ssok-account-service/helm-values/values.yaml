@@ -87,8 +87,6 @@ applicationConfig:
         enabled: true
       chaosmonkey:
         enabled: true
-      chaosmonkeyjmx:
-        enabled: true
   health:
     kubernetes:
       enabled: false
@@ -106,21 +104,6 @@ applicationConfig:
             isolation:
               thread:
                 timeoutInMilliseconds: 30000
-  chaos:
-    monkey:
-      enabled: true                     # Chaos Monkey 전체 활성화 여부
-      watcher:                          # 어떤 컴포넌트에 혼란(assault)을 주입할지 지정
-        repository: true                # @Repository 에 주입할지 여부
-        restController: true            # @RestController 에 주입할지 여부
-        service: true                   # @Service 에 주입할지 여부
-      assaults:                         # 어떤 형태의 혼란을 줄지 설정
-        level: 1                        # 공격의 빈도(0~10), 높을수록 자주 발생
-        latency-active: true            # 지연(latency) 주입 여부
-        latency-range-start: 3000       # 최소 지연 (ms)
-        latency-range-end: 5000         # 최대 지연 (ms)
-        exceptions-active: false        # 예외(exception) 발생 여부
-        kill-application-active: false  # 애플리케이션 강제 종료 여부
-        memory-active: false            # 메모리 점유(오버로드) 여부
 
 fluentbit:
   fluentBitConf: |-

@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: ssok-account-service
+  name: ssok-account-service-kubernetes
   namespace: ssok
   labels:
     {{- include "ssok-account-service.labels" . | nindent 4 }}
