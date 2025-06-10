@@ -132,4 +132,15 @@ entries:
     urls:
     - ssom-backend-0.1.0.tgz
     version: 0.1.0
-generated: "2025-06-10T22:33:19.1761012+09:00"
+  ssom-llm:
+  - apiVersion: v2
+    appVersion: 0.1.0
+    created: "2025-06-10T23:36:33.7948934+09:00"
+    description: A SSOM-LLM Helm chart for Kubernetes
+    digest: 3eabdd801f4adaf2e87c29fcf7a3b8012fdfd72283c3dfe03d3ceef9f079ed85
+    name: ssom-llm
+    type: application
+    urls:
+    - ssom-llm-0.1.0.tgz
+    version: 0.1.0
+generated: "2025-06-10T23:36:33.7859383+09:00"

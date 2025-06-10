@@ -12,6 +12,7 @@ helm package ./ssok-transfer-service
 helm package ./ssok-user-service
 helm package ./ssok-openbanking
 helm package ./ssom-backend
+helm package ./ssom-llm
 
 helm repo index .
 

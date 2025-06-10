@@ -1,0 +1,104 @@
+---
+# Source: ssom-llm/templates/secret.yaml
+apiVersion: v1
+kind: Secret
+metadata:
+  name: ssom-llm-secrets
+  namespace: ssom
+  labels:
+    helm.sh/chart: ssom-llm-0.1.0
+    app.kubernetes.io/name: ssom-llm
+    app.kubernetes.io/instance: ssom-llm
+    app.kubernetes.io/version: "0.1.0"
+    app.kubernetes.io/managed-by: Helm
+type: Opaque
+stringData:
+  qdrant_host: ""
+  qdrant_port: ""
+---
+# Source: ssom-llm/templates/service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: ssom-llm
+  namespace: ssom
+  labels:
+    helm.sh/chart: ssom-llm-0.1.0
+    app.kubernetes.io/name: ssom-llm
+    app.kubernetes.io/instance: ssom-llm
+    app.kubernetes.io/version: "0.1.0"
+    app.kubernetes.io/managed-by: Helm
+spec:
+  type: ClusterIP
+  selector:
+    app.kubernetes.io/name: ssom-llm
+    app.kubernetes.io/instance: ssom-llm
+  sessionAffinity: None
+  ports:
+    - port: 8000
+      targetPort: 8000
+---
+# Source: ssom-llm/templates/deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ssom-llm
+  namespace: ssom
+  labels:
+    helm.sh/chart: ssom-llm-0.1.0
+    app.kubernetes.io/name: ssom-llm
+    app.kubernetes.io/instance: ssom-llm
+    app.kubernetes.io/version: "0.1.0"
+    app.kubernetes.io/managed-by: Helm
+spec:
+  revisionHistoryLimit: 1
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: ssom-llm
+      app.kubernetes.io/instance: ssom-llm
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: ssom-llm
+        app.kubernetes.io/instance: ssom-llm
+    spec:
+      containers:
+        - name: ssom-llm
+          image: "kudong/ssom-backend:latest"
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8000
+          env:
+            - name: EMBEDDING_MODEL
+              value: "text-embedding-3-small"
+            - name: LLM_MODEL
+              value: "gpt-4.1-mini"
+            - name: LLM_TEMPERATURE
+              value: "0.3"
+            - name: RETRIEVER_TOP_K
+              value: "5"
+            - name: COLLECTION_NAME
+              value: "java-files"
+          envFrom:
+            - secretRef:
+                name: ssom-llm-secrets
+          readinessProbe:
+            httpGet:
+              path: /health/readiness
+              port: 8000
+            initialDelaySeconds: 10
+            periodSeconds: 20
+          livenessProbe:
+            httpGet:
+              path: /health/liveness
+              port: 8000
+            initialDelaySeconds: 180
+            periodSeconds: 20
+          resources:
+            limits:
+              cpu: 1000m
+              memory: 1Gi
+            requests:
+              cpu: 500m
+              memory: 512Mi

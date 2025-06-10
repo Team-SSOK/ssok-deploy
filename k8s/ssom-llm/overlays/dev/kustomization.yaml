@@ -1,0 +1,10 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+helmCharts:
+- name: ssom-llm
+  repo: https://raw.githubusercontent.com/Team-SSOK/ssok-deploy/main/helm
+  version: 0.1.0
+  releaseName: ssom-llm
+  namespace: ssom
+  valuesFile: helm-values/values.yaml

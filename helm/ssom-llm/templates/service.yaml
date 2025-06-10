@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "ssom-llm.fullname" . }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "ssom-llm.labels" . | nindent 4 }}
+spec:
+  type: ClusterIP
+  selector:
+    {{- include "ssom-llm.selectorLabels" . | nindent 4 }}
+  sessionAffinity: None
+  ports:
+    - port: 8000
+      targetPort: 8000

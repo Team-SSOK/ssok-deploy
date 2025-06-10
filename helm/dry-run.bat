@@ -12,5 +12,6 @@ helm template --dry-run --debug --namespace ssok ssok-transfer-service ./ssok-tr
 helm template --dry-run --debug --namespace ssok ssok-user-service ./ssok-user-service >> ./dry-run/ssok-user-service-template.yaml
 helm template --dry-run --debug --namespace openbanking ssok-openbanking ./ssok-openbanking >> ./dry-run/ssok-openbanking-template.yaml
 helm template --dry-run --debug --namespace ssom ssom-backend ./ssom-backend >> ./dry-run/ssom-backend-template.yaml
+helm template --dry-run --debug --namespace ssom ssom-llm ./ssom-llm >> ./dry-run/ssom-llm-template.yaml
 
 pause

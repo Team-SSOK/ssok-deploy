@@ -228,6 +228,8 @@ spec:
           env:
             - name: SPRING_CONFIG_LOCATION
               value: file:/config/application.yml
+            - name: SPRING_PROFILES_ACTIVE
+              value: chaos-monkey
           volumeMounts:
             - name: varlog
               mountPath: /var/log

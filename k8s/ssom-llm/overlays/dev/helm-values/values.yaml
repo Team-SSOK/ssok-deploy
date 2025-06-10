@@ -1,0 +1,23 @@
+image:
+  repository: kudong/ssom-backend
+  pullPolicy: IfNotPresent
+  tag: "latest"
+
+resources:
+  requests:
+    cpu: "500m"      # 최소 0.5 CPU 코어
+    memory: "512Mi"  # 512MB
+  limits:
+    cpu: "1000m"     # 최대 1 CPU 코어
+    memory: "1Gi"    # 1GB
+
+env:
+  embedding_model: text-embedding-3-small
+  llm_model: gpt-4.1-mini
+  llm_temperature: "0.3"
+  retriever_top_k: "5"
+  collection_name: java-files
+
+secrets:
+  qdrant_host: "172.16.0.86"
+  qdrant_port: "6333"

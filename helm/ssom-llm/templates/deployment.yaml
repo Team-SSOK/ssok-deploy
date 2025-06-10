@@ -1,0 +1,54 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "ssom-llm.fullname" . }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "ssom-llm.labels" . | nindent 4 }}
+spec:
+  revisionHistoryLimit: 1
+  replicas: 1
+  selector:
+    matchLabels:
+      {{- include "ssom-llm.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- include "ssom-llm.selectorLabels" . | nindent 8 }}
+    spec:
+      containers:
+        - name: {{ .Chart.Name }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+            - containerPort: 8000
+          env:
+            - name: EMBEDDING_MODEL
+              value: {{ .Values.env.embedding_model | quote }}
+            - name: LLM_MODEL
+              value: {{ .Values.env.llm_model | quote }}
+            - name: LLM_TEMPERATURE
+              value: {{ .Values.env.llm_temperature | quote }}
+            - name: RETRIEVER_TOP_K
+              value: {{ .Values.env.retriever_top_k | quote }}
+            - name: COLLECTION_NAME
+              value: {{ .Values.env.collection_name | quote }}
+          envFrom:
+            - secretRef:
+                name: ssom-llm-secrets
+          readinessProbe:
+            httpGet:
+              path: /health/readiness
+              port: 8000
+            initialDelaySeconds: 10
+            periodSeconds: 20
+          livenessProbe:
+            httpGet:
+              path: /health/liveness
+              port: 8000
+            initialDelaySeconds: 180
+            periodSeconds: 20
+          resources:
+            {{- with .Values.resources }}
+            {{- toYaml . | nindent 12 }}
+            {{- end }}
