@@ -28,3 +28,10 @@ spec:
                 name: ssok-gateway-service
                 port:
                   number: 80
+          - path: /chaos
+            pathType: Prefix
+            backend:
+              service:
+                name: ssok-gateway-service
+                port:
+                  number: 80

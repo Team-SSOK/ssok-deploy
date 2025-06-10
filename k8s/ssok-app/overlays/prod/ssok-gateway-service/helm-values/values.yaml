@@ -73,35 +73,35 @@ applicationConfig:
           - id: account-chaosmonkey
             uri: http://ssok-account-service.ssok.svc.cluster.local
             predicates:
-              - Path=/actuator/account-service/**
+              - Path=/chaos/account-service/**
             filters:
               - StripPrefix=2
 
           - id: transfer-chaosmonkey
             uri: http://ssok-transfer-service.ssok.svc.cluster.local
             predicates:
-              - Path=/actuator/transfer-service/**
+              - Path=/chaos/transfer-service/**
             filters:
               - StripPrefix=2
 
           - id: user-chaosmonkey
             uri: http://ssok-user-service.ssok.svc.cluster.local
             predicates:
-              - Path=/actuator/user-service/**
+              - Path=/chaos/user-service/**
             filters:
               - StripPrefix=2
 
           - id: notification-chaosmonkey
             uri: http://ssok-notification-service.ssok.svc.cluster.local
             predicates:
-              - Path=/actuator/notification-service/**
+              - Path=/chaos/notification-service/**
             filters:
               - StripPrefix=2
 
           - id: bluetooth-chaosmonkey
             uri: http://ssok-bluetooth-service.ssok.svc.cluster.local
             predicates:
-              - Path=/actuator/bluetooth-service/**
+              - Path=/chaos/bluetooth-service/**
             filters:
               - StripPrefix=2
               
