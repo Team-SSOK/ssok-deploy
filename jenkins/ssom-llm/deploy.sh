@@ -16,7 +16,7 @@ BUILD="jenkins"
 
 echo $separationPhrase
 echo
-echo "SSOK BANK DEPLOY Process Start......"
+echo "SSOM LLM DEPLOY Process Start......"
 echo 
 echo $separationPhrase
 echo
@@ -87,4 +87,4 @@ docker image prune -f
 
 
 echo
-echo "SSOK BANK DEPLOY Finished!"
+echo "SSOM LLM DEPLOY Finished!"
