@@ -14,6 +14,8 @@ spec:
       - name: discord-notify
         image: curlimages/curl:latest
         env:
+        - name: TZ
+          value: "Asia/Seoul"
         - name: WEBHOOK_URL
           valueFrom:
             secretKeyRef:
@@ -88,6 +90,8 @@ spec:
       - name: discord-notify
         image: curlimages/curl:latest
         env:
+        - name: TZ
+          value: "Asia/Seoul"
         - name: WEBHOOK_URL
           valueFrom:
             secretKeyRef:
