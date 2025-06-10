@@ -66,7 +66,7 @@ applicationConfig:
           name: ssok-account-service-kubernetes
           namespace: ssok
           sources:
-            - name: ssok-account-service-kubernetes
+            - name: ssok-account-service
         secrets:
           enabled: false
         reload:
