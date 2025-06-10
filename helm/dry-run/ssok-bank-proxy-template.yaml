@@ -21,9 +21,9 @@ metadata:
   name: ssok-bank-proxy-discord-webhook
   namespace: bank
 type: Opaque
-stringData:
-  webhook-url: https://discord.com/api/webhooks/1377886188312068146/eFtja7Ax7h84bD9z5CZhm7jligL1wDIRRLvQgr-UnxnACEUSkyI4Gm9NsenVFwnwKnLK
-  ssom-url: http://ssom-backend.ssom.svc.cluster.local:8080/api/alert/devops
+data:
+  webhook-url: aHR0cHM6Ly9kaXNjb3JkLmNvbS9hcGkvd2ViaG9va3MvMTM4MjExNzgxOTI4MTU3NjExNi92dUFIVFVVb19qdmpIeExQTjFjTnRZR1RmZW0tVTBudzN2Y25ZUkVUT3YyU2s3d3p3VFAwQmROS3hnR1I5Z0pYcGhQcw==
+  ssom-url: aHR0cDovL3Nzb20tYmFja2VuZC5zc29tLnN2Yy5jbHVzdGVyLmxvY2FsOjgwODAvYXBpL2FsZXJ0L2Rldm9wcw==
 ---
 # Source: ssok-bank-proxy/templates/configmap.yaml
 apiVersion: v1
