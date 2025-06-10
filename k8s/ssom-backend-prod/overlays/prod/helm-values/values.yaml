@@ -64,6 +64,7 @@ ssom:
     LLM_API_URL: aHR0cDovL2t1ZG9uZy5rcjo1NTAzNg==
     
     # OpenSearch 설정 (외부 서버 - base64 인코딩)
-    OPENSEARCH_HOST: a3Vkb25nLmty
-    OPENSEARCH_PORT: NTUwMzQ=
-    OPENSEARCH_API_URL: a3Vkb25nLmtyOjU1MDM0
+    # 
+    OPENSEARCH_HOST: b3BlbnNlYXJjaC1jbHVzdGVyLWNvb3JkLmxvZ2dpbmcuc3ZjLmNsdXN0ZXIubG9jYWw=
+    OPENSEARCH_PORT: OTIwMA==
+    OPENSEARCH_API_URL: b3BlbnNlYXJjaC1jbHVzdGVyLWNvb3JkLmxvZ2dpbmcuc3ZjLmNsdXN0ZXIubG9jYWw6OTIwMA==

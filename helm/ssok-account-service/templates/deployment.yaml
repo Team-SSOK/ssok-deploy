@@ -72,7 +72,7 @@ spec:
       volumes:
         - name: config-volume
           configMap:
-            name: ssok-account-service
+            name: ssok-account-service-kubernetes
         - name: varlog
           emptyDir: {}
         - name: fluent-bit-config
