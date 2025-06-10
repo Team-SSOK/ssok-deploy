@@ -249,7 +249,7 @@ metadata:
   namespace: bank
   annotations:
     argocd.argoproj.io/hook: PostSync
-    argocd.argoproj.io/hook-delete-policy: HookSucceeded
+    argocd.argoproj.io/hook-delete-policy: HookSucceeded,HookFailed,BeforeHookCreation
     argocd.argoproj.io/sync-wave: "10"  # 모든 배포 완료 후
 spec:
   template:
@@ -324,7 +324,7 @@ metadata:
   namespace: bank
   annotations:
     argocd.argoproj.io/hook: SyncFail
-    argocd.argoproj.io/hook-delete-policy: HookSucceeded
+    argocd.argoproj.io/hook-delete-policy: HookSucceeded,HookFailed,BeforeHookCreation
     argocd.argoproj.io/sync-wave: "10"  # 모든 배포 완료 후
 spec:
   template:
