@@ -65,7 +65,7 @@ spec:
     spec:
       containers:
         - name: ssom-llm
-          image: "kudong/ssom-backend:latest"
+          image: "kudong/ssom-llm:latest"
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 8000
