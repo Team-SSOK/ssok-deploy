@@ -316,7 +316,7 @@ metadata:
   namespace: ssok
   annotations:
     argocd.argoproj.io/hook: PostSync
-    argocd.argoproj.io/hook-delete-policy: HookSucceeded,HookFailed,BeforeHookCreation
+    argocd.argoproj.io/hook-delete-policy: HookSucceeded
     argocd.argoproj.io/sync-wave: "10"  # 모든 배포 완료 후
 spec:
   template:
@@ -379,7 +379,7 @@ spec:
                 \"timestamp\": \"$DEPLOY_TIME\",
                 \"message\": \"ArgoCD ssok-account-service 배포 성공 - 모든 컴포넌트가 정상적으로 배포되었습니다.\"
               }" \
-              "$SSOM_URL"               
+              "$SSOM_URL" || true               
       restartPolicy: Never
       serviceAccountName: default  # kubectl 권한 필요 시 별도 ServiceAccount 생성
 ---
@@ -391,7 +391,7 @@ metadata:
   namespace: ssok
   annotations:
     argocd.argoproj.io/hook: SyncFail
-    argocd.argoproj.io/hook-delete-policy: HookSucceeded,HookFailed,BeforeHookCreation
+    argocd.argoproj.io/hook-delete-policy: HookSucceeded
     argocd.argoproj.io/sync-wave: "10"  # 모든 배포 완료 후
 spec:
   template:
@@ -451,5 +451,5 @@ spec:
                 \"timestamp\": \"$DEPLOY_TIME\",
                 \"message\": \"ArgoCD ssok-account-service 배포 실패 - 배포 중 오류가 발생했습니다.\"
               }" \
-              "$SSOM_URL"               
+              "$SSOM_URL" || true              
       restartPolicy: Never

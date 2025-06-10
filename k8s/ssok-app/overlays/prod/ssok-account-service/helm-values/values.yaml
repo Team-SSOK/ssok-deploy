@@ -57,6 +57,8 @@ applicationConfig:
   server:
     port: 8080
   spring:
+    profiles:
+      active: chaos-monkey
     application:
       name: ssok-account-service
     cloud:
@@ -79,7 +81,7 @@ applicationConfig:
     endpoints:
       web:
         exposure:
-          include: "*"
+          include: "health,info,chaosmonkey,prometheus"
     endpoint:
       health:
         show-details: always
