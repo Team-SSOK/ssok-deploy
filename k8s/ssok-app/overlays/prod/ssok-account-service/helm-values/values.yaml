@@ -57,13 +57,15 @@ applicationConfig:
   server:
     port: 8080
   spring:
+    profiles:
+      active: chaos-monkey
     application:
       name: ssok-account-service
     cloud:
       kubernetes:
         config:
           enabled: true
-          name: ssok-account-service-kubernetes
+          name: ssok-account-service
           namespace: ssok
           sources:
             - name: ssok-account-service
@@ -79,7 +81,7 @@ applicationConfig:
     endpoints:
       web:
         exposure:
-          include: "*"
+          include: health,info,chaosmonkey,prometheus
     endpoint:
       health:
         show-details: always
