@@ -56,6 +56,9 @@ hpa:
 applicationConfig:
   server:
     port: 8080
+  chaos:
+    monkey:
+      enabled: true
   spring:
     profiles:
       active: chaos-monkey
