@@ -57,6 +57,8 @@ applicationConfig:
   server:
     port: 8080
   spring:
+    profiles:
+      active: chaos-monkey
     application:
       name: ssok-account-service
     cloud:
