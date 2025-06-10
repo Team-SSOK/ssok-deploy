@@ -101,29 +101,12 @@ applicationConfig:
         enabled: true
       chaosmonkey:
         enabled: true
-      chaosmonkeyjmx:
-        enabled: true
   health:
     kubernetes:
       enabled: false
   logging:
     level:
       kr.ssok.userservice.client: DEBUG
-  chaos:
-    monkey:
-      enabled: true
-      watcher:
-        repository: true
-        restController: true
-        service: true
-      assaults:
-        level: 1
-        latency-active: true
-        latency-range-start: 3000
-        latency-range-end: 5000
-        exceptions-active: false
-        kill-application-active: false
-        memory-active: false
 
 fluentbit:
   fluentBitConf: |-
