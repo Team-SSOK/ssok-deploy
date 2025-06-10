@@ -35,8 +35,6 @@ spec:
           env:
             - name: SPRING_CONFIG_LOCATION
               value: file:/config/application.yml
-            - name: SPRING_PROFILES_ACTIVE
-              value: chaos-monkey
           volumeMounts:
             - name: varlog
               mountPath: /var/log
@@ -74,7 +72,7 @@ spec:
       volumes:
         - name: config-volume
           configMap:
-            name: ssok-account-service-kubernetes
+            name: ssok-account-service
         - name: varlog
           emptyDir: {}
         - name: fluent-bit-config

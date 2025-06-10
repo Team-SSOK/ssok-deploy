@@ -65,7 +65,7 @@ applicationConfig:
       kubernetes:
         config:
           enabled: true
-          name: ssok-account-service-kubernetes
+          name: ssok-account-service
           namespace: ssok
           sources:
             - name: ssok-account-service
@@ -81,7 +81,7 @@ applicationConfig:
     endpoints:
       web:
         exposure:
-          include: "health,info,chaosmonkey,prometheus"
+          include: health,info,chaosmonkey,prometheus
     endpoint:
       health:
         show-details: always
