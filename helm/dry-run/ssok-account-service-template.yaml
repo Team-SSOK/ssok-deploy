@@ -51,7 +51,7 @@ stringData:
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: ssok-account-service-kubernetes
+  name: ssok-account-service
   namespace: ssok
   labels:
     app.kubernetes.io/name: ssok-account-service
@@ -104,10 +104,10 @@ data:
         kubernetes:
           config:
             enabled: true
-            name: ssok-account-service-kubernetes
+            name: ssok-account-service
             namespace: ssok
             sources:
-            - name: ssok-account-service-kubernetes
+            - name: ssok-account-service
           discovery:
             all-namespaces: false
           loadbalancer:
@@ -237,8 +237,9 @@ spec:
             httpGet:
               path: /actuator/health/readiness
               port: 8080
-            initialDelaySeconds: 10
+            initialDelaySeconds: 60
             periodSeconds: 20
+            failureThreshold: 5
           livenessProbe:
             httpGet:
               path: /actuator/health/liveness
@@ -261,7 +262,7 @@ spec:
       volumes:
         - name: config-volume
           configMap:
-            name: ssok-account-service-kubernetes
+            name: ssok-account-service
         - name: varlog
           emptyDir: {}
         - name: fluent-bit-config

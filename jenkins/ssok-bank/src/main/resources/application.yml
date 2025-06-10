@@ -1,6 +1,12 @@
+server:
+  shutdown: graceful
+
 spring:
   application:
     name: ssok-bank
+
+  lifecycle:
+    timeout-per-shutdown-phase: 25s
 
   kafka:
     bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS:172.21.1.22:31001}
