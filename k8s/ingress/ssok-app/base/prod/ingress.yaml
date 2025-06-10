@@ -28,7 +28,7 @@ spec:
                 name: ssok-gateway-service
                 port:
                   number: 80
-          - path: /chaos
+          - path: /actuator
             pathType: Prefix
             backend:
               service:
