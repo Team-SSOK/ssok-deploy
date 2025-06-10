@@ -347,7 +347,9 @@ spec:
         - sh
         - -c
         - |
-          DEPLOY_TIME=$(date "+%Y-%m-%dT%H:%M:%S")
+          UTC_TIMESTAMP=$(date -u +%s)
+          KST_TIMESTAMP=$((UTC_TIMESTAMP + 32400))
+          DEPLOY_TIME=$(date -u -d @$KST_TIMESTAMP "+%Y-%m-%dT%H:%M:%S")
           DEPLOY_TIME_DISPLAY=$(echo "$DEPLOY_TIME" | sed 's/T/ /')
           curl --connect-timeout 2 --fail -H "Content-Type: application/json" \
                -X POST \
@@ -422,7 +424,9 @@ spec:
         - sh
         - -c
         - |
-          DEPLOY_TIME=$(date "+%Y-%m-%dT%H:%M:%S")
+          UTC_TIMESTAMP=$(date -u +%s)
+          KST_TIMESTAMP=$((UTC_TIMESTAMP + 32400))
+          DEPLOY_TIME=$(date -u -d @$KST_TIMESTAMP "+%Y-%m-%dT%H:%M:%S")
           DEPLOY_TIME_DISPLAY=$(echo "$DEPLOY_TIME" | sed 's/T/ /')
           curl --connect-timeout 2 --fail -H "Content-Type: application/json" \
                -X POST \
