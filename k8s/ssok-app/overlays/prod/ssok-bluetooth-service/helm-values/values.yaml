@@ -27,7 +27,12 @@ resources:
 applicationConfig:
   server:
     port: 8080
+  chaos:
+    monkey:
+      enabled: true
   spring:
+    profiles:
+      active: chaos-monkey
     application:
       name: ssok-bluetooth-service
     cloud:
