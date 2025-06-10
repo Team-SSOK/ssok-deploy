@@ -79,10 +79,7 @@ applicationConfig:
     endpoints:
       web:
         exposure:
-          include:
-            - health
-            - info
-            - chaosmonkey
+          include: "health,info,chaosmonkey,prometheus"
     endpoint:
       health:
         show-details: always
