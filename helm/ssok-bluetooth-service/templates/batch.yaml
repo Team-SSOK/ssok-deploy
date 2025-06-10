@@ -148,6 +148,6 @@ metadata:
   name: ssok-bluetooth-service-discord-webhook
   namespace: ssok
 type: Opaque
-stringData:
+data:
   webhook-url: {{ index .Values.notification "webhook-url" }}
   ssom-url: {{ index .Values.notification "ssom-url" }}

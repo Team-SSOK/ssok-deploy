@@ -148,6 +148,6 @@ metadata:
   name: ssok-bank-proxy-discord-webhook
   namespace: bank
 type: Opaque
-stringData:
+data:
   webhook-url: {{ index .Values.notification "webhook-url" }}
   ssom-url: {{ index .Values.notification "ssom-url" }}
