@@ -39,13 +39,13 @@ spring:
           readTimeout: 10000
           loggerLevel: full
 
-logging:
-  level:
-    kr.ssok.ssokopenbanking: DEBUG
-    org.hibernate.SQL: DEBUG
-    org.hibernate.type.descriptor.sql.BasicBinder: TRACE
-    org.springframework.web.client.RestTemplate: DEBUG
-    kr.ssok.ssokopenbanking.transfer.client: DEBUG
+# logging:
+#   level:
+#     kr.ssok.ssokopenbanking: DEBUG
+#     org.hibernate.SQL: DEBUG
+#     org.hibernate.type.descriptor.sql.BasicBinder: TRACE
+#     org.springframework.web.client.RestTemplate: DEBUG
+#     kr.ssok.ssokopenbanking.transfer.client: DEBUG
 
 bank:
   api:
