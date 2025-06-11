@@ -19,5 +19,5 @@ env:
   collection_name: java-files
 
 secrets:
-  qdrant_host: "172.16.0.86"
-  qdrant_port: "6333"
+  qdrant_host: MTcyLjE2LjAuODY=
+  qdrant_port: NjMzMw==
