@@ -18,8 +18,8 @@ resources:
 
 hpa:
   enabled: true
-  minReplicas: 1
-  maxReplicas: 3
+  minReplicas: 2
+  maxReplicas: 6
   metrics:
   - type: Resource
     resource:
