@@ -33,6 +33,9 @@ spec:
                 name: ssok-account-service
           ports:
             - containerPort: {{ .Values.service.targetPort }}
+              name: {{ .Values.service.name }}
+            - containerPort: {{ .Values.service.grpc.targetPort }}
+              name: {{ .Values.service.grpc.name }}
           env:
             - name: SPRING_CONFIG_LOCATION
               value: file:/config/application.yml

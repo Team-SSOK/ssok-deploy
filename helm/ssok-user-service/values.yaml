@@ -8,6 +8,10 @@ service:
   name: web
   port: 80
   targetPort: 8080
+  grpc:
+    name: grpc
+    port: 9090
+    targetPort: 9090
 
 notification:
   profile: "[DEV]"
@@ -176,3 +180,6 @@ secrets:
     s3Bucket: ""
     s3ProfilePath: ""
   authWhitelist: "/api/auth/login,/api/auth/refresh,/api/users/signup,/api/users/phone,/api/users/phone/verify"
+  grpc:
+    accountService:
+      port: ""

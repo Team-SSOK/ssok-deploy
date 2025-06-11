@@ -8,6 +8,10 @@ service:
   name: web
   port: 80
   targetPort: 8080
+  grpc:
+    name: grpc
+    port: 9090
+    targetPort: 9090
 
 notification:
   profile: "[DEV]"
@@ -156,3 +160,9 @@ secrets:
       apiKey: ""
     userService:
       url: http://localhost
+  grpc:
+    userService:
+      url: localhost
+      port: "9090"
+    accountService:
+      port: "9090"

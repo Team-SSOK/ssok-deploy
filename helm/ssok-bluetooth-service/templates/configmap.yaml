@@ -21,3 +21,10 @@ data:
         url: ${EXTERNAL_TRANSFER_SERVICE_URL}
     bluetooth:
       uuid-ttl-seconds: ${BLUETOOTH_UUID_TTL_SECONDS}
+    grpc:
+      user-service:
+        url: ${GRPC_USER_SERVICE_URL}
+        port: ${GRPC_USER_SERVICE_PORT}
+      account-service:
+        url: ${GRPC_ACCOUNT_SERVICE_URL}
+        port: ${GRPC_ACCOUNT_SERVICE_PORT}

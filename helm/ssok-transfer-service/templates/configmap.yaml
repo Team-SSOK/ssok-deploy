@@ -23,3 +23,7 @@ data:
     kafka:
       notification-topic: ${KAFKA_NOTIFICATION_TOPIC}
       bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS}
+    grpc:
+      account-service:
+        url: ${GRPC_ACCOUNT_SERVICE_URL}
+        port: ${GRPC_ACCOUNT_SERVICE_PORT}

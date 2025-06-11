@@ -40,3 +40,6 @@ data:
         region: ${AWS_S3_REGION}
         bucket: ${AWS_S3_BUCKET}
         profile-image-path: ${AWS_S3_PROFILE_IMAGE_PATH}
+    grpc:
+      account-service:
+        port: ${GRPC_ACCOUNT_SERVICE_PORT}

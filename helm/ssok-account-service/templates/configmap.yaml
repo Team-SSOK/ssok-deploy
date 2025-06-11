@@ -22,3 +22,10 @@ data:
         api-key: ${EXTERNAL_OPENBANKING_API_KEY}
       user-service:
         url: ${EXTERNAL_USER_SERVICE_URL}
+    grpc:
+      user-service:
+        url: ${GRPC_USER_SERVICE_URL}
+        port: ${GRPC_USER_SERVICE_PORT}
+      account-service:
+        port: ${GRPC_ACCOUNT_SERVICE_PORT}
+        

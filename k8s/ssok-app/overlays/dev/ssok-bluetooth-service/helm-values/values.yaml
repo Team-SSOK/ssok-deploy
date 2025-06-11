@@ -10,6 +10,10 @@ service:
   name: web
   port: 80
   targetPort: 8080
+  grpc:
+    name: grpc
+    port: 9090
+    targetPort: 9090
 
 notification:
   profile: "[DEV]"
@@ -113,3 +117,10 @@ secrets:
       url: http://ssok-transfer-service.ssok.svc.cluster.local
   bluetooth:
     uuidTtlSeconds: "86400"
+  grpc:
+    userService:
+      url: ssok-user-service.ssok.svc.cluster.local
+      port: "9090"
+    accountService:
+      url: ssok-account-service.ssok.svc.cluster.local
+      port: "9090"

@@ -10,6 +10,10 @@ service:
   name: web
   port: 80
   targetPort: 8080
+  grpc:
+    name: grpc
+    port: 9090
+    targetPort: 9090
 
 notification:
   profile: "[DEV]"
@@ -144,3 +148,9 @@ secrets:
       apiKey: 4a87c69e-2787-4ae7-8f41-dbb0068a44d9
     userService:
       url: http://ssok-user-service.ssok.svc.cluster.local
+  grpc:
+    userService:
+      url: ssok-user-service.ssok.svc.cluster.local
+      port: "9090"
+    accountService:
+      port: "9090"

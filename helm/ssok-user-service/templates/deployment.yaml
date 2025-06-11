@@ -33,6 +33,9 @@ spec:
                 name: ssok-user-service
           ports:
             - containerPort: {{ .Values.service.targetPort }}
+              name: {{ .Values.service.name }}
+            - containerPort: {{ .Values.service.grpc.targetPort }}
+              name: {{ .Values.service.grpc.name }}
           volumeMounts:
             - name: varlog
               mountPath: /var/log
