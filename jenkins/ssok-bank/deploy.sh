@@ -109,7 +109,7 @@ echo
 git push https://${GIT_PASS}@github.com/Team-SSOK/ssok-deploy.git main
 
 export TZ='Asia/Seoul'
-DEPLOY_TIME=$(date +"%Y-%m-%dT%H:%M:%S.%N%:z")
+DEPLOY_TIME=$(date +"%Y-%m-%dT%H:%M:%S")
 WEBHOOK_URL="http://172.21.1.22:31105/api/alert/devops"
 
 if curl --connect-timeout 3 --fail -X POST \
