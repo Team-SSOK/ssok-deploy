@@ -1,5 +1,5 @@
 image:
-  repository: kudong/ssom-backend
+  repository: kudong/ssom-llm
   pullPolicy: IfNotPresent
   tag: "latest"
 
