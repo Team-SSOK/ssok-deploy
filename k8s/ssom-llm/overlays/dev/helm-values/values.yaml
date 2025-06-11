@@ -17,8 +17,3 @@ env:
   llm_temperature: "0.3"
   retriever_top_k: "5"
   collection_name: java-files
-
-secrets:
-  qdrant_host: MTcyLjE2LjAuODY=
-  qdrant_port: NjMzMw==
-  openai_api_key: ""

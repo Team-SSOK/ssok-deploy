@@ -18,12 +18,3 @@ spec:
       selfHeal: true
     syncOptions:
       - CreateNamespace=true
-  ignoreDifferences:
-    - group: ""   # core group
-      kind: Secret
-      name: ssom-llm-secrets
-      namespace: ssom
-      jsonPointers:
-        - /data/openai_api_key
-        - /data/qdrant_host
-        - /data/qdrant_port
