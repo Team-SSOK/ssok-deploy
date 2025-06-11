@@ -89,6 +89,23 @@ fi
 
 echo $separationPhrase
 echo
+echo "Triggering embedding API on llm.ssok.kr..."
+echo
+
+EMBEDDING_WEBHOOK_URL="https://llm.ssok.kr/api/codes/embedding"
+GITHUB_URL="https://github.com/Team-SSOK/ssom-backend.git"
+
+if curl --connect-timeout 30 --fail -X POST \
+  -H "Content-Type: application/json" \
+  -d "{\"github_url\": \"${GITHUB_URL}\"}" \
+  "$EMBEDDING_WEBHOOK_URL"; then
+  echo "[EMBEDDING] llm.ssok.kr embedding API 호출 성공"
+else
+  echo "[EMBEDDING] llm.ssok.kr embedding API 호출 실패"
+fi
+
+echo $separationPhrase
+echo
 echo "Deployment Manifest Updated Successfully!"
 echo
 echo $separationPhrase
