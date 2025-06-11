@@ -2,7 +2,7 @@ replicaCount: 1
 
 image:
   repository: kudong/ssok-gateway-service
-  tag: "build-137"
+  tag: "build-138"
   pullPolicy: IfNotPresent
 
 service:
