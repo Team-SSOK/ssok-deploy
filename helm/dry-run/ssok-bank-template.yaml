@@ -186,6 +186,14 @@ spec:
             port: 8080
           initialDelaySeconds: 180
           periodSeconds: 30
+        lifecycle:
+          preStop:
+            exec:
+              command:
+              - /bin/sh
+              - -c
+              - |
+                sleep 10
 
       - name: fluent-bit
         image: cr.fluentbit.io/fluent/fluent-bit:4.0.2
