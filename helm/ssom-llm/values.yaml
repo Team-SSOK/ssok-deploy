@@ -17,3 +17,7 @@ env:
   llm_temperature: "0.3"
   retriever_top_k: "5"
   collection_name: java-files
+
+secrets:
+  qdrant_host: ""
+  qdrant_port: ""

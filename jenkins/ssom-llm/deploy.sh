@@ -37,9 +37,14 @@ echo
 echo $separationPhrase
 
 
+# OpenAI API Key를 환경 변수에 포함하여 빌드
+echo "OpenAI API Key를 도커 이미지에 설정 중..."
+echo "OPENAI_API_KEY = ${OPENAI_API_KEY}"
+
+
 #백엔드 도커 이미지 빌드
 cd $currentDir/ssom_server
-docker buildx build -t $BACKEND_IMAGE_NAME:$TAG .
+docker buildx build --build-arg OPENAI_API_KEY=${OPENAI_API_KEY} -t $BACKEND_IMAGE_NAME:$TAG .
 
 #백엔드 도커 파일 tar 저장
 docker save -o $currentDir/images/$BACKEND_IMAGE_NAME.tar $BACKEND_IMAGE_NAME:$TAG
