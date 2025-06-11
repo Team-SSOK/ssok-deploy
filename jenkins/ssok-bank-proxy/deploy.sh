@@ -107,6 +107,7 @@ git commit -m "build: ${BACKEND_IMAGE_NAME} 이미지 태그를 ${TAG}로 업데
 echo
 git push https://${GIT_PASS}@github.com/Team-SSOK/ssok-deploy.git main
 
+export TZ='Asia/Seoul'
 DEPLOY_TIME=$(date +"%Y-%m-%dT%H:%M:%S.%N%:z")
 WEBHOOK_URL="http://172.21.1.22:31105/api/alert/devops"
 

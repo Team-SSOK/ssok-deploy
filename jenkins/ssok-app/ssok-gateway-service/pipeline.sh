@@ -51,6 +51,7 @@ git add .
 git commit -m "Update $SERVICE_NAME image to ${BUILD_TAG}"
 git push origin main
 
+export TZ='Asia/Seoul'
 DEPLOY_TIME=$(date +"%Y-%m-%dT%H:%M:%S.%N%:z")
 WEBHOOK_URL="http://172.21.1.22:31105/api/alert/devops"
 
