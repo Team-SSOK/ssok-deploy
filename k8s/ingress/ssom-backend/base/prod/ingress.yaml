@@ -25,3 +25,13 @@ spec:
                 name: ssom-backend-prod
                 port:
                   number: 80
+    - host: llm.ssok.kr
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: ssom-llm
+                port:
+                  number: 8000
