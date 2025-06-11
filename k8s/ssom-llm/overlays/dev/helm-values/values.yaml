@@ -1,6 +1,6 @@
 image:
   repository: kudong/ssom-llm
-  pullPolicy: IfNotPresent
+  pullPolicy: Always
   tag: "latest"
 
 resources:
