@@ -21,3 +21,4 @@ env:
 secrets:
   qdrant_host: ""
   qdrant_port: ""
+  openai_api_key: ""

@@ -36,14 +36,6 @@ echo "BACKEND BUILD Start...."
 echo 
 echo $separationPhrase
 
-# OpenAI API Key를를 .env에 직접 주입
-echo "OpenAI API Key를 .env에 주입 중..."
-echo "OPENAI_API_KEY = ${OPENAI_API_KEY}"
-
-# .env 파일에서 ${OPENAI_API_KEY}을 실제 값으로 치환
-sed -i "s/\${OPENAI_API_KEY}/${OPENAI_API_KEY}/g" $currentDir/ssom_server/.env
-
-echo "OpenAI API Key 주입 완료"
 
 #백엔드 도커 이미지 빌드
 cd $currentDir/ssom_server
