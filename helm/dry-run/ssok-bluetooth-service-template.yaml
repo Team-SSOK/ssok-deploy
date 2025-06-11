@@ -198,6 +198,7 @@ spec:
         app.kubernetes.io/name: ssok-bluetooth-service
         app.kubernetes.io/instance: ssok-bluetooth-service
     spec:
+      terminationGracePeriodSeconds: 60 # Kubernetes가 Pod를 강제로 죽이기 전에 얼마나 기다려줄지 정한다.
       serviceAccountName: ssok-bluetooth-service-sa
       containers:
         - name: ssok-bluetooth-service
@@ -216,19 +217,26 @@ spec:
           env:
             - name: SPRING_CONFIG_LOCATION
               value: file:/config/application.yml
-          readinessProbe:
+          readinessProbe: # Pod가 트래픽 받을 준비 확인
             httpGet:
               path: /actuator/health/readiness
               port: 8080
-            initialDelaySeconds: 60
-            periodSeconds: 20
-            failureThreshold: 5
-          livenessProbe:
+            initialDelaySeconds: 45
+            periodSeconds: 5 # 5 초마다 체크
+          livenessProbe: # Pod가 살아있는지 확인 (죽은 Pod 재시작)
             httpGet:
               path: /actuator/health/liveness
               port: 8080
             initialDelaySeconds: 180
-            periodSeconds: 20
+            periodSeconds: 30
+          lifecycle:
+            preStop:
+              exec:
+                command:
+                - /bin/sh
+                - -c
+                - |
+                  sleep 10
 
         - name: fluent-bit
           image: cr.fluentbit.io/fluent/fluent-bit:4.0.2
