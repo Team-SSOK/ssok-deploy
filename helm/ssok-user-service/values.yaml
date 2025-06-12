@@ -181,5 +181,5 @@ secrets:
     s3ProfilePath: ""
   authWhitelist: "/api/auth/login,/api/auth/refresh,/api/users/signup,/api/users/phone,/api/users/phone/verify"
   grpc:
-    accountService:
+    userService:
       port: ""

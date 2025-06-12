@@ -169,5 +169,5 @@ secrets:
       apiKey: "6ee92f1d-e70e-470b-9f13-1b0822374728"
   grpc:
     accountService:
-      url: "ssok-account-service.ssok.svc.cluster.local"
+      url: "ssok-account-service-grpc.ssok.svc.cluster.local"
       port: "9090"

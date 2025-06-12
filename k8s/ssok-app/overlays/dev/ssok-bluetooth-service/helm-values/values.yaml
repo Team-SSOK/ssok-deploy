@@ -119,8 +119,8 @@ secrets:
     uuidTtlSeconds: "86400"
   grpc:
     userService:
-      url: ssok-user-service.ssok.svc.cluster.local
+      url: ssok-user-service-grpc.ssok.svc.cluster.local
       port: "9090"
     accountService:
-      url: ssok-account-service.ssok.svc.cluster.local
+      url: ssok-account-service-grpc.ssok.svc.cluster.local
       port: "9090"
