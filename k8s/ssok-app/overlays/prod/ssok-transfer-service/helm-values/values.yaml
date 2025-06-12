@@ -2,7 +2,7 @@ replicaCount: 1
 
 image:
   repository: kudong/ssok-transfer-service
-  tag: "build-150"
+  tag: "build-151"
   pullPolicy: IfNotPresent
 
 service:
