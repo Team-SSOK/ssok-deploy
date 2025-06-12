@@ -104,6 +104,7 @@ ssom:
     # JWT 설정 (비민감 정보)
     JWT_ACCESS_TOKEN_VALIDITY_IN_SECONDS: "1800"
     JWT_REFRESH_TOKEN_VALIDITY_IN_SECONDS: "604800"
+    JWT_SSE_TOKEN_VALIDITY_IN_SECONDS: "43200"
     
     # Security Whitelist
     SECURITY_WHITELIST_0: "/api/users/login"
