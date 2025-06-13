@@ -46,7 +46,7 @@ ssom:
 
     # Kafka 설정
     KAFKA_BOOTSTRAP_SERVERS: "ssok-cluster-kafka-bootstrap.kafka.svc.cluster.local:9092"
-    KAFKA_CONSUMER_GROUP: "ssom-alert-consumer-dev"
+    KAFKA_CONSUMER_GROUP: "ssom-alert-consumer-dev-v2"
     KAFKA_LISTENER_CONCURRENCY: "5"
 
     # Alert Kafka 토픽 설정
