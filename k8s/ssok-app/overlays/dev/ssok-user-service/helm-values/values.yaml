@@ -2,7 +2,7 @@ replicaCount: 1
 
 image:
   repository: kudong/ssok-user-service
-  tag: "build-134"
+  tag: "build-157"
   pullPolicy: IfNotPresent
 
 service:
@@ -169,5 +169,5 @@ secrets:
     s3ProfilePath: "profile-images"
   authWhitelist: "/api/auth/login,/api/auth/refresh,/api/users/signup,/api/users/phone,/api/users/phone/verify"
   grpc:
-    accountService:
+    userService:
       port: "9090"

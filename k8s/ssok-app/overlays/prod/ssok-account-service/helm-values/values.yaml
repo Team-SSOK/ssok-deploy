@@ -2,7 +2,7 @@ replicaCount: 1
 
 image:
   repository: kudong/ssok-account-service
-  tag: "build-134"
+  tag: "build-156"
   pullPolicy: IfNotPresent
 
 service:
@@ -163,7 +163,7 @@ secrets:
       url: http://ssok-user-service.ssok.svc.cluster.local
   grpc:
     userService:
-      url: ssok-user-service.ssok.svc.cluster.local
+      url: ssok-user-service-grpc.ssok.svc.cluster.local
       port: "9090"
     accountService:
       port: "9090"
