@@ -49,6 +49,45 @@ spring:
           max-wait: -1ms
           time-between-eviction-runs: 60s
 
+  # Kafka 설정
+  kafka:
+    bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS:localhost:9092}
+
+    # Producer 설정
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+      acks: "1"                    # 리더만 확인 (성능과 안정성 균형)
+      retries: 3                   # 재시도 횟수
+      batch-size: 16384           # 배치 크기 (16KB)
+      linger-ms: 5                # 배치 대기 시간 (5ms)
+      buffer-memory: 33554432     # 버퍼 메모리 (32MB)
+      compression-type: lz4       # 압축 타입
+      request-timeout-ms: 30000   # 요청 타임아웃 (30초)
+      delivery-timeout-ms: 120000 # 전체 전송 타임아웃 (2분)
+
+    # Consumer 설정
+    consumer:
+      group-id: ${KAFKA_CONSUMER_GROUP:ssom-alert-consumer}
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.ErrorHandlingDeserializer
+      auto-offset-reset: earliest  # 처음부터 읽기
+      enable-auto-commit: false   # 수동 커밋
+      max-poll-records: 10        # 한번에 처리할 레코드 수
+      fetch-min-size: 1           # 최소 페치 크기
+      fetch-max-wait: 500         # 최대 대기 시간 (500ms)
+      heartbeat-interval: 3000    # 하트비트 간격 (3초)
+      session-timeout: 30000      # 세션 타임아웃 (30초)
+      properties:
+        spring.deserializer.value.delegate.class: org.springframework.kafka.support.serializer.JsonDeserializer
+        spring.json.trusted.packages: "kr.ssok.ssom.backend.domain.alert.dto.kafka"
+
+    # 리스너 설정
+    listener:
+      concurrency: ${KAFKA_LISTENER_CONCURRENCY:10}  # 동시 처리 스레드 수
+      ack-mode: manual_immediate                      # 수동 즉시 커밋
+      missing-topics-fatal: false                     # 토픽 없어도 실행
+
 jwt:
   secret: ${JWT_SECRET}
   access-token-validity-in-seconds: 1800
@@ -118,3 +157,33 @@ firebase:
   enabled: "true"
 fcm:
   tokenTtlSeconds: "2592000"
+
+# Alert Kafka 설정
+alert:
+  kafka:
+    # 토픽 설정
+    topics:
+      alert-created: ${ALERT_CREATED_TOPIC:alert-created-topic}
+      user-alert: ${USER_ALERT_TOPIC:user-alert-topic}
+
+    # 토픽 생성 설정
+    topic-config:
+      alert-created:
+        partitions: ${ALERT_CREATED_PARTITIONS:3}        # Alert 생성 토픽 파티션 수
+      user-alert:
+        partitions: ${USER_ALERT_PARTITIONS:10}          # 사용자 알림 토픽 파티션 수
+      replication-factor: ${KAFKA_REPLICATION_FACTOR:1}  # 복제 팩터
+      retention-ms: ${KAFKA_RETENTION_MS:604800000}      # 7일 보관
+
+    # 처리 성능 설정
+    processing:
+      max-retry-attempts: 3           # 최대 재시도 횟수
+      retry-delay-ms: 1000           # 재시도 지연 시간
+      batch-size: 100                # 배치 처리 크기
+      timeout-ms: 30000              # 처리 타임아웃
+
+    # 모니터링 설정
+    monitoring:
+      enable-metrics: true           # 메트릭 수집 활성화
+      log-processing-time: true      # 처리 시간 로깅
+      alert-slow-processing-ms: 5000 # 느린 처리 알림 기준
