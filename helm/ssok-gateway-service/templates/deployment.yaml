@@ -9,7 +9,9 @@ metadata:
     argocd.argoproj.io/sync-wave: "1"
 spec:
   revisionHistoryLimit: 1
-  replicas: {{ .Values.replicaCount }}
+  {{- if not .Values.hpa.enabled }}
+  replicas: 2
+  {{- end }}
   strategy:
     type: RollingUpdate
     rollingUpdate:

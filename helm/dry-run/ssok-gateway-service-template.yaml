@@ -1,4 +1,19 @@
 ---
+# Source: ssok-gateway-service/templates/hpa.yaml
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: ssok-gateway-service-pdb
+  namespace: ssok
+  annotations:
+    argocd.argoproj.io/sync-wave: "2"
+spec:
+  minAvailable: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: ssok-gateway-service
+      app.kubernetes.io/instance: ssok-gateway-service
+---
 # Source: ssok-gateway-service/templates/batch.yaml
 apiVersion: v1
 kind: Secret
@@ -196,7 +211,6 @@ metadata:
     argocd.argoproj.io/sync-wave: "1"
 spec:
   revisionHistoryLimit: 1
-  replicas: 1
   strategy:
     type: RollingUpdate
     rollingUpdate:
@@ -274,6 +288,46 @@ spec:
         - name: fluent-bit-config
           configMap:
             name: fluent-bit-config-gateway
+---
+# Source: ssok-gateway-service/templates/hpa.yaml
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: ssok-gateway-service-hpa
+  namespace: ssok
+  annotations:
+    argocd.argoproj.io/sync-wave: "2"
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: ssok-gateway-service
+  minReplicas: 1
+  maxReplicas: 3
+  metrics:
+  - resource:
+      name: cpu
+      target:
+        averageUtilization: 90
+        type: Utilization
+    type: Resource
+  behavior:
+    scaleDown:
+      policies:
+      - periodSeconds: 30
+        type: Percent
+        value: 50
+      stabilizationWindowSeconds: 300
+    scaleUp:
+      policies:
+      - periodSeconds: 15
+        type: Percent
+        value: 100
+      - periodSeconds: 15
+        type: Pods
+        value: 2
+      selectPolicy: Max
+      stabilizationWindowSeconds: 0
 ---
 # Source: ssok-gateway-service/templates/batch.yaml
 apiVersion: batch/v1

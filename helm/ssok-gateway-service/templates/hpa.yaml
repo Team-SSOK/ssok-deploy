@@ -1,0 +1,39 @@
+{{- if .Values.hpa.enabled }}
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: ssok-gateway-service-hpa
+  namespace: {{ .Release.Namespace }}
+  annotations:
+    argocd.argoproj.io/sync-wave: "2"
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: {{ include "ssok-gateway-service.name" . }}
+  minReplicas: {{ .Values.hpa.minReplicas }}
+  maxReplicas: {{ .Values.hpa.maxReplicas }}
+  metrics:
+  {{- with .Values.hpa.metrics }}
+  {{- toYaml . | nindent 2 }}
+  {{- end }}
+  behavior:
+  {{- with .Values.hpa.behavior }}
+  {{- toYaml . | nindent 4 }}
+  {{- end }}
+---
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: ssok-gateway-service-pdb
+  namespace: {{ .Release.Namespace }}
+  annotations:
+    argocd.argoproj.io/sync-wave: "2"
+spec:
+  minAvailable: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: {{ include "ssok-gateway-service.name" . }}
+      app.kubernetes.io/instance: {{ .Release.Name }}
+---
+{{- end }}
