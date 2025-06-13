@@ -60,7 +60,7 @@ spec:
               - /bin/sh
               - -c
               - |
-                sleep 10
+                sleep 30
         {{- if .Values.resources }}
         resources:
           {{- toYaml .Values.resources | nindent 10 }}

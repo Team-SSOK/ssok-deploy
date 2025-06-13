@@ -172,7 +172,7 @@ spec:
               - /bin/sh
               - -c
               - |
-                sleep 10
+                sleep 30
 
       - name: fluent-bit
         image: cr.fluentbit.io/fluent/fluent-bit:4.0.2
