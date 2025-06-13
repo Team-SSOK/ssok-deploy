@@ -10,6 +10,11 @@ metadata:
 spec:
   revisionHistoryLimit: 1
   replicas: {{ .Values.replicaCount }}
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 0    # 용량 감소 방지 (몇 개까지 동시에 죽여도 되나)
+      maxSurge: 25%       # 여유 Pod 먼저 생성 (몇 개까지 추가로 만들어도 되나?)
   selector:
     matchLabels:
       app.kubernetes.io/name: {{ include "ssok-bluetooth-service.name" . }}
