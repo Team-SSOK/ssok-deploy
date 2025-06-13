@@ -165,6 +165,6 @@ secrets:
     imageUrl: "https://example.com/images/ssok-logo.png"
   aligo:
     smsApiUrl: "https://apis.aligo.in/send/"
-    apiKey: "eu0x6jq8ohfldehok2vvbecg0exhnrle"
-    userId: "kingmandoo95"
-    sender: "01077948797"
+    apiKey: "j9zcumyr64fv2egts3retgm6cxllj8gp"
+    userId: "welabs"
+    sender: "01034912327"
