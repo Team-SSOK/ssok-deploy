@@ -26,32 +26,32 @@ resources:
 
 hpa:
   enabled: true
-  minReplicas: 1
-  maxReplicas: 3
+  minReplicas: 2  # 고가용성 보장
+  maxReplicas: 5  # 여유분 확보
   metrics:
   - type: Resource
     resource:
       name: cpu
       target:
         type: Utilization
-        averageUtilization: 80 # CPU 이용률 90% 이상시
+        averageUtilization: 70  # 좀 더 여유롭게
   behavior:
     scaleDown:
-      stabilizationWindowSeconds: 300 # 5분 대기, 30초 주기, 점진적 감소
+      stabilizationWindowSeconds: 300
       policies:
       - type: Percent
         value: 50
-        periodSeconds: 30
+        periodSeconds: 60  # 좀 더 안정적으로
     scaleUp:
-      stabilizationWindowSeconds: 0 # 0초 대기, 15초 주기, 최대 증가
+      stabilizationWindowSeconds: 30  # 약간의 안정화 시간
       policies:
       - type: Percent
-        value: 100          # 현재 Pod 수의 100% 증가
-        periodSeconds: 15   # 15초마다
+        value: 50           # 50% 증가로 완화
+        periodSeconds: 30
       - type: Pods          
-        value: 2            # 또는 2개씩 증가
-        periodSeconds: 15   # 15초마다
-      selectPolicy: Max # 정책 2개중 가장 큰것을 선택
+        value: 1            # 1개씩 증가로 완화
+        periodSeconds: 30
+      selectPolicy: Max
 
 applicationConfig:
   server:
