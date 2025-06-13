@@ -70,7 +70,7 @@ applicationConfig:
     application:
       name: ssok-transfer-service
     lifecycle:
-      timeout-per-shutdown-phase: 25s
+      timeout-per-shutdown-phase: 120s
     cloud:
       kubernetes:
         config:
