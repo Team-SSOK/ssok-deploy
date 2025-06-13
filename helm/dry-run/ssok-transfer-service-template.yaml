@@ -279,14 +279,19 @@ spec:
             httpGet:
               path: /actuator/health/readiness
               port: 8080
-            initialDelaySeconds: 60
+            initialDelaySeconds: 45
             periodSeconds: 5 # 5 초마다 체크
+            timeoutSeconds: 5       
+            failureThreshold: 3     
+            successThreshold: 1 # 기본값
           livenessProbe: # Pod가 살아있는지 확인 (죽은 Pod 재시작)
             httpGet:
               path: /actuator/health/liveness
               port: 8080
-            initialDelaySeconds: 180
+            initialDelaySeconds: 120
             periodSeconds: 30
+            timeoutSeconds: 5       
+            failureThreshold: 3      
           lifecycle:
             preStop:
               exec:
@@ -294,7 +299,7 @@ spec:
                 - /bin/sh
                 - -c
                 - |
-                  sleep 30
+                  sleep 15
 
         - name: fluent-bit
           image: cr.fluentbit.io/fluent/fluent-bit:4.0.2
