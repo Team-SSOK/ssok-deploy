@@ -27,6 +27,7 @@ resources:
 applicationConfig:
   server:
     port: 8080
+    shutdown: graceful
   chaos:
     monkey:
       enabled: true
@@ -35,6 +36,8 @@ applicationConfig:
       active: chaos-monkey
     application:
       name: ssok-gateway-service
+    lifecycle:
+      timeout-per-shutdown-phase: 25s
     cloud:
       kubernetes:
         config:

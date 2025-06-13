@@ -10,6 +10,11 @@ metadata:
 spec:
   revisionHistoryLimit: 1
   replicas: {{ .Values.replicaCount }}
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 0    # 용량 감소 방지 (몇 개까지 동시에 죽여도 되나)
+      maxSurge: 25%       # 여유 Pod 먼저 생성 (몇 개까지 추가로 만들어도 되나?)
   selector:
     matchLabels:
       app.kubernetes.io/name: {{ include "ssok-gateway-service.name" . }}
@@ -20,6 +25,7 @@ spec:
         app.kubernetes.io/name: {{ include "ssok-gateway-service.name" . }}
         app.kubernetes.io/instance: {{ .Release.Name }}
     spec:
+      terminationGracePeriodSeconds: 60 # Kubernetes가 Pod를 강제로 죽이기 전에 얼마나 기다려줄지 정한다.
       serviceAccountName: ssok-gateway-service-sa
       containers:
         - name: {{ .Chart.Name }}
@@ -38,6 +44,26 @@ spec:
           env:
             - name: SPRING_CONFIG_LOCATION
               value: file:/config/application.yml
+          readinessProbe: # Pod가 트래픽 받을 준비 확인
+            httpGet:
+              path: /actuator/health/readiness
+              port: 8080
+            initialDelaySeconds: 45
+            periodSeconds: 5 # 5 초마다 체크
+          livenessProbe: # Pod가 살아있는지 확인 (죽은 Pod 재시작)
+            httpGet:
+              path: /actuator/health/liveness
+              port: 8080
+            initialDelaySeconds: 180
+            periodSeconds: 30
+          lifecycle:
+            preStop:
+              exec:
+                command:
+                - /bin/sh
+                - -c
+                - |
+                  sleep 10
           {{- if .Values.resources }}
           resources:
             {{- toYaml .Values.resources | nindent 12 }}

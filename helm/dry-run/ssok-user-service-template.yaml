@@ -57,6 +57,7 @@ stringData:
   AWS_S3_BUCKET:                           ""
   AWS_S3_PROFILE_IMAGE_PATH:               ""
   AUTH_WHITELIST:                          "/api/auth/login,/api/auth/refresh,/api/users/signup,/api/users/phone,/api/users/phone/verify"
+  GRPC_USER_SERVICE_PORT:                  ""
 ---
 # Source: ssok-user-service/templates/configmap.yaml
 apiVersion: v1
@@ -166,6 +167,9 @@ data:
         region: ${AWS_S3_REGION}
         bucket: ${AWS_S3_BUCKET}
         profile-image-path: ${AWS_S3_PROFILE_IMAGE_PATH}
+    grpc:
+      user-service:
+        port: ${GRPC_USER_SERVICE_PORT}
 ---
 # Source: ssok-user-service/templates/fluentbit-config.yaml
 apiVersion: v1
@@ -226,6 +230,27 @@ spec:
       targetPort: 8080
   type: ClusterIP
 ---
+# Source: ssok-user-service/templates/service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: ssok-user-service-grpc
+  namespace: ssok
+  labels:
+    app.kubernetes.io/name: ssok-user-service
+    app.kubernetes.io/instance: ssok-user-service
+    app.kubernetes.io/version: 1.0.0
+    app.kubernetes.io/managed-by: Helm
+spec:
+  clusterIP: None
+  selector:
+    app.kubernetes.io/name: ssok-user-service
+    app.kubernetes.io/instance: ssok-user-service
+  ports:
+    - name: grpc
+      port: 9090
+      targetPort: 9090
+---
 # Source: ssok-user-service/templates/deployment.yaml
 apiVersion: apps/v1
 kind: Deployment
@@ -241,6 +266,11 @@ metadata:
     argocd.argoproj.io/sync-wave: "1"
 spec:
   revisionHistoryLimit: 1
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 0    # 용량 감소 방지 (몇 개까지 동시에 죽여도 되나)
+      maxSurge: 25%       # 여유 Pod 먼저 생성 (몇 개까지 추가로 만들어도 되나?)
   selector:
     matchLabels:
       app.kubernetes.io/name: ssok-user-service
@@ -262,6 +292,9 @@ spec:
                 name: ssok-user-service
           ports:
             - containerPort: 8080
+              name: web
+            - containerPort: 9090
+              name: grpc
           volumeMounts:
             - name: varlog
               mountPath: /var/log
@@ -274,7 +307,7 @@ spec:
             httpGet:
               path: /actuator/health/readiness
               port: 8080
-            initialDelaySeconds: 45
+            initialDelaySeconds: 60
             periodSeconds: 5 # 5 초마다 체크
           livenessProbe: # Pod가 살아있는지 확인 (죽은 Pod 재시작)
             httpGet:
