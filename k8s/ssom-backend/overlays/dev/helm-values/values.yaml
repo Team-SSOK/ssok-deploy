@@ -52,10 +52,13 @@ ssom:
     # Alert Kafka 토픽 설정
     ALERT_CREATED_TOPIC: "alert-created-topic-dev"
     USER_ALERT_TOPIC: "user-alert-topic-dev"
+    ALERT_DLQ_TOPIC: "alert-dlq-topic"
     ALERT_CREATED_PARTITIONS: "3"
     USER_ALERT_PARTITIONS: "5"
     KAFKA_REPLICATION_FACTOR: "1"
     KAFKA_RETENTION_MS: "604800000"
+    ALERT_DLQ_PARTITIONS: "1"
+    DLQ_RETENTION_MS: "2592000000"
 
   secrets:
     # 정확한 base64 인코딩된 값들

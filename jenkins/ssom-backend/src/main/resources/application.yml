@@ -49,7 +49,6 @@ spring:
           max-wait: -1ms
           time-between-eviction-runs: 60s
 
-
   # Kafka 설정
   kafka:
     bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS:localhost:9092}
@@ -166,6 +165,7 @@ alert:
     topics:
       alert-created: ${ALERT_CREATED_TOPIC:alert-created-topic}
       user-alert: ${USER_ALERT_TOPIC:user-alert-topic}
+      dlq: ${ALERT_DLQ_TOPIC:alert-dlq-topic}
 
     # 토픽 생성 설정
     topic-config:
@@ -173,6 +173,9 @@ alert:
         partitions: ${ALERT_CREATED_PARTITIONS:3}        # Alert 생성 토픽 파티션 수
       user-alert:
         partitions: ${USER_ALERT_PARTITIONS:10}          # 사용자 알림 토픽 파티션 수
+      dlq:
+        partitions: ${ALERT_DLQ_PARTITIONS:1}            # DLQ 토픽 파티션 수 (순서 보장을 위해 1개)
+        retention-ms: ${DLQ_RETENTION_MS:2592000000}     # DLQ는 30일 보관 (더 길게)
       replication-factor: ${KAFKA_REPLICATION_FACTOR:1}  # 복제 팩터
       retention-ms: ${KAFKA_RETENTION_MS:604800000}      # 7일 보관
 
