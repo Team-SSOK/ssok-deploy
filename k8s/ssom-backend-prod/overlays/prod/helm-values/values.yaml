@@ -81,6 +81,6 @@ ssom:
     
     # OpenSearch 설정 (외부 서버 - base64 인코딩)
     # 
-    OPENSEARCH_HOST: c3NvbS1sbG0uc3NvbS5zdmMuY2x1c3Rlci5sb2NhbDo4MDAw
+    OPENSEARCH_HOST: c3NvbS1sbG0uc3NvbS5zdmMuY2x1c3Rlci5sb2NhbA==
     OPENSEARCH_PORT: OTIwMA==
     OPENSEARCH_API_URL: b3BlbnNlYXJjaC1jbHVzdGVyLWNvb3JkLmxvZ2dpbmcuc3ZjLmNsdXN0ZXIubG9jYWw6OTIwMA==
