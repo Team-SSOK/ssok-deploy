@@ -3,7 +3,7 @@
 image:
   repository: kudong/ssom-backend-prod
   pullPolicy: IfNotPresent
-  tag: "1.65"
+  tag: "1.64"
 
 notification:
   profile: "[PROD]"
@@ -77,10 +77,10 @@ ssom:
     GITHUB_WEBHOOK_SECRET: c3NvbV9kZXZfd2ViaG9va19zZWNyZXRfMjAyNV9zZWN1cmVfa2V5X2FiYzEyM3h5eg==
     
     # LLM API URL
-    LLM_API_URL: aHR0cDovL2t1ZG9uZy5rcjo1NTAzNg==
+    LLM_API_URL: c3NvbS1sbG0uc3NvbS5zdmMuY2x1c3Rlci5sb2NhbDo4MDAw
     
     # OpenSearch 설정 (외부 서버 - base64 인코딩)
     # 
-    OPENSEARCH_HOST: c3NvbS1sbG0uc3NvbS5zdmMuY2x1c3Rlci5sb2NhbA==
+    OPENSEARCH_HOST: b3BlbnNlYXJjaC1jbHVzdGVyLWNvb3JkLmxvZ2dpbmcuc3ZjLmNsdXN0ZXIubG9jYWw=
     OPENSEARCH_PORT: OTIwMA==
     OPENSEARCH_API_URL: b3BlbnNlYXJjaC1jbHVzdGVyLWNvb3JkLmxvZ2dpbmcuc3ZjLmNsdXN0ZXIubG9jYWw6OTIwMA==
