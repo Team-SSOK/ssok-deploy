@@ -39,6 +39,12 @@ hpa:
       target:
         type: Utilization
         averageUtilization: 80 # CPU 이용률 80% 이상시
+  - type: Resource
+    resource:
+      name: memory
+      target:
+        type: Utilization
+        averageUtilization: 70 # 메모리 이용률 70% 이상시
   behavior:
     scaleDown:
       stabilizationWindowSeconds: 300 # 5분 대기, 30초 주기, 점진적 감소
