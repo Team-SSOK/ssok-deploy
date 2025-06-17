@@ -1,0 +1,37 @@
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: custom-kube-state-alerts
+  namespace: monitoring
+  labels:
+    release: monitoring-stack
+spec:
+  groups:
+    - name: custom-kube-state-alerts
+      rules:
+      - alert: PodCrashLooping
+        expr: kube_pod_container_status_waiting_reason{reason="CrashLoopBackOff", namespace="ssok"} > 0
+        for: 5m
+        labels:
+          severity: critical
+        annotations:
+          summary: "Pod가 CrashLoopBackOff 상태입니다."
+          description: "{{ $labels.namespace }}/{{ $labels.pod }} 컨테이너({{ $labels.container }})가 CrashLoopBackOff 상태로 5분 이상 대기 중."
+
+      - alert: PodPendingLong
+        expr: kube_pod_status_phase{phase="Pending", namespace="ssok"} > 0
+        for: 10m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Pod가 오랜 시간 Pending 상태"
+          description: "{{ $labels.namespace }}/{{ $labels.pod }} Pod가 10분 이상 Pending 상태입니다."
+
+      - alert: DeploymentReplicasMismatch
+        expr: kube_deployment_status_replicas_available{namespace="ssok"} != kube_deployment_spec_replicas{namespace="ssok"}
+        for: 5m
+        labels:
+          severity: critical
+        annotations:
+          summary: "Deployment 레플리카 불일치"
+          description: "{{ $labels.namespace }}/{{ $labels.deployment }} Deployment의 가용 레플리카 수가 명세와 다릅니다."

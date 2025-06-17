@@ -1,0 +1,182 @@
+# values.yaml
+
+grafana:
+  enabled: true
+  adminPassword: "prom-operator"
+  persistence:
+    enabled: true
+    accessModes:
+      - ReadWriteOnce
+    size: 5Gi
+    storageClassName: gp2
+  service:
+    type: ClusterIP
+  
+  grafana.ini:
+    auth.anonymous:
+      enabled: true
+      org_role: Viewer
+    security:
+      allow_embedding: true
+
+prometheus:
+  prometheusSpec:
+    externalUrl: "http://metric.ssok.kr/prometheus"
+    routePrefix: "/prometheus"
+    serviceMonitorSelectorNilUsesHelmValues: false
+
+nodeExporter:
+  enabled: true
+  hostRootfs: /host/root
+  containerSecurityContext:
+    privileged: true
+  service:
+    port: 9100
+
+alertmanager:
+  alertmanagerSpec:
+    externalUrl: "http://metric.ssok.kr/alertmanager"
+    routePrefix: "/alertmanager"
+  config:
+    global:
+      slack_api_url: 'https://hooks.slack.com/services/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'
+      resolve_timeout: 5m
+    route:
+      receiver: 'default-receiver'
+      group_by: ['alertname', 'severity']
+      group_wait: 10s
+      group_interval: 10s
+      repeat_interval: 1h
+      routes:
+        - receiver: 'critical-alerts-slack'
+          matchers:
+            - severity = "critical"
+          continue: true
+          group_wait: 30s
+          repeat_interval: 30m
+        
+        - receiver: 'critical-alerts-webhook'
+          matchers:
+            - severity = "critical"
+          continue: false
+          group_wait: 30s
+          repeat_interval: 30m
+        
+        - receiver: 'warning-alerts-slack'
+          matchers:
+            - severity = "warning"
+          continue: true
+
+        - receiver: 'warning-alerts-webhook'
+          matchers:
+            - severity = "warning"
+          continue: false
+
+        - receiver: 'watchdog-notifications'
+          matchers:
+            - alertname = "Watchdog"
+
+    receivers:
+      - name: 'default-receiver'
+        slack_configs:
+          - channel: '#monitoring'
+            send_resolved: true
+            username: 'Prometheus'
+            title: '기본 알림'
+            text: '{{ range .Alerts }}{{ .Annotations.summary }}{{ end }}'
+
+      - name: 'critical-alerts-slack'
+        slack_configs:
+          - channel: '#monitoring'
+            send_resolved: true
+            username: 'Prometheus Critical'
+            title: '🚨 Critical Alert: {{ .GroupLabels.alertname }}'
+            text: |
+              {{ range .Alerts }}
+              *Alert:* {{ .Annotations.summary }}
+              *Description:* {{ .Annotations.description }}
+              *Severity:* {{ .Labels.severity }}
+              *Instance:* {{ .Labels.instance }}
+              {{ end }}
+            color: 'danger'
+
+      - name: 'critical-alerts-webhook'
+        webhook_configs:
+          - url: 'http://ssom-metric-proxy.monitoring.svc.cluster.local:8000/receive-alert-webhook'
+            send_resolved: true
+            # http_config:
+            #   basic_auth:
+            #     username: 'prometheus'
+            #     password: 'secret'
+
+      - name: 'warning-alerts-slack'
+        slack_configs:
+          - channel: '#monitoring'
+            send_resolved: true
+            username: 'Prometheus Warning'
+            title: '⚠️ Warning: {{ .GroupLabels.alertname }}'
+            text: |
+              {{ range .Alerts }}
+              *Alert:* {{ .Annotations.summary }}
+              *Description:* {{ .Annotations.description }}
+              *Instance:* {{ .Labels.instance }}
+              {{ end }}
+            color: 'warning'
+      
+      - name: 'warning-alerts-webhook'
+        webhook_configs:
+          - url: 'http://ssom-metric-proxy.monitoring.svc.cluster.local:8000/receive-alert-webhook'
+            send_resolved: true
+            # http_config:
+            #   basic_auth:
+            #     username: 'prometheus'
+            #     password: 'secret'
+
+      - name: 'watchdog-notifications'
+        slack_configs:
+          - channel: '#monitoring'
+            send_resolved: true
+            username: 'Prometheus Watchdog'
+            title: 'Watchdog Status'
+            
+      - name: 'null'
+
+defaultRules:
+  create: true
+  rules:
+    alertmanager: true
+    etcd: false
+    configReloaders: true
+    general: true
+    k8s: true
+    kubeApiserver: true
+    kubeApiserverAvailability: true
+    kubeApiserverSlos: true
+    kubelet: true
+    kubeProxy: true
+    kubePrometheusGeneral: true
+    kubePrometheusNodeRecording: true
+    kubernetesApps: true
+    kubernetesResources: true
+    kubernetesStorage: true
+    kubernetesSystem: true
+    kubeScheduler: false
+    kubeStateMetrics: false
+    network: true
+    node: true
+    nodeExporterAlerting: false
+    nodeExporterRecording: true
+    prometheus: true
+    prometheusOperator: true
+
+kubeControllerManager:
+  enabled: false
+
+kubeEtcd:
+  enabled: false
+  
+kubeScheduler:
+  enabled: false
+
+kubeStateMetrics:
+  enabled: true

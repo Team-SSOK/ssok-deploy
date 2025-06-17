@@ -1,0 +1,20 @@
+# ssok-proxy-servicemonitor.yaml
+
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: ssok-bank-proxy-monitor
+  namespace: monitoring
+  labels:
+    release: monitoring-stack  # Prometheus Helm release 이름
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: ssok-bank-proxy  # 실제 라벨과 일치
+  namespaceSelector:
+    matchNames:
+      - bank
+  endpoints:
+    - port: "web"             
+      path: /actuator/prometheus
+      interval: 15s

@@ -1,0 +1,29 @@
+# ssok-backend-servicemonitor.yaml
+
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: ssok-backend-monitor
+  namespace: monitoring
+  labels:
+    release: monitoring-stack  # Prometheus Helm release 이름
+spec:
+  selector:
+    matchExpressions:
+      - key: app.kubernetes.io/name
+        operator: In
+        values:
+          - ssok-account-service
+          - ssok-bluetooth-service
+          - ssok-gateway-service
+          - ssok-notification-service
+          - ssok-transfer-service
+          - ssok-user-service
+  namespaceSelector:
+    matchNames:
+      - ssok
+  endpoints:
+    - port: "web"             
+      path: /actuator/prometheus
+      interval: 15s
+  

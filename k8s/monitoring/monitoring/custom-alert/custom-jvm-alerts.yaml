@@ -1,0 +1,55 @@
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: custom-jvm-alerts
+  namespace: monitoring
+  labels:
+    release: monitoring-stack
+spec:
+  groups:
+  - name: custom-application-alerts
+    rules:
+    - alert: HighCpuUsage
+      expr: (process_cpu_usage) * 100 > 70
+      for: 2m
+      labels:
+        severity: warning
+      annotations:
+        summary: "CPU 사용률 70% 초과"
+        description: "애플리케이션 CPU 사용률이 70%를 넘었습니다 (2분 이상)."
+
+    - alert: HighMemoryUsage
+      expr: (jvm_memory_used_bytes{area="heap"} / jvm_memory_max_bytes{area="heap"}) * 100 > 70
+      for: 2m
+      labels:
+        severity: warning
+      annotations:
+        summary: "Heap 메모리 사용률 70% 초과"
+        description: "JVM Heap 메모리 사용률이 70%를 넘었습니다 (2분 이상)."
+
+    - alert: HighServerErrorRate
+      expr: increase(http_server_requests_seconds_count{status=~"5.."}[5m]) > 5
+      for: 1m
+      labels:
+        severity: critical
+      annotations:
+        summary: "5xx 에러 다발 발생"
+        description: "5분간 5xx 에러가 5회 초과 발생 중"
+
+    - alert: InstanceDown
+      expr: up{job=~"ssok-.*"} == 0
+      for: 1m
+      labels:
+        severity: critical
+      annotations:
+        summary: "Ssok 서비스 인스턴스 Down"
+        description: "{{ $labels.job }} 인스턴스({{ $labels.instance }})가 다운됐습니다."
+
+    - alert: LongGCTime
+      expr: increase(jvm_gc_pause_seconds_sum[5m]) > 10
+      for: 1m
+      labels:
+        severity: warning
+      annotations:
+        summary: "GC 시간 급증"
+        description: "최근 5분간 GC 총 소요 시간이 10초를 초과했습니다."

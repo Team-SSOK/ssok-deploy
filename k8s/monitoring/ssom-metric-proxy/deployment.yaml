@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ssom-metric-proxy
+  namespace: monitoring
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: ssom-metric-proxy
+  template:
+    metadata:
+      labels:
+        app: ssom-metric-proxy
+    spec:
+      containers:
+      - name: ssom-metric-proxy
+        image: kudong/ssom-metric-proxy:latest
+        ports:
+        - containerPort: 8000
+        env:
+        - name: TARGET_WEBHOOK_URL
+          value: "http://ssom-backend-prod.ssom.svc.cluster.local:8080/api/alert/grafana,http://kudong.kr:55037/api/alert/grafana"
