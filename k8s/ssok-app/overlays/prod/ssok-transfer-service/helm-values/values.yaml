@@ -96,6 +96,10 @@ applicationConfig:
           all-namespaces: false
         loadbalancer:
           mode: service
+    datasource:
+      hikari:
+        maximum-pool-size: 30
+        connection-timeout: 30000
     jpa:
       hibernate:
         ddl-auto: update
