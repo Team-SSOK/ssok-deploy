@@ -162,8 +162,8 @@ secrets:
       url: "ssok-account-service-grpc.ssok.svc.cluster.local"
       port: "9090"
   executor:
-    corePoolSizeMultiplier: "10"
-    maxPoolSizeMultiplier: "20"
+    corePoolSizeMultiplier: "20"
+    maxPoolSizeMultiplier: "40"
   datasource:
       hikari:
         maximumPoolSize: "50"
