@@ -77,6 +77,9 @@ applicationConfig:
       name: ssok-transfer-service
     lifecycle:
       timeout-per-shutdown-phase: 30s
+    mvc:
+      async:
+        request-timeout: 120s
     cloud:
       kubernetes:
         config:
@@ -181,5 +184,5 @@ secrets:
       url: "ssok-account-service-grpc.ssok.svc.cluster.local"
       port: "9090"
   executor:
-    corePoolSizeMultiplier: "10"
-    maxPoolSizeMultiplier: "20"
+    corePoolSizeMultiplier: "2"
+    maxPoolSizeMultiplier: "4"
