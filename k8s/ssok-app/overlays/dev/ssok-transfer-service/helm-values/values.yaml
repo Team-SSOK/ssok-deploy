@@ -54,6 +54,9 @@ applicationConfig:
   spring:
     application:
       name: ssok-transfer-service
+    mvc:
+      async:
+        request-timeout: 120s
     cloud:
       kubernetes:
         config:
