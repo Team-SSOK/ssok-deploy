@@ -12,6 +12,9 @@ data:
         url: ${SPRING_DATASOURCE_URL}
         username: ${SPRING_DATASOURCE_USERNAME}
         password: ${SPRING_DATASOURCE_PASSWORD}
+        hikari:
+          maximum-pool-size: ${DATASOURCE_HIKARI_MAXIMUMPOOLSIZE}
+          connection-timeout: ${DATASOURCE_HIKARI_CONNECTIONTIMEOUT}
     external:
       account-service:
         url: ${EXTERNAL_ACCOUNT_SERVICE_URL}

@@ -173,3 +173,7 @@ secrets:
   executor:
     corePoolSizeMultiplier: ""
     maxPoolSizeMultiplier: ""
+  datasource:
+      hikari:
+        maximumPoolSize: ""
+        connectionTimeout: ""

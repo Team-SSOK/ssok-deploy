@@ -73,10 +73,6 @@ applicationConfig:
           all-namespaces: false
         loadbalancer:
           mode: service
-    datasource:
-      hikari:
-        maximum-pool-size: 30
-        connection-timeout: 30000
     jpa:
       hibernate:
         ddl-auto: update
@@ -168,3 +164,7 @@ secrets:
   executor:
     corePoolSizeMultiplier: "10"
     maxPoolSizeMultiplier: "20"
+  datasource:
+      hikari:
+        maximumPoolSize: "50"
+        connectionTimeout: "30000"
