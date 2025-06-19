@@ -170,3 +170,6 @@ secrets:
     accountService:
       url: ""
       port: ""
+  executor:
+    corePoolSizeMultiplier: ""
+    maxPoolSizeMultiplier: ""

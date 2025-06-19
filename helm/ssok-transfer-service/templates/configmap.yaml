@@ -27,3 +27,6 @@ data:
       account-service:
         url: ${GRPC_ACCOUNT_SERVICE_URL}
         port: ${GRPC_ACCOUNT_SERVICE_PORT}
+    executor:
+      corePoolSizeMultiplier: ${EXECUTOR_COREPOOLSIZE}
+      maxPoolSizeMultiplier: ${EXECUTOR_MAXPOOLSIZE}
