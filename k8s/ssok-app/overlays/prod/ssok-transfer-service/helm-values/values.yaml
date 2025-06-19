@@ -2,7 +2,7 @@ replicaCount: 1
 
 image:
   repository: kudong/ssok-transfer-service
-  tag: "build-169"
+  tag: "build-167"
   pullPolicy: IfNotPresent
 
 service:
@@ -184,5 +184,5 @@ secrets:
       url: "ssok-account-service-grpc.ssok.svc.cluster.local"
       port: "9090"
   executor:
-    corePoolSizeMultiplier: "2"
-    maxPoolSizeMultiplier: "4"
+    corePoolSizeMultiplier: "10"
+    maxPoolSizeMultiplier: "20"
