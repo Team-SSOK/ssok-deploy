@@ -11,11 +11,11 @@ spring:
     password: ${SPRING_DATASOURCE_PASSWORD}
     driver-class-name: com.mysql.cj.jdbc.Driver
     hikari:
-      maximum-pool-size: 50
+      maximum-pool-size: 200
       minimum-idle: 10
       idle-timeout: 300000
       max-lifetime: 1800000
-      connection-timeout: 30000
+      connection-timeout: 3000
       validation-timeout: 3000
       leak-detection-threshold: 60000
 
