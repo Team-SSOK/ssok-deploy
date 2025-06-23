@@ -38,9 +38,9 @@ metadata:
     app.kubernetes.io/managed-by: Helm
 type: Opaque
 stringData:
-  SPRING_DATASOURCE_URL:      "jdbc:mysql://localhost:3306/ssokdb"
-  SPRING_DATASOURCE_USERNAME: "root"
-  SPRING_DATASOURCE_PASSWORD: "1234"
+  SPRING_DATASOURCE_URL:      
+  SPRING_DATASOURCE_USERNAME: 
+  SPRING_DATASOURCE_PASSWORD: 
   KAFKA_BOOTSTRAP_SERVERS:    ""
   KAFKA_NOTIFICATION_TOPIC:   ""
   EXTERNAL_ACCOUNT_SERVICE_URL:      ""
@@ -49,6 +49,10 @@ stringData:
   EXTERNAL_OPENBANKING_API_KEY:      ""
   GRPC_ACCOUNT_SERVICE_URL:   ""
   GRPC_ACCOUNT_SERVICE_PORT:  ""
+  EXECUTOR_COREPOOLSIZE:      ""
+  EXECUTOR_MAXPOOLSIZE:       ""
+  DATASOURCE_HIKARI_MAXIMUMPOOLSIZE: ""
+  DATASOURCE_HIKARI_CONNECTIONTIMEOUT: ""
 ---
 # Source: ssok-transfer-service/templates/configmap.yaml
 apiVersion: v1
@@ -127,6 +131,9 @@ data:
         url: ${SPRING_DATASOURCE_URL}
         username: ${SPRING_DATASOURCE_USERNAME}
         password: ${SPRING_DATASOURCE_PASSWORD}
+        hikari:
+          maximum-pool-size: ${DATASOURCE_HIKARI_MAXIMUMPOOLSIZE}
+          connection-timeout: ${DATASOURCE_HIKARI_CONNECTIONTIMEOUT}
     external:
       account-service:
         url: ${EXTERNAL_ACCOUNT_SERVICE_URL}
@@ -142,6 +149,9 @@ data:
       account-service:
         url: ${GRPC_ACCOUNT_SERVICE_URL}
         port: ${GRPC_ACCOUNT_SERVICE_PORT}
+    executor:
+      corePoolSizeMultiplier: ${EXECUTOR_COREPOOLSIZE}
+      maxPoolSizeMultiplier: ${EXECUTOR_MAXPOOLSIZE}
 ---
 # Source: ssok-transfer-service/templates/fluentbit-config.yaml
 apiVersion: v1
