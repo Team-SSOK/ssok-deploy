@@ -13,7 +13,14 @@ spec:
   policyTypes:
   - Ingress
   ingress:
-  - from: []
+  - from:
+    - namespaceSelector:
+        matchLabels:
+          name: bank
+    - namespaceSelector:
+        matchLabels:
+          name: ssok
+    - {}  # 모든 소스 허용 (NodePort 포함)
     ports:
     - protocol: TCP
       port: 8080
