@@ -1,15 +1,16 @@
 # SSOK-Deploy
 
 **LG CNS Am Inspire Camp 1기 3조 금융팀 최종프로젝트**
- **SSOK 프로젝트의 배포 자동화 및 인프라 관리**
+ **SSOK 프로젝트 DevOps & 인프라 레포지토리**
 
-![SSOK Logo](https://img.shields.io/badge/SSOK-Deploy-blue?style=for-the-badge&logo=rocket)[![Kubernetes](https://img.shields.io/badge/kubernetes-326ce5.svg?&style=for-the-badge&logo=kubernetes&logoColor=white)](https://kubernetes.io/)[![Jenkins](https://img.shields.io/badge/Jenkins-D24939?style=for-the-badge&logo=Jenkins&logoColor=white)](https://jenkins.io/)[![ArgoCD](https://img.shields.io/badge/ArgoCD-EF7B4D?style=for-the-badge&logo=argo&logoColor=white)](https://argoproj.github.io/cd/)[![Helm](https://img.shields.io/badge/Helm-0F1689?style=for-the-badge&logo=Helm&logoColor=white)](https://helm.sh/)[![Docker](https://img.shields.io/badge/docker-0db7ed.svg?&style=for-the-badge&logo=docker&logoColor=white)](https://docker.com/)
+[![Kubernetes](https://img.shields.io/badge/kubernetes-326ce5.svg?&style=for-the-badge&logo=kubernetes&logoColor=white)](https://kubernetes.io/)[![Jenkins](https://img.shields.io/badge/Jenkins-D24939?style=for-the-badge&logo=Jenkins&logoColor=white)](https://jenkins.io/)[![ArgoCD](https://img.shields.io/badge/ArgoCD-EF7B4D?style=for-the-badge&logo=argo&logoColor=white)](https://argoproj.github.io/cd/)[![Helm](https://img.shields.io/badge/Helm-0F1689?style=for-the-badge&logo=Helm&logoColor=white)](https://helm.sh/)[![Docker](https://img.shields.io/badge/docker-0db7ed.svg?&style=for-the-badge&logo=docker&logoColor=white)](https://docker.com/)
 
 ------
 
 ## 📋 개요
 
 LG CNS Am Inspire Camp 1기 3조 금융팀의 최종 프로젝트 SSOK-Deploy 레포지토리 입니다.
+
 이 저장소는 **SSOK 프로젝트의 Helm Charts와 배포 스크립트**를 포함하고 있으며, ArgoCD를 이용한 GitOps 방식을 채택하여 안정적이고 추적 가능한 배포 환경을 제공합니다.
 
 ## 📁 디렉토리 구조
