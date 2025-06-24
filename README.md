@@ -97,14 +97,14 @@ ssok-deploy/
 
 <div align="center">
 
-| 카테고리             | 기술                   |
-| -------------------- | ---------------------- |
-| **🏗️ 컨테이너화**     | Docker, Docker Hub     |
-| **☸️ 오케스트레이션** | Kubernetes             |
-| **🔄 GitOps**         | ArgoCD                 |
-| **🚀 CI/CD**          | Jenkins Pipeline       |
-| **📦 패키지 관리**    | Helm Charts, Kustomize |
-| **📊 인프라**         | AWS EKS / ALB / EC2    |
+| 카테고리             | 기술                      |
+| -------------------- | ------------------------- |
+| **🏗️ 컨테이너화**     | Docker, Docker Hub        |
+| **☸️ 오케스트레이션** | Kubernetes                |
+| **🔄 GitOps**         | ArgoCD                    |
+| **🚀 CI/CD**          | Jenkins Pipeline / ArgoCD |
+| **📦 패키지 관리**    | Helm Charts, Kustomize    |
+| **📊 인프라**         | AWS EKS / ALB / EC2       |
 
 </div>
 
