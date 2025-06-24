@@ -61,6 +61,8 @@ ssok-deploy/
 
 ## 🔄 CI/CD 파이프라인
 
+![cicd](https://github.com/user-attachments/assets/49cabdf4-b133-4dff-9792-d8915dea4d1a)
+
 * **SSOK-Backend (MSA)**
 
   * SSOK-Backend는 다음과 같은 SSOK-MSA CI/CD 워크플로우를 구현합니다
