@@ -1,12 +1,10 @@
 # SSOK-Deploy
 
+[![Kubernetes](https://img.shields.io/badge/kubernetes-326ce5.svg?&style=for-the-badge&logo=kubernetes&logoColor=white)](https://kubernetes.io/)[![Jenkins](https://img.shields.io/badge/Jenkins-D24939?style=for-the-badge&logo=Jenkins&logoColor=white)](https://jenkins.io/)[![ArgoCD](https://img.shields.io/badge/ArgoCD-EF7B4D?style=for-the-badge&logo=argo&logoColor=white)](https://argoproj.github.io/cd/)[![Helm](https://img.shields.io/badge/Helm-0F1689?style=for-the-badge&logo=Helm&logoColor=white)](https://helm.sh/)[![Docker](https://img.shields.io/badge/docker-0db7ed.svg?&style=for-the-badge&logo=docker&logoColor=white)](https://docker.com/)
+
 **LG CNS Am Inspire Camp 1기 3조 금융팀 최종프로젝트**
 
 **SSOK 프로젝트 DevOps & 인프라 레포지토리**
-
-[![Kubernetes](https://img.shields.io/badge/kubernetes-326ce5.svg?&style=for-the-badge&logo=kubernetes&logoColor=white)](https://kubernetes.io/)[![Jenkins](https://img.shields.io/badge/Jenkins-D24939?style=for-the-badge&logo=Jenkins&logoColor=white)](https://jenkins.io/)[![ArgoCD](https://img.shields.io/badge/ArgoCD-EF7B4D?style=for-the-badge&logo=argo&logoColor=white)](https://argoproj.github.io/cd/)[![Helm](https://img.shields.io/badge/Helm-0F1689?style=for-the-badge&logo=Helm&logoColor=white)](https://helm.sh/)[![Docker](https://img.shields.io/badge/docker-0db7ed.svg?&style=for-the-badge&logo=docker&logoColor=white)](https://docker.com/)
-
-------
 
 ## 📋 개요
 
@@ -96,8 +94,6 @@ ssok-deploy/
     5. ArgoCD가 변경을 감지하고 자동으로 해당 서비스 배포
 
        (ssok-deploy 저장소의 해당 서비스 HelmChart 렌더링 후 kustomization `values.yaml` 파일 오버라이드)
-
-       
 
 ## 🛠️ 기술 스택
 
