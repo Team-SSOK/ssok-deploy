@@ -2,9 +2,7 @@
 
 [![Kubernetes](https://img.shields.io/badge/kubernetes-326ce5.svg?&style=for-the-badge&logo=kubernetes&logoColor=white)](https://kubernetes.io/)[![Jenkins](https://img.shields.io/badge/Jenkins-D24939?style=for-the-badge&logo=Jenkins&logoColor=white)](https://jenkins.io/)[![ArgoCD](https://img.shields.io/badge/ArgoCD-EF7B4D?style=for-the-badge&logo=argo&logoColor=white)](https://argoproj.github.io/cd/)[![Helm](https://img.shields.io/badge/Helm-0F1689?style=for-the-badge&logo=Helm&logoColor=white)](https://helm.sh/)[![Docker](https://img.shields.io/badge/docker-0db7ed.svg?&style=for-the-badge&logo=docker&logoColor=white)](https://docker.com/)
 
-**LG CNS Am Inspire Camp 1기 3조 금융팀 최종프로젝트**
-
-**SSOK 프로젝트 DevOps & 인프라 레포지토리**
+**LG CNS Am Inspire Camp 1기 3조 금융팀 최종프로젝트 SSOK DevOps & 인프라 레포지토리**
 
 ## 📋 개요
 
