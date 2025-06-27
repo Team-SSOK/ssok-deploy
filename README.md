@@ -63,29 +63,12 @@ ssok-deploy/
 
 ![cicd](https://github.com/user-attachments/assets/49cabdf4-b133-4dff-9792-d8915dea4d1a)
 
-* **SSOK-Backend (MSA)**
+  * SSOK-DEPLOY는 다음과 같은 CI/CD 워크플로우를 구현합니다
 
-  * SSOK-Backend는 다음과 같은 SSOK-MSA CI/CD 워크플로우를 구현합니다
-
-    1. ssok-backend 저장소의 develop 브랜치에 변경사항 발생 (push/merge)
-
-    2. Jenkins가 변경을 감지하고 **영향을 받는 서비스만** 선택적으로 빌드 수행
-
-    3. 빌드된 이미지는 Docker 이미지로 패키징되어 Docker Hub에 업로드
-
-    4. 빌드후 Jenkins에서 Github ssok-deploy 저장소에 최신 이미지 버전으로 업데이트 및 자동 커밋
-
-    5. ArgoCD가 변경을 감지하고 자동으로 해당 서비스 배포
-
-       (ssok-deploy 저장소의 해당 서비스 HelmChart 렌더링 후 kustomization `values.yaml` 파일 오버라이드)
-
-* **SSOK-Backend 외 모놀리식 구조** (SSOK-BANK / SSOK-OPENBANKING / SSOM-BACKEND / SSOM-LLM)
-
-  * 모놀리식 구조는 다음과 같은 CI/CD 워크플로우를 구현합니다
-
+```
     1. 해당 저장소의 develop 브랜치에 변경사항 발생 (push/merge)
 
-    2. Jenkins가 변경을 감지하고 **해당하는 서비스**의 빌드 수행
+    2. Jenkins가 발생한 트리거를 확인하고 해당하는 서비스의 빌드 수행
 
     3. 빌드된 이미지는 Docker 이미지로 패키징되어 Docker Hub에 업로드
 
@@ -93,7 +76,12 @@ ssok-deploy/
 
     5. ArgoCD가 변경을 감지하고 자동으로 해당 서비스 배포
 
-       (ssok-deploy 저장소의 해당 서비스 HelmChart 렌더링 후 kustomization `values.yaml` 파일 오버라이드)
+       (ssok-deploy 저장소의 해당 서비스 HelmChart 렌더링 후 kustomization values.yaml 파일 오버라이드)
+```
+
+## 🏗️ 인프라 아키텍처
+
+![3조_금융_인프라_구성도](https://github.com/user-attachments/assets/c1502f53-4cab-46f0-8024-ad701662cb57)
 
 ## 🛠️ 기술 스택
 
