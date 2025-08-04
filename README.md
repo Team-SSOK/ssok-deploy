@@ -10,6 +10,30 @@ LG CNS Am Inspire Camp 1기 3조 금융팀의 최종 프로젝트 SSOK-Deploy �
 
 이 저장소는 **SSOK 프로젝트의 Helm Charts와 배포 스크립트**를 포함하고 있으며, ArgoCD를 이용한 GitOps 방식을 채택하여 안정적이고 추적 가능한 배포 환경을 제공합니다.
 
+## 🔄 CI/CD 파이프라인
+
+![cicd](https://github.com/user-attachments/assets/49cabdf4-b133-4dff-9792-d8915dea4d1a)
+
+  * SSOK-DEPLOY는 다음과 같은 CI/CD 워크플로우를 구현합니다
+
+```
+    1. 해당 저장소의 develop 브랜치에 변경사항 발생 (push/merge)
+
+    2. Jenkins가 발생한 트리거를 확인하고 해당하는 서비스의 빌드 수행
+
+    3. 빌드된 이미지는 Docker 이미지로 패키징되어 Docker Hub에 업로드
+
+    4. 빌드후 Jenkins에서 Github ssok-deploy 저장소에 최신 이미지 버전으로 업데이트 및 자동 커밋
+
+    5. ArgoCD가 변경을 감지하고 자동으로 해당 서비스 배포
+
+       (ssok-deploy 저장소의 해당 서비스 HelmChart 렌더링 후 kustomization values.yaml 파일 오버라이드)
+```
+
+## 🏗️ 인프라 아키텍처
+
+![3조_금융_인프라_구성도](https://github.com/user-attachments/assets/c1502f53-4cab-46f0-8024-ad701662cb57)
+
 ## 📁 디렉토리 구조
 
 ```
@@ -58,30 +82,6 @@ ssok-deploy/
 │       └── k8s/                   # Kubernetes 배포 매니페스트
 └── 📚 docs/                       # 가이드 문서
 ```
-
-## 🔄 CI/CD 파이프라인
-
-![cicd](https://github.com/user-attachments/assets/49cabdf4-b133-4dff-9792-d8915dea4d1a)
-
-  * SSOK-DEPLOY는 다음과 같은 CI/CD 워크플로우를 구현합니다
-
-```
-    1. 해당 저장소의 develop 브랜치에 변경사항 발생 (push/merge)
-
-    2. Jenkins가 발생한 트리거를 확인하고 해당하는 서비스의 빌드 수행
-
-    3. 빌드된 이미지는 Docker 이미지로 패키징되어 Docker Hub에 업로드
-
-    4. 빌드후 Jenkins에서 Github ssok-deploy 저장소에 최신 이미지 버전으로 업데이트 및 자동 커밋
-
-    5. ArgoCD가 변경을 감지하고 자동으로 해당 서비스 배포
-
-       (ssok-deploy 저장소의 해당 서비스 HelmChart 렌더링 후 kustomization values.yaml 파일 오버라이드)
-```
-
-## 🏗️ 인프라 아키텍처
-
-![3조_금융_인프라_구성도](https://github.com/user-attachments/assets/c1502f53-4cab-46f0-8024-ad701662cb57)
 
 ## 🛠️ 기술 스택
 
